@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+/*
+ * ARC Modules design tokens.
+ * Source of truth: project/_ds/arc-modules-2d44f4eb-69fc-4508-9032-b1afc2cdb0dc/tokens/colors.css
+ * (the actual shipped, AA-contrast-tuned bundle — not the earlier build-brief draft).
+ * Status colors (go/caution/info/danger) are a documented extension, not official ARC brand.
+ */
+@theme {
+  --color-arc-navy: #113d55;
+  --color-arc-red: #b42025;
+  --color-arc-sky: #7db4d1;
+  --color-arc-mist: #dbeaf2;
+  --color-arc-ink: #000000;
+  --color-arc-paper: #f5f5f5;
+  --color-arc-white: #ffffff;
+
+  --color-navy-100: #e7ecee;
+  --color-navy-200: #c4ced4;
+  --color-navy-300: #94a8b2;
+  --color-navy-400: #587788;
+  --color-navy-500: #113d55;
+  --color-navy-600: #0e3246;
+  --color-navy-700: #0b2837;
+  --color-navy-800: #081d29;
+
+  --color-red-100: #f8e9e9;
+  --color-red-200: #ecc7c8;
+  --color-red-300: #dd9b9d;
+  --color-red-400: #ca6366;
+  --color-red-500: #b42025;
+  --color-red-600: #941a1e;
+  --color-red-700: #751518;
+  --color-red-800: #560f12;
+
+  --color-sky-100: #f2f8fa;
+  --color-sky-200: #deecf4;
+  --color-sky-300: #c4ddea;
+  --color-sky-400: #a4cadf;
+  --color-sky-500: #7db4d1;
+  --color-sky-600: #6694ab;
+  --color-sky-700: #517588;
+  --color-sky-800: #3c5664;
+
+  --color-mist-100: #fbfdfe;
+  --color-mist-200: #f6fafc;
+  --color-mist-300: #eff6f9;
+  --color-mist-400: #e6f0f6;
+  --color-mist-500: #dbeaf2;
+  --color-mist-600: #b4c0c6;
+  --color-mist-700: #8e989d;
+  --color-mist-800: #697074;
+
+  --color-go: #1b7a4b;
+  --color-go-tint: #e8f2ed;
+  --color-caution: #8a5a00;
+  --color-caution-tint: #f3eee6;
+  --color-info: #0e5c82;
+  --color-info-tint: #e7eff2;
+  --color-danger: #b42025;
+  --color-danger-tint: #f8e9e9;
+
+  --font-heading: "Futura PT", var(--font-jost), "Jost", sans-serif;
+  --font-body: "Museo Sans", var(--font-nunito-sans), "Nunito Sans", sans-serif;
+
+  /* Brand spacing is 10/20/30/40/60/80. Tailwind v4 spacing keys are
+     calc(var(--spacing) * N), so a 10px base makes the stock keys
+     p-1/2/3/4/6/8 land exactly on brand values with zero custom keys. */
+  --spacing: 10px;
+
+  /* Radius 0 everywhere except circular controls (rounded-full is untouched). */
+  --radius-xs: 0px;
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+
+  --shadow-overlay: 0 20px 60px rgba(8, 29, 41, 0.28);
+
+  --ease-arc: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@layer base {
+  html {
+    height: 100%;
+  }
+  body {
+    min-height: 100%;
+    background: var(--color-arc-white);
+    color: var(--color-arc-ink);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 18px;
+    line-height: 1.6;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-arc-navy);
+    text-wrap: pretty;
+  }
+  a {
+    color: var(--color-arc-navy);
+  }
+  :focus-visible {
+    outline: 3px solid var(--color-arc-sky);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

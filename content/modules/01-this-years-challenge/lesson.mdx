@@ -1,0 +1,101 @@
+import { SeasonFigures } from "@/components/lesson/Parameter";
+import { Citation } from "@/components/lesson/Citation";
+import { TermList } from "@/components/lesson/TermList";
+import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
+import { AltitudeNumberLine } from "@/components/diagrams/AltitudeNumberLine";
+import { RocketCutaway } from "@/components/diagrams/RocketCutaway";
+import { StabilityComparison } from "@/components/diagrams/StabilityComparison";
+import { PayloadBayCompare } from "@/components/diagrams/PayloadBayCompare";
+import { FlightGraph } from "@/components/diagrams/FlightGraph";
+import { Callout } from "@/components/ui/Callout";
+
+You're on a rocket team now. At some point this season your team will stand at a pad, push a button, and watch roughly forty seconds decide the year's work. The rocket climbs, levels off, deploys a parachute, and comes back down carrying two raw eggs. Whether that flight goes well was decided months earlier — at a table, with a pencil and a plan.
+
+The American Rocketry Challenge is the largest student rocket competition in the world. Teams of students in grades 6 through 12 design a rocket, build it by hand, predict its performance in software, fly it, then revise it and fly again. There's no kit and no set of instructions — your team decides the body length, the fin size, the motor, and how the eggs are protected.
+
+That freedom only makes sense once you know what the rocket is actually being asked to do. This season's flight goal is the answer, and every design decision you make traces back to it. This module gives you that goal, the vocabulary to discuss it precisely, and the parts list you'll be working from.
+
+## The flight goal for this season
+
+Every season, the competition sets one flight goal, and it changes year to year. The goal has three parts: how high the rocket must fly, how long it must stay airborne, and what it must carry. These are this season's figures, quoted directly from the published rules.
+
+<SeasonFigures />
+
+<Citation ruleNumber="2" />
+
+<Citation ruleNumber="3" />
+
+<TermList ids={["apogee", "duration", "payload", "liftoff-mass"]} />
+
+The altitude figure is a target, not a minimum: overshooting it by 150 feet costs exactly what undershooting it by 150 feet costs. That catches almost every first-year team off guard, and it's the single most important idea in the competition.
+
+<AltitudeNumberLine className="w-full max-w-md mx-auto my-6" />
+
+These are the figures the rules change each season. The quoted text above comes straight from the published rules — read them yourself before you design anything, and check them again before your qualification flight.
+
+## The parts of your rocket
+
+From ten feet away, a competition rocket looks simple: a tube with a point on one end and fins on the other. Up close it's six or seven parts, each doing a distinct job. Learn the names now and you can read the rules, read a simulation output, and ask for help without guessing at vocabulary.
+
+<RocketCutaway className="w-full my-6" />
+
+<TermList
+  ids={[
+    "nose-cone",
+    "body-tube",
+    "fins",
+    "motor-mount",
+    "payload-bay",
+    "recovery-system",
+    "altimeter",
+  ]}
+/>
+
+The rules address several of these parts directly — how the payload must be carried, how the rocket may be recovered. Read those sections before you finalize where the payload bay goes.
+
+## Why a rocket flies straight
+
+A rocket that flies straight isn't lucky — it's balanced, and that balance can be measured before it ever leaves the table. Engineers describe it using two reference points along the airframe.
+
+<TermList ids={["center-of-gravity", "center-of-pressure"]} />
+
+The rule is simple to state: <GlossaryTerm id="center-of-gravity">CG</GlossaryTerm> has to sit ahead of <GlossaryTerm id="center-of-pressure">CP</GlossaryTerm>. When it does, the rocket self-corrects after a gust knocks it off course. When CP ends up ahead of CG, the opposite happens — the rocket diverges further from its path and the flight ends early and unpredictably. The distance between the two points is the <GlossaryTerm id="stability-margin">stability margin</GlossaryTerm>, and simulation software will calculate it for you.
+
+<StabilityComparison className="w-full my-6" />
+
+This is a physics constraint, not a competition rule, so it doesn't change from season to season. It's also why extra mass at the nose is usually a net positive.
+
+## Why the eggs decide the flight
+
+The eggs aren't a gimmick — they're what makes the flight difficult. They add mass, take up volume, and cap how hard the rocket is allowed to land. A team can hit the altitude and the duration exactly and still score nothing if a shell cracks on touchdown.
+
+Two things protect them. The payload bay — foam, a molded cradle, or a wrapped tube — keeps the eggs off hard surfaces and away from each other. The second is descent rate: how fast the rocket is falling at touchdown. A larger parachute slows the landing and improves the odds the shells survive, but it also lengthens the descent, which shifts your flight time. Every choice here trades against something else.
+
+<PayloadBayCompare className="w-full my-6" />
+
+<Citation ruleNumber="1" />
+
+The rules are specific about the payload — count, grade, weight, orientation, and condition on landing. Work from the rule quoted above, not from what a previous team told you.
+
+## How a flight is scored
+
+Scoring runs opposite to intuition: it's a penalty score, so lower is better and a perfect flight scores zero. Points accrue for every foot missed on altitude and every second spent outside the duration window.
+
+That means both halves of the flight goal matter, and they pull against each other. A small parachute gets you down fast and risks landing short of the duration window; a large one keeps you airborne longer but drifts further and lands harder. The teams that place well aren't the ones with the fastest build — they're the ones who can predict what their rocket will do and land deliberately in the middle of the window.
+
+<FlightGraph className="w-full my-6" />
+
+The scoring formula itself is in the team handbook, which this lesson hasn't quoted yet. Read it there before planning a qualification flight — don't carry over the per-foot and per-second penalties from a prior season.
+
+## Using this on your own rocket
+
+You'll return to this module the first time your team sits down to sketch. Before drawing a tube, write this season's figures at the top of the page — every decision that follows is an attempt to hit those numbers.
+
+You'll use it again the first time a flight underperforms, which it will. When a rocket comes back short of the target, the useful question isn't what went wrong — it's which single variable to change next. Change one thing per flight and log it before you fly, or you won't know which change produced which result.
+
+One rule overrides everything else here: nothing on this course happens without an adult present who has read the model rocket safety code. Motors are small, but they're genuinely energetic devices. Your team advisor isn't there to slow you down — they're there so the season doesn't end in an emergency room.
+
+<Callout tone="info" title="Think about your rocket">
+  If your rocket needed added mass before tomorrow's flight, would you add it at
+  the nose or the tail — and what would that do to your stability margin?
+</Callout>
