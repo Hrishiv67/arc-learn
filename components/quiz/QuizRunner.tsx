@@ -15,6 +15,7 @@ export function QuizRunner({
   flagDraft,
   moduleTitle,
   nextModuleTitle,
+  isFrontier,
   onComplete,
   onExit,
 }: {
@@ -22,6 +23,9 @@ export function QuizRunner({
   flagDraft: boolean;
   moduleTitle: string;
   nextModuleTitle?: string;
+  /** True once this is the last live module with no live module after it —
+   * i.e. the learner has now taken every quiz that's currently available. */
+  isFrontier?: boolean;
   onComplete: (score: number, total: number) => void;
   onExit: () => void;
 }) {
@@ -126,7 +130,18 @@ export function QuizRunner({
               Back to the course
             </Button>
             <TextButton onClick={retry}>Try again</TextButton>
+            <TextButton tone="navy" href="/modules/results">
+              See your results
+            </TextButton>
           </div>
+
+          {isFrontier && (
+            <Callout tone="go" title="You're caught up">
+              Every module that&rsquo;s live right now is complete. See your
+              full scorecard — including what&rsquo;s worth a reread — on
+              the results page.
+            </Callout>
+          )}
 
           {nextModuleTitle && (
             <div className="border-t border-mist-600 pt-5">

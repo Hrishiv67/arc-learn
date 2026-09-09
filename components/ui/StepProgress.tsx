@@ -93,9 +93,9 @@ export function ProgressRing({
         ) : (
           <span
             className="font-body font-bold text-arc-navy"
-            style={{ fontSize: size * 0.28 }}
+            style={{ fontSize: size * 0.24 }}
           >
-            {Math.round(clamped)}
+            {Math.round(clamped)}%
           </span>
         )}
       </span>

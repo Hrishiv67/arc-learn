@@ -6,6 +6,7 @@ import { useProgress, getCoursePct } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { isModuleComplete } from "@/lib/schemas/progress";
 import { ProgressRing } from "@/components/ui/StepProgress";
+import { TextButton } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { Container } from "@/components/ui/Container";
@@ -173,6 +174,13 @@ function ProgressSummary({
             style={{ width: `${coursePct}%` }}
           />
         </div>
+        {completeCount > 0 && (
+          <div className="mt-3">
+            <TextButton tone="navy" href="/modules/results">
+              See your results
+            </TextButton>
+          </div>
+        )}
       </div>
       <div className="border-t border-mist-600 pt-5">
         <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">

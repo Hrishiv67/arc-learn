@@ -8,7 +8,7 @@ import { isModuleUnlocked } from "@/lib/progress/gating";
 import { QuizRunner } from "@/components/quiz/QuizRunner";
 import { LessonRail } from "@/components/lesson/LessonRail";
 import { RESOURCES } from "@/app/modules/[slug]/lesson/LessonClient";
-import { getNextModule } from "@/content/modules/registry";
+import { getNextModule, MODULES } from "@/content/modules/registry";
 import { Container } from "@/components/ui/Container";
 
 export function QuizClient({ slug }: { slug: string }) {
@@ -23,6 +23,9 @@ export function QuizClient({ slug }: { slug: string }) {
   const next = getNextModule(mod.order);
   const read = !!progress[mod.id]?.read;
   const quizDone = !!progress[mod.id]?.quiz;
+  const isFrontier = !MODULES.some(
+    (m) => m.status === "live" && m.order > mod.order,
+  );
 
   return (
     <Container className="py-7 md:py-9 pb-20 md:pb-20">
@@ -36,6 +39,7 @@ export function QuizClient({ slug }: { slug: string }) {
               ? `Module ${next.order} · ${next.title}`
               : undefined
           }
+          isFrontier={isFrontier}
           onComplete={(score, total) => recordQuizResult(mod.id, score, total)}
           onExit={() => router.push("/modules")}
         />
