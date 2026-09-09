@@ -55,7 +55,7 @@ export function GlossaryTerm({
         id={panelId}
         role="tooltip"
         hidden={!open}
-        className="absolute z-30 top-full left-1/2 -translate-x-1/2 mt-2 w-60 bg-arc-white p-3.5 text-left"
+        className="absolute z-30 top-full left-1/2 -translate-x-1/2 mt-2 w-[240px] bg-arc-white p-3.5 text-left"
         style={{ boxShadow: "var(--shadow-overlay)" }}
       >
         <span className="block font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">

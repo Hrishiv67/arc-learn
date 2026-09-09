@@ -6,8 +6,8 @@ import { getModule, getModuleQuiz } from "@/lib/content/loadModule";
 import { useProgress, recordQuizResult } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { QuizRunner } from "@/components/quiz/QuizRunner";
-import { StepProgress } from "@/components/ui/StepProgress";
-import { CourseOutline } from "@/components/lesson/CourseOutline";
+import { LessonRail } from "@/components/lesson/LessonRail";
+import { RESOURCES } from "@/app/modules/[slug]/lesson/LessonClient";
 import { getNextModule } from "@/content/modules/registry";
 import { Container } from "@/components/ui/Container";
 
@@ -41,34 +41,23 @@ export function QuizClient({ slug }: { slug: string }) {
         />
 
         <aside className="hidden md:block">
-          <div
-            tabIndex={0}
-            aria-label="Quiz navigation"
-            className="flex flex-col gap-6 sticky top-[92px] max-h-[calc(100vh-120px)] overflow-y-auto pr-1"
-          >
-            <div>
-              <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-                This module
-              </span>
-              <div className="mt-3">
-                <StepProgress
-                  steps={[
-                    {
-                      label: "Read the lesson",
-                      state: read ? "done" : "todo",
-                    },
-                    {
-                      label: "Take the quiz",
-                      state: quizDone ? "done" : "current",
-                    },
-                  ]}
-                />
-              </div>
-            </div>
-            <div className="border-t border-mist-600 pt-4">
-              <CourseOutline progress={progress} currentSlug={slug} />
-            </div>
-          </div>
+          <LessonRail
+            resources={RESOURCES}
+            steps={[
+              {
+                id: "read",
+                label: "Read the lesson",
+                href: `/modules/${mod.slug}/lesson`,
+                state: read ? "done" : "todo",
+              },
+              {
+                id: "check",
+                label: "Take the quiz",
+                href: `/modules/${mod.slug}/quiz`,
+                state: quizDone ? "done" : "current",
+              },
+            ]}
+          />
         </aside>
       </div>
     </Container>

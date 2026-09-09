@@ -167,9 +167,9 @@ function ProgressSummary({
             {completeCount} of {MODULES.length} modules complete
           </span>
         </div>
-        <div className="h-2 bg-mist-600 mt-3.5">
+        <div className="h-[8px] bg-mist-600 mt-[14px]">
           <div
-            className="h-2 bg-go transition-[width] duration-500 ease-arc"
+            className="h-[8px] bg-go transition-[width] duration-500 ease-arc"
             style={{ width: `${coursePct}%` }}
           />
         </div>

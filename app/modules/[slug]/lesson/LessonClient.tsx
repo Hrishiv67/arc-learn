@@ -10,7 +10,7 @@ import { ReviewFlag } from "@/components/lesson/ReviewFlag";
 import { LessonRail } from "@/components/lesson/LessonRail";
 import { Container } from "@/components/ui/Container";
 
-const RESOURCES = [
+export const RESOURCES = [
   { title: "Module 1 student handout", pages: 4 },
   { title: "Module 1 worksheets", pages: 3 },
   { title: "Module 1 instructor guide", pages: 6 },
@@ -74,8 +74,6 @@ export function LessonClient({ slug }: { slug: string }) {
           <LessonRail
             contentRef={contentRef}
             resources={RESOURCES}
-            progress={progress}
-            currentSlug={slug}
             steps={[
               {
                 id: "read",

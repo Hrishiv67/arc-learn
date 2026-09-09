@@ -5,9 +5,8 @@ import Link from "next/link";
 import { clsx } from "@/lib/clsx";
 import { Icon } from "@/components/ui/Icon";
 import { StepDot } from "@/components/ui/StepDot";
+import { ProgressRing } from "@/components/ui/StepProgress";
 import type { StepState } from "@/components/ui/StepProgress";
-import { CourseOutline } from "./CourseOutline";
-import type { ProgressState } from "@/lib/schemas/progress";
 
 export type LessonStep = {
   id: string;
@@ -17,32 +16,33 @@ export type LessonStep = {
 };
 
 /**
- * Desktop-only lesson rail: step nav (Read/Quiz), a scrollspy of the MDX
- * lesson's <h2> sections (ids added in mdx-components.tsx), and downloads.
- * Sections are discovered from the DOM rather than structured content data,
- * since lesson bodies are real MDX, not the JSON block arrays this was
- * modeled on.
+ * Desktop-only rail, shared by both the lesson and quiz pages (mirroring
+ * the artifact's own Rail component, which the same way serves ReadView
+ * and CheckView): a progress ring + step count, the Read/Quiz step nav,
+ * an optional scrollspy of the MDX lesson's <h2> sections (ids added in
+ * mdx-components.tsx — omitted on the quiz page, which has no contentRef
+ * and nothing to spy on), and downloads. Sections are discovered from the
+ * DOM rather than structured content data, since lesson bodies are real
+ * MDX, not the JSON block arrays this was modeled on.
  */
 export function LessonRail({
   steps,
   contentRef,
   resources,
-  progress,
-  currentSlug,
 }: {
   steps: LessonStep[];
-  contentRef: RefObject<HTMLElement | null>;
+  contentRef?: RefObject<HTMLElement | null>;
   resources: { title: string; pages: number }[];
-  progress: ProgressState;
-  currentSlug: string;
 }) {
+  const doneCount = steps.filter((s) => s.state === "done").length;
+  const pct = (doneCount / steps.length) * 100;
   const [sections, setSections] = useState<{ id: string; label: string }[]>(
     [],
   );
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
-    const root = contentRef.current;
+    const root = contentRef?.current;
     if (!root) return;
     const headings = Array.from(
       root.querySelectorAll<HTMLHeadingElement>("h2[id]"),
@@ -93,7 +93,13 @@ export function LessonRail({
         <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
           This module
         </span>
-        <div className="mt-3 flex flex-col">
+        <div className="flex items-center gap-3 mt-3">
+          <ProgressRing pct={pct} size={48} done={pct === 100} />
+          <span className="font-body text-[14px] text-arc-ink">
+            {doneCount} of {steps.length} steps done
+          </span>
+        </div>
+        <div className="mt-4 flex flex-col">
           {steps.map((s) => (
             <Link
               key={s.id}
@@ -172,10 +178,6 @@ export function LessonRail({
             </a>
           ))}
         </div>
-      </div>
-
-      <div className="border-t border-mist-600 pt-4">
-        <CourseOutline progress={progress} currentSlug={currentSlug} />
       </div>
     </div>
   );
