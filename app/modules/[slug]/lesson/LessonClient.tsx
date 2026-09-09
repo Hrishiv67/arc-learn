@@ -74,6 +74,8 @@ export function LessonClient({ slug }: { slug: string }) {
           <LessonRail
             contentRef={contentRef}
             resources={RESOURCES}
+            progress={progress}
+            currentSlug={slug}
             steps={[
               {
                 id: "read",

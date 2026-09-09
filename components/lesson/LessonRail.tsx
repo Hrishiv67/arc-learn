@@ -6,6 +6,8 @@ import { clsx } from "@/lib/clsx";
 import { Icon } from "@/components/ui/Icon";
 import { StepDot } from "@/components/ui/StepDot";
 import type { StepState } from "@/components/ui/StepProgress";
+import { CourseOutline } from "./CourseOutline";
+import type { ProgressState } from "@/lib/schemas/progress";
 
 export type LessonStep = {
   id: string;
@@ -25,10 +27,14 @@ export function LessonRail({
   steps,
   contentRef,
   resources,
+  progress,
+  currentSlug,
 }: {
   steps: LessonStep[];
   contentRef: RefObject<HTMLElement | null>;
   resources: { title: string; pages: number }[];
+  progress: ProgressState;
+  currentSlug: string;
 }) {
   const [sections, setSections] = useState<{ id: string; label: string }[]>(
     [],
@@ -79,6 +85,8 @@ export function LessonRail({
 
   return (
     <div
+      tabIndex={0}
+      aria-label="Lesson navigation"
       className="flex flex-col gap-6 sticky top-[92px] max-h-[calc(100vh-120px)] overflow-y-auto pr-1"
     >
       <div>
@@ -164,6 +172,10 @@ export function LessonRail({
             </a>
           ))}
         </div>
+      </div>
+
+      <div className="border-t border-mist-600 pt-4">
+        <CourseOutline progress={progress} currentSlug={currentSlug} />
       </div>
     </div>
   );

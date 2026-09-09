@@ -13,6 +13,17 @@ export async function proxy(request: NextRequest) {
   const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!url || !key) return NextResponse.next();
 
+  // Anonymous (Tier 1) visitors are the overwhelming majority of traffic
+  // here by design, and carry no Supabase cookie at all. Without this check
+  // every one of them paid a real network round trip to Supabase's auth
+  // server on every single navigation, for a session that was never going
+  // to exist — the difference between an instant page and a visible pause
+  // on every click. Only someone who has ever signed in carries this cookie.
+  const hasAuthCookie = request.cookies
+    .getAll()
+    .some((c) => c.name.startsWith("sb-") && c.name.includes("-auth-token"));
+  if (!hasAuthCookie) return NextResponse.next();
+
   let response = NextResponse.next({ request });
 
   const supabase = createServerClient(url, key, {

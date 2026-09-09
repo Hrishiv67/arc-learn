@@ -7,6 +7,7 @@ import { useProgress, recordQuizResult } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { QuizRunner } from "@/components/quiz/QuizRunner";
 import { StepProgress } from "@/components/ui/StepProgress";
+import { CourseOutline } from "@/components/lesson/CourseOutline";
 import { getNextModule } from "@/content/modules/registry";
 import { Container } from "@/components/ui/Container";
 
@@ -25,7 +26,7 @@ export function QuizClient({ slug }: { slug: string }) {
 
   return (
     <Container className="py-7 md:py-9 pb-20 md:pb-20">
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_300px] gap-8 md:gap-12 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_300px] gap-8 md:gap-12">
         <QuizRunner
           quiz={quiz}
           flagDraft={mod.needsReview}
@@ -39,21 +40,33 @@ export function QuizClient({ slug }: { slug: string }) {
           onExit={() => router.push("/modules")}
         />
 
-        <aside className="hidden md:flex flex-col gap-6 sticky top-[92px]">
-          <div>
-            <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-              This module
-            </span>
-            <div className="mt-3">
-              <StepProgress
-                steps={[
-                  { label: "Read the lesson", state: read ? "done" : "todo" },
-                  {
-                    label: "Take the quiz",
-                    state: quizDone ? "done" : "current",
-                  },
-                ]}
-              />
+        <aside className="hidden md:block">
+          <div
+            tabIndex={0}
+            aria-label="Quiz navigation"
+            className="flex flex-col gap-6 sticky top-[92px] max-h-[calc(100vh-120px)] overflow-y-auto pr-1"
+          >
+            <div>
+              <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
+                This module
+              </span>
+              <div className="mt-3">
+                <StepProgress
+                  steps={[
+                    {
+                      label: "Read the lesson",
+                      state: read ? "done" : "todo",
+                    },
+                    {
+                      label: "Take the quiz",
+                      state: quizDone ? "done" : "current",
+                    },
+                  ]}
+                />
+              </div>
+            </div>
+            <div className="border-t border-mist-600 pt-4">
+              <CourseOutline progress={progress} currentSlug={slug} />
             </div>
           </div>
         </aside>
