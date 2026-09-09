@@ -10,17 +10,18 @@ export function SearchField({
   className?: string;
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type">) {
   return (
-    <label className={clsx("relative flex items-center", className)}>
+    <label
+      className={clsx(
+        "flex items-center gap-[10px] min-h-[44px] bg-arc-mist rounded-none px-[18px]",
+        className,
+      )}
+    >
       <span className="sr-only">{label}</span>
-      <Icon
-        name="search"
-        size={16}
-        className="pointer-events-none absolute left-4 text-sky-800"
-      />
+      <Icon name="search" size={18} className="shrink-0 text-arc-navy" />
       <input
         type="search"
         placeholder={label}
-        className="min-h-11 w-full bg-arc-mist rounded-none border-0 pl-11 pr-4 font-body text-[16px] text-arc-ink placeholder:text-sky-800"
+        className="flex-1 min-w-0 bg-transparent border-0 outline-none py-[12px] font-body font-light text-[16px] text-arc-ink placeholder:text-sky-800"
         {...rest}
       />
     </label>

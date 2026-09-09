@@ -18,11 +18,11 @@ export function Checkbox({
     <label
       htmlFor={checkboxId}
       className={clsx(
-        "inline-flex items-center gap-3 min-h-11 cursor-pointer select-none",
+        "inline-flex items-center gap-[20px] min-h-[44px] cursor-pointer select-none",
         className,
       )}
     >
-      <span className="relative inline-flex h-6 w-6 shrink-0 items-center justify-center">
+      <span className="relative inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center">
         <input
           id={checkboxId}
           type="checkbox"
@@ -40,7 +40,7 @@ export function Checkbox({
         {checked && (
           <Icon
             name="check"
-            size={15}
+            size={18}
             className="relative text-arc-white pointer-events-none"
           />
         )}

@@ -42,14 +42,14 @@ function AccordionRow({
         aria-expanded={isOpen}
         aria-controls={`${id}-panel`}
         onClick={onToggle}
-        className="flex w-full items-center justify-between gap-4 min-h-14 px-4 text-left"
+        className="flex w-full items-center justify-between gap-[20px] min-h-[44px] px-[20px] text-left"
       >
-        <span className="font-heading font-bold text-[17px] text-arc-navy">
+        <span className="font-heading font-bold text-[24px] text-arc-navy">
           {item.title}
         </span>
         <Icon
           name={isOpen ? "chevron-up" : "chevron-down"}
-          size={18}
+          size={22}
           className="shrink-0 text-arc-navy"
         />
       </button>
@@ -59,7 +59,7 @@ function AccordionRow({
         style={{ gridTemplateRows: isOpen ? "1fr" : "0fr" }}
       >
         <div className="overflow-hidden">
-          <div className="px-4 pb-4 font-body text-[16px] text-arc-ink">
+          <div className="px-[20px] pb-[20px] font-body font-light text-[16px] text-arc-ink max-w-[65ch]">
             {item.content}
           </div>
         </div>

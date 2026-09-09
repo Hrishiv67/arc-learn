@@ -42,19 +42,19 @@ export function TabBar({ items }: { items: TabItem[] }) {
             key={item.href}
             href={item.href}
             className={clsx(
-              "flex-1 flex flex-col items-center justify-center gap-1 min-h-14 border-t-[3px]",
+              "flex-1 flex flex-col items-center justify-center gap-[4px] min-h-[44px] pt-[10px] px-[4px] pb-[12px] border-t-[3px]",
               active ? "border-arc-red" : "border-transparent",
             )}
             aria-current={active ? "page" : undefined}
           >
             <Icon
               name={item.icon}
-              size={22}
+              size={24}
               className={active ? "text-white" : "text-sky-500"}
             />
             <span
               className={clsx(
-                "font-heading font-semibold text-[10px] uppercase tracking-[0.03em]",
+                "font-heading font-semibold text-[11px] uppercase tracking-[0.04em]",
                 active ? "text-white" : "text-sky-500",
               )}
             >

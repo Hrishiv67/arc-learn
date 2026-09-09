@@ -61,7 +61,7 @@ export function ModulesIndexClient() {
                           // floor) below WCAG contrast. The lock icon and
                           // Coming soon/Locked badge already carry the
                           // "not available" meaning at full opacity.
-                          "grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_130px] gap-3.5 items-center min-h-16 px-3 py-3.5 border-t border-mist-600 transition-colors duration-200 ease-arc",
+                          "grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_130px] gap-[14px] items-center min-h-[64px] px-[14px] py-[16px] border-t border-mist-600 transition-colors duration-200 ease-arc",
                           clickable && "group hover:bg-mist-300",
                         )}
                       >
@@ -85,7 +85,7 @@ export function ModulesIndexClient() {
                             <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">
                               Module {m.order}
                             </span>
-                            {!live && <Badge tone="mist">Coming soon</Badge>}
+                            {!live && <Badge tone="mist" size="sm">Coming soon</Badge>}
                           </div>
                           <span className="font-heading font-bold text-[18px] md:text-[20px] text-arc-navy group-hover:text-sky-700 transition-colors duration-200 ease-arc block mt-0.5">
                             {m.title}
@@ -111,10 +111,10 @@ export function ModulesIndexClient() {
                                 </span>
                               )
                             ) : (
-                              <Badge tone="caution">Locked</Badge>
+                              <Badge tone="caution" size="sm">Locked</Badge>
                             )
                           ) : (
-                            <Badge tone="mist">Coming soon</Badge>
+                            <Badge tone="mist" size="sm">Coming soon</Badge>
                           )}
                         </div>
                       </div>
@@ -137,7 +137,7 @@ export function ModulesIndexClient() {
           </div>
         </div>
 
-        <aside className="hidden md:block sticky top-28">
+        <aside className="hidden md:block sticky top-[92px]">
           <ProgressSummary
             coursePct={coursePct}
             completeCount={completeCount}

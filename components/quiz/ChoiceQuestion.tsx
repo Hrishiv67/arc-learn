@@ -43,7 +43,7 @@ export function ChoiceQuestion({
               disabled={answered}
               onClick={() => setPicked(i)}
               className={clsx(
-                "text-left min-h-13 px-4 py-3.5 flex gap-3 items-center transition-colors duration-200 ease-arc",
+                "text-left min-h-[52px] px-[16px] py-[14px] flex gap-3 items-center transition-colors duration-200 ease-arc",
                 showRight
                   ? "bg-go-tint border-l-[6px] border-go"
                   : showWrong

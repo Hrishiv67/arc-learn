@@ -20,11 +20,11 @@ export function Input({
   const generatedId = useId();
   const inputId = id ?? generatedId;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-[10px]">
       <label
         htmlFor={inputId}
         className={clsx(
-          "font-heading font-semibold text-[11px] uppercase tracking-[0.04em] text-arc-navy",
+          "font-heading font-semibold text-[14px] uppercase tracking-[0.04em] text-arc-navy",
           hideLabel && "sr-only",
         )}
       >
@@ -33,7 +33,7 @@ export function Input({
       <input
         id={inputId}
         className={clsx(
-          "min-h-11 bg-arc-mist rounded-none border-0 px-4 font-body text-[17px] text-arc-ink placeholder:text-sky-800",
+          "min-h-[44px] bg-arc-mist rounded-none border-0 p-[16px] font-body font-light text-[18px] text-arc-ink placeholder:text-sky-800",
           error && "outline outline-2 outline-danger",
           className,
         )}

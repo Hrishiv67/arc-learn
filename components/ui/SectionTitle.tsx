@@ -19,7 +19,7 @@ export function SectionTitle({
   return (
     <div className={className}>
       {eyebrow && (
-        <span className="block font-heading font-semibold text-[11px] uppercase tracking-[0.04em] text-sky-800 mb-2">
+        <span className="block font-heading font-semibold text-[11px] uppercase tracking-[0.04em] text-sky-800 mb-[10px]">
           {eyebrow}
         </span>
       )}

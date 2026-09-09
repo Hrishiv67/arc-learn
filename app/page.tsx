@@ -51,7 +51,7 @@ export default function HomePage() {
                   (i > 0 ? "sm:border-l sm:border-mist-600 sm:pl-8" : "")
                 }
               >
-                <span className="block w-10 h-[3px] bg-arc-red mb-3" />
+                <span className="block w-[40px] h-[3px] bg-arc-red mb-3" />
                 <h2 className="font-heading font-bold text-[19px] text-arc-navy">
                   {f.title}
                 </h2>

@@ -30,23 +30,23 @@ export function StatTiles({
           <div
             key={i}
             className={clsx(
-              "flex flex-col gap-1.5 px-5 py-5 min-w-0",
+              "flex flex-col gap-[6px] px-[20px] pt-[20px] pb-[18px] min-w-0",
               dark ? "bg-arc-navy" : "bg-mist-300",
             )}
           >
-            <span className="flex items-baseline gap-1.5 flex-wrap min-w-0">
+            <span className="flex items-baseline gap-[6px] flex-wrap min-w-0">
               <span
                 className={clsx(
                   "font-heading font-bold leading-none",
                   dark ? "text-white" : "text-arc-navy",
                 )}
-                style={{ fontSize: 32 }}
+                style={{ fontSize: 34 }}
               >
                 {s.value}
               </span>
               <span
                 className={clsx(
-                  "font-heading font-semibold text-[13px] uppercase tracking-[0.03em]",
+                  "font-heading font-semibold text-[14px] uppercase tracking-[0.04em]",
                   dark ? "text-arc-sky" : "text-sky-800",
                 )}
               >
@@ -55,7 +55,7 @@ export function StatTiles({
             </span>
             <span
               className={clsx(
-                "font-heading font-semibold text-[11px] uppercase tracking-[0.03em]",
+                "font-heading font-semibold text-[11px] uppercase tracking-[0.04em]",
                 dark ? "text-arc-sky" : "text-sky-800",
               )}
             >

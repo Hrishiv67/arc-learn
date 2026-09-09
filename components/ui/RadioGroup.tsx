@@ -21,10 +21,10 @@ export function RadioGroup({
   className?: string;
 }) {
   return (
-    <fieldset className={clsx("flex flex-col gap-2", className)}>
+    <fieldset className={clsx("flex flex-col gap-[10px]", className)}>
       <legend
         className={clsx(
-          "font-heading font-semibold text-[11px] uppercase tracking-[0.04em] text-arc-navy mb-1",
+          "font-heading font-semibold text-[14px] uppercase tracking-[0.04em] text-arc-navy mb-1",
           hideLegend && "sr-only",
         )}
       >
@@ -35,9 +35,9 @@ export function RadioGroup({
         return (
           <label
             key={opt.value}
-            className="inline-flex items-center gap-3 min-h-11 cursor-pointer select-none"
+            className="inline-flex items-center gap-[20px] min-h-[44px] cursor-pointer select-none"
           >
-            <span className="relative inline-flex h-6 w-6 shrink-0 items-center justify-center">
+            <span className="relative inline-flex h-[26px] w-[26px] shrink-0 items-center justify-center">
               <input
                 type="radio"
                 name={name}

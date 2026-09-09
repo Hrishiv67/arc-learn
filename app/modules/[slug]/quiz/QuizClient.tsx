@@ -39,7 +39,7 @@ export function QuizClient({ slug }: { slug: string }) {
           onExit={() => router.push("/modules")}
         />
 
-        <aside className="hidden md:flex flex-col gap-6 sticky top-28">
+        <aside className="hidden md:flex flex-col gap-6 sticky top-[92px]">
           <div>
             <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
               This module

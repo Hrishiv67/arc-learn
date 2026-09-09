@@ -20,11 +20,11 @@ export function Select({
   const generatedId = useId();
   const selectId = id ?? generatedId;
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-[10px]">
       <label
         htmlFor={selectId}
         className={clsx(
-          "font-heading font-semibold text-[11px] uppercase tracking-[0.04em] text-arc-navy",
+          "font-heading font-semibold text-[14px] uppercase tracking-[0.04em] text-arc-navy",
           hideLabel && "sr-only",
         )}
       >
@@ -34,7 +34,7 @@ export function Select({
         <select
           id={selectId}
           className={clsx(
-            "min-h-11 w-full appearance-none bg-arc-mist rounded-none border-0 pl-4 pr-10 font-body text-[17px] text-arc-ink",
+            "min-h-[44px] w-full appearance-none bg-arc-mist rounded-none border-0 pl-[16px] pr-[56px] font-body font-light text-[18px] text-arc-ink",
             className,
           )}
           {...rest}
@@ -43,8 +43,8 @@ export function Select({
         </select>
         <Icon
           name="chevron-down"
-          size={16}
-          className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-sky-800"
+          size={20}
+          className="pointer-events-none absolute right-[16px] top-1/2 -translate-y-1/2 text-arc-navy"
         />
       </div>
     </div>

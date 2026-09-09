@@ -79,7 +79,7 @@ export function LessonRail({
 
   return (
     <div
-      className="flex flex-col gap-6 sticky top-28 max-h-[calc(100vh-120px)] overflow-y-auto pr-1"
+      className="flex flex-col gap-6 sticky top-[92px] max-h-[calc(100vh-120px)] overflow-y-auto pr-1"
     >
       <div>
         <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
@@ -91,7 +91,7 @@ export function LessonRail({
               key={s.id}
               href={s.href}
               className={clsx(
-                "flex items-center gap-3 min-h-11 px-3 border-l-[3px] transition-colors duration-200 ease-arc",
+                "flex items-center gap-3 min-h-[44px] px-3 border-l-[3px] transition-colors duration-200 ease-arc",
                 s.state === "current"
                   ? "bg-mist-300 border-arc-navy"
                   : "border-transparent hover:bg-mist-300",
@@ -123,7 +123,7 @@ export function LessonRail({
                 type="button"
                 onClick={() => jump(s.id)}
                 className={clsx(
-                  "text-left min-h-10 px-2.5 py-2 border-l-[3px] font-body text-[15px] transition-colors duration-200 ease-arc",
+                  "text-left min-h-[40px] px-2.5 py-2 border-l-[3px] font-body text-[15px] transition-colors duration-200 ease-arc",
                   active === s.id
                     ? "border-arc-navy text-arc-navy font-bold"
                     : "border-transparent text-arc-ink font-light",

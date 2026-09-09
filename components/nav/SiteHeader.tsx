@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
-import { TextButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { useProgress, getCoursePct } from "@/lib/progress/local";
 import { useSupabaseUser } from "@/lib/supabase/useUser";
@@ -40,7 +39,7 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
   return (
     <header className="sticky top-0 z-40 border-b border-navy-200 bg-arc-white md:bg-arc-white">
       {/* Mobile app bar */}
-      <div className="flex md:hidden items-center justify-between h-14 px-4 bg-arc-navy text-white">
+      <div className="flex md:hidden items-center justify-between h-[56px] px-4 bg-arc-navy text-white">
         <Link
           href="/"
           className="font-heading font-bold text-[18px] text-white"
@@ -50,14 +49,14 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
         <Link
           href="/account"
           aria-label={signedIn ? "Account" : "Sign in"}
-          className="inline-flex items-center justify-center w-11 h-11 -mr-2 text-white"
+          className="inline-flex items-center justify-center w-[44px] h-[44px] -mr-2 text-white"
         >
           <Icon name="user" size={20} />
         </Link>
       </div>
 
       {/* Desktop header */}
-      <Container className="hidden md:flex items-center justify-between h-20">
+      <Container className="hidden md:flex items-center gap-[28px] h-[68px]">
         <Link href="/" className="flex flex-col leading-none">
           <span className="font-heading font-bold text-[22px] text-arc-navy">
             ARC Learn
@@ -66,7 +65,10 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
             Unofficial course
           </span>
         </Link>
-        <nav className="flex items-center gap-8 h-full" aria-label="Primary">
+        <nav
+          className="flex items-center gap-[24px] flex-1 h-full"
+          aria-label="Primary"
+        >
           {links.map((l) => {
             const active = isLinkActive(l.href);
             return (
@@ -75,7 +77,7 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
                 href={l.href}
                 aria-current={active ? "page" : undefined}
                 className={clsx(
-                  "flex items-center h-full font-heading font-semibold text-[13px] uppercase tracking-[0.03em] border-b-[3px] transition-colors duration-200 ease-arc hover:text-sky-700",
+                  "flex items-center h-full font-heading font-semibold text-[13px] uppercase tracking-[0.04em] border-b-[3px] transition-colors duration-200 ease-arc hover:text-sky-700",
                   active
                     ? "text-arc-navy border-arc-red"
                     : "text-arc-navy border-transparent",
@@ -85,7 +87,9 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
               </Link>
             );
           })}
-          <span className="flex items-center gap-2.5">
+        </nav>
+        <div className="flex items-center gap-[16px]">
+          <span className="flex items-center gap-[10px]">
             <span className="w-[90px] h-[6px] bg-mist-600">
               <span
                 className="block h-full bg-go transition-[width] duration-500 ease-arc"
@@ -96,10 +100,13 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
               {Math.round(pct)}%
             </span>
           </span>
-          <TextButton href="/account">
+          <Link
+            href="/account"
+            className="font-heading font-semibold text-[12px] uppercase tracking-[0.04em] text-arc-navy"
+          >
             {signedIn ? "Account" : "Sign in"}
-          </TextButton>
-        </nav>
+          </Link>
+        </div>
       </Container>
     </header>
   );

@@ -43,22 +43,27 @@ export function Callout({
   return (
     <div
       role={tone === "danger" || tone === "caution" ? "alert" : undefined}
-      className={clsx("flex gap-3 border-l-[6px] p-4", t.bar, t.bg, className)}
+      className={clsx(
+        "flex gap-[20px] border-l-[6px] p-[20px]",
+        t.bar,
+        t.bg,
+        className,
+      )}
     >
       {icon && (
         <Icon
           name={t.icon}
-          size={18}
-          className={clsx("mt-0.5 shrink-0", iconColor[tone])}
+          size={22}
+          className={clsx("mt-[3px] shrink-0", iconColor[tone])}
         />
       )}
       <div className="min-w-0">
         {title && (
-          <p className="font-body font-bold text-[15px] text-arc-ink">
+          <p className="font-body font-bold text-[18px] text-arc-navy mb-[4px]">
             {title}
           </p>
         )}
-        <div className="font-body text-[15px] text-arc-ink mt-1">
+        <div className="font-body font-light text-[16px] leading-[1.6] text-arc-ink">
           {children}
         </div>
       </div>
