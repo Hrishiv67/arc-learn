@@ -70,14 +70,21 @@ export function ChoiceQuestion({
         })}
       </div>
 
-      {answered && (
-        <Callout
-          tone={right ? "go" : "caution"}
-          title={right ? "Correct" : "Not this time"}
-        >
-          {question.why}
-        </Callout>
-      )}
+      <div
+        className={clsx(
+          "grid transition-[grid-template-rows] duration-[280ms] ease-arc",
+          answered ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">
+          <Callout
+            tone={right ? "go" : "caution"}
+            title={right ? "Correct" : "Not this time"}
+          >
+            {question.why}
+          </Callout>
+        </div>
+      </div>
 
       <div>
         {answered ? (

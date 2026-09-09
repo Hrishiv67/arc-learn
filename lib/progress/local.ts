@@ -1,13 +1,24 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useSyncExternalStore } from "react";
 import {
   progressStateSchema,
+  isModuleComplete,
   type ProgressState,
   type ModuleProgress,
 } from "@/lib/schemas/progress";
+import { MODULES } from "@/content/modules/registry";
 
 const STORAGE_KEY = "arc-learn:progress:v1";
+const EMPTY_PROGRESS: ProgressState = {};
+
+// useSyncExternalStore calls getSnapshot on every render and treats a new
+// object reference as "the store changed" — since JSON.parse allocates a
+// fresh object every call, returning it unconditionally caused an infinite
+// render loop. Cache by the raw string so an unchanged localStorage value
+// returns the exact same reference.
+let cachedRaw: string | null = null;
+let cachedState: ProgressState = EMPTY_PROGRESS;
 
 /**
  * Tier 1 (anonymous) progress. Excellent on its own — no signup wall, no
@@ -15,15 +26,26 @@ const STORAGE_KEY = "arc-learn:progress:v1";
  * rather than discarding it.
  */
 export function readProgress(): ProgressState {
-  if (typeof window === "undefined") return {};
+  if (typeof window === "undefined") return EMPTY_PROGRESS;
+  let raw: string | null;
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
-    if (!raw) return {};
-    const parsed = progressStateSchema.safeParse(JSON.parse(raw));
-    return parsed.success ? parsed.data : {};
+    raw = window.localStorage.getItem(STORAGE_KEY);
   } catch {
-    return {};
+    return EMPTY_PROGRESS;
   }
+  if (raw === cachedRaw) return cachedState;
+  cachedRaw = raw;
+  if (!raw) {
+    cachedState = EMPTY_PROGRESS;
+    return cachedState;
+  }
+  try {
+    const parsed = progressStateSchema.safeParse(JSON.parse(raw));
+    cachedState = parsed.success ? parsed.data : EMPTY_PROGRESS;
+  } catch {
+    cachedState = EMPTY_PROGRESS;
+  }
+  return cachedState;
 }
 
 function writeProgress(state: ProgressState) {
@@ -55,21 +77,49 @@ export function resetProgress() {
   writeProgress({});
 }
 
-/** Client-side reactive read of the whole progress state. */
+/**
+ * Pull-on-signin counterpart to sync.ts's mergeLocalProgressOnSignUp: folds
+ * remote (Supabase) progress into local storage, module by module, keeping
+ * whichever side represents more progress rather than letting a fresh
+ * sign-in on a new device blow away further-along local progress.
+ */
+export function mergeRemoteProgress(remote: ProgressState) {
+  const local = readProgress();
+  const merged: ProgressState = { ...local };
+  for (const [moduleId, remoteModule] of Object.entries(remote)) {
+    const localModule = local[moduleId];
+    const remoteScore = remoteModule.quiz?.score ?? -1;
+    const localScore = localModule?.quiz?.score ?? -1;
+    if (!localModule || remoteScore > localScore) {
+      merged[moduleId] = remoteModule;
+    }
+  }
+  writeProgress(merged);
+}
+
+function subscribeToProgress(onChange: () => void) {
+  window.addEventListener("arc-learn:progress-changed", onChange);
+  window.addEventListener("storage", onChange);
+  return () => {
+    window.removeEventListener("arc-learn:progress-changed", onChange);
+    window.removeEventListener("storage", onChange);
+  };
+}
+
+/**
+ * Client-side reactive read of the whole progress state. Uses
+ * useSyncExternalStore (not useState+useEffect) specifically so the server
+ * render and the client's *first* render both see EMPTY_PROGRESS — reading
+ * localStorage during the initial client render, before hydration commits,
+ * produced a hydration mismatch (course completion flashing from 0% to its
+ * real value on every load).
+ */
 export function useProgress(): ProgressState {
-  const [state, setState] = useState<ProgressState>(readProgress);
-
-  useEffect(() => {
-    const onChange = () => setState(readProgress());
-    window.addEventListener("arc-learn:progress-changed", onChange);
-    window.addEventListener("storage", onChange);
-    return () => {
-      window.removeEventListener("arc-learn:progress-changed", onChange);
-      window.removeEventListener("storage", onChange);
-    };
-  }, []);
-
-  return state;
+  return useSyncExternalStore(
+    subscribeToProgress,
+    readProgress,
+    () => EMPTY_PROGRESS,
+  );
 }
 
 export function useModuleProgress(
@@ -81,4 +131,10 @@ export function useModuleProgress(
 
 export function useMarkRead(moduleId: string) {
   return useCallback(() => markRead(moduleId), [moduleId]);
+}
+
+/** Percentage of the whole course (all modules, not just live ones) completed. */
+export function getCoursePct(progress: ProgressState): number {
+  const done = MODULES.filter((m) => isModuleComplete(progress[m.id])).length;
+  return (done / MODULES.length) * 100;
 }

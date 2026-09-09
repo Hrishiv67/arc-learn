@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { UNITS, MODULES } from "@/content/modules/registry";
-import { useProgress } from "@/lib/progress/local";
+import { useProgress, getCoursePct } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { isModuleComplete } from "@/lib/schemas/progress";
 import { ProgressRing } from "@/components/ui/StepProgress";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
+import { Container } from "@/components/ui/Container";
 import { clsx } from "@/lib/clsx";
 
 export function ModulesIndexClient() {
@@ -15,10 +16,10 @@ export function ModulesIndexClient() {
   const completeCount = MODULES.filter((m) =>
     isModuleComplete(progress[m.id]),
   ).length;
-  const coursePct = (completeCount / MODULES.length) * 100;
+  const coursePct = getCoursePct(progress);
 
   return (
-    <div className="max-w-[1240px] mx-auto px-5 md:px-10 py-8 md:py-12">
+    <Container className="py-8 md:py-12">
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_300px] gap-8 md:gap-12 items-start">
         <div className="min-w-0">
           <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
@@ -61,7 +62,7 @@ export function ModulesIndexClient() {
                           // Coming soon/Locked badge already carry the
                           // "not available" meaning at full opacity.
                           "grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_130px] gap-3.5 items-center min-h-16 px-3 py-3.5 border-t border-mist-600 transition-colors duration-200 ease-arc",
-                          clickable && "hover:bg-mist-300",
+                          clickable && "group hover:bg-mist-300",
                         )}
                       >
                         {live && unlocked ? (
@@ -86,7 +87,7 @@ export function ModulesIndexClient() {
                             </span>
                             {!live && <Badge tone="mist">Coming soon</Badge>}
                           </div>
-                          <span className="font-heading font-bold text-[18px] md:text-[20px] text-arc-navy block mt-0.5">
+                          <span className="font-heading font-bold text-[18px] md:text-[20px] text-arc-navy group-hover:text-sky-700 transition-colors duration-200 ease-arc block mt-0.5">
                             {m.title}
                           </span>
                           <span className="font-body text-[13px] text-sky-800 block mt-1">
@@ -143,7 +144,7 @@ export function ModulesIndexClient() {
           />
         </aside>
       </div>
-    </div>
+    </Container>
   );
 }
 

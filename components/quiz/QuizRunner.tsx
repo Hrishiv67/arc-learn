@@ -71,7 +71,7 @@ export function QuizRunner({
           <span
             key={k}
             className={clsx(
-              "h-1.5 flex-1 transition-colors duration-250 ease-arc",
+              "h-[6px] flex-1 transition-colors duration-250 ease-arc",
               k < marks.length
                 ? marks[k]
                   ? "bg-go"

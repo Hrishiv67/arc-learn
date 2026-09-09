@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Container } from "@/components/ui/Container";
 
 /**
  * Legal footer required on every screen: educational content, adult
@@ -8,7 +9,7 @@ import Link from "next/link";
 export function SiteFooter() {
   return (
     <footer className="bg-arc-paper border-t border-navy-200 py-8">
-      <div className="max-w-[1240px] mx-auto px-5 md:px-10 pb-16 md:pb-0">
+      <Container className="pb-16 md:pb-0">
         <p className="font-body text-[13px] leading-relaxed text-arc-ink max-w-[70ch]">
           Educational content only. Model rocketry requires adult supervision.
           Follow the{" "}
@@ -26,7 +27,7 @@ export function SiteFooter() {
             Legal
           </Link>
         </p>
-      </div>
+      </Container>
     </footer>
   );
 }

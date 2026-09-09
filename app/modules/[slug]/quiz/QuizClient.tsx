@@ -8,6 +8,7 @@ import { isModuleUnlocked } from "@/lib/progress/gating";
 import { QuizRunner } from "@/components/quiz/QuizRunner";
 import { StepProgress } from "@/components/ui/StepProgress";
 import { getNextModule } from "@/content/modules/registry";
+import { Container } from "@/components/ui/Container";
 
 export function QuizClient({ slug }: { slug: string }) {
   const router = useRouter();
@@ -23,7 +24,7 @@ export function QuizClient({ slug }: { slug: string }) {
   const quizDone = !!progress[mod.id]?.quiz;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-5 md:px-10 py-7 md:py-9 pb-20 md:pb-20">
+    <Container className="py-7 md:py-9 pb-20 md:pb-20">
       <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_300px] gap-8 md:gap-12 items-start">
         <QuizRunner
           quiz={quiz}
@@ -57,6 +58,6 @@ export function QuizClient({ slug }: { slug: string }) {
           </div>
         </aside>
       </div>
-    </div>
+    </Container>
   );
 }

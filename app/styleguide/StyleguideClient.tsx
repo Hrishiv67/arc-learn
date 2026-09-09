@@ -15,6 +15,7 @@ import { SectionTitle } from "@/components/ui/SectionTitle";
 import { StatTiles } from "@/components/ui/StatTile";
 import { Quote } from "@/components/ui/Quote";
 import { Accordion } from "@/components/nav/Accordion";
+import { Container } from "@/components/ui/Container";
 
 function Row({
   title,
@@ -35,7 +36,7 @@ function Row({
 
 export function StyleguideClient() {
   return (
-    <div className="max-w-[1240px] mx-auto px-5 md:px-10 py-10">
+    <Container className="py-10">
       <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[42px]">
         Styleguide
       </h1>
@@ -163,6 +164,6 @@ export function StyleguideClient() {
           />
         </div>
       </Row>
-    </div>
+    </Container>
   );
 }

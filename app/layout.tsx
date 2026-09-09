@@ -5,11 +5,12 @@ import { SiteHeader } from "@/components/nav/SiteHeader";
 import { SiteFooter } from "@/components/nav/SiteFooter";
 import { TabBar } from "@/components/nav/TabBar";
 import { PwaRegister } from "@/components/PwaRegister";
+import { AccountSync } from "@/components/account/AccountSync";
 
 const jost = Jost({
   variable: "--font-jost",
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700", "900"],
 });
 
 const nunitoSans = Nunito_Sans({
@@ -65,6 +66,7 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <PwaRegister />
+        <AccountSync />
         <SiteHeader links={NAV_LINKS} />
         <main className="flex-1">{children}</main>
         <SiteFooter />

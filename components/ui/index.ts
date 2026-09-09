@@ -10,6 +10,7 @@ export { Badge } from "./Badge";
 export { StepProgress, ProgressRing, type StepState } from "./StepProgress";
 export { Hero } from "./Hero";
 export { Card } from "./Card";
+export { Container } from "./Container";
 export { SectionTitle } from "./SectionTitle";
 export { StatTiles, type Stat } from "./StatTile";
 export { Quote } from "./Quote";

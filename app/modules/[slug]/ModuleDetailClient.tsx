@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { Callout } from "@/components/ui/Callout";
 import { Badge } from "@/components/ui/Badge";
 import { VideoPlaceholder } from "@/components/lesson/VideoPlaceholder";
+import { Container } from "@/components/ui/Container";
 
 export function ModuleDetailClient({ slug }: { slug: string }) {
   const mod = getModule(slug);
@@ -19,7 +20,7 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
 
   if (mod.status !== "live") {
     return (
-      <div className="max-w-[720px] mx-auto px-5 md:px-10 py-12">
+      <Container className="py-12">
         <Badge tone="mist">Coming soon</Badge>
         <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[36px] mt-4">
           {mod.title}
@@ -31,7 +32,7 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
         <Button href="/modules" variant="outline" className="mt-6">
           Back to the course
         </Button>
-      </div>
+      </Container>
     );
   }
 
@@ -40,7 +41,7 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
   if (!unlocked) {
     const blocker = lockedReason(mod, progress);
     return (
-      <div className="max-w-[720px] mx-auto px-5 md:px-10 py-12">
+      <Container className="py-12">
         <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[36px]">
           {mod.title}
         </h1>
@@ -58,14 +59,14 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
             Go to {blocker.title}
           </Button>
         )}
-      </div>
+      </Container>
     );
   }
 
   const complete = isModuleComplete(progress[mod.id]);
 
   return (
-    <div className="max-w-[720px] mx-auto px-5 md:px-10 py-12 flex flex-col gap-6">
+    <Container className="py-12 flex flex-col gap-6">
       <div>
         <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
           Module {mod.order} · {mod.unitTitle}
@@ -106,6 +107,6 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
       >
         Back to the course
       </Link>
-    </div>
+    </Container>
   );
 }

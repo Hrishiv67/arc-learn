@@ -14,6 +14,21 @@ export type TabItem = { href: string; label: string; icon: IconName };
  */
 export function TabBar({ items }: { items: TabItem[] }) {
   const pathname = usePathname();
+
+  // "/modules" is a prefix of "/modules/this-years-challenge", so a naive
+  // startsWith check would light up both the Course and Module 1 tabs at
+  // once on any module page. Only the most specific (longest href) match wins.
+  const isTabActive = (href: string) => {
+    if (pathname === href) return true;
+    if (!pathname.startsWith(href + "/")) return false;
+    return !items.some(
+      (other) =>
+        other.href !== href &&
+        other.href.length > href.length &&
+        (pathname === other.href || pathname.startsWith(other.href + "/")),
+    );
+  };
+
   return (
     <nav
       aria-label="Primary"
@@ -21,8 +36,7 @@ export function TabBar({ items }: { items: TabItem[] }) {
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
       {items.map((item) => {
-        const active =
-          pathname === item.href || pathname.startsWith(item.href + "/");
+        const active = isTabActive(item.href);
         return (
           <Link
             key={item.href}

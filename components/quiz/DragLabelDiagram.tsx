@@ -203,16 +203,23 @@ export function DragLabelDiagram({
         )}
       </DndContext>
 
-      {checked && (
-        <Callout
-          tone={allCorrect ? "go" : "caution"}
-          title={`${correctCount} of ${question.targets.length} correct`}
-        >
-          {question.why}
-        </Callout>
-      )}
+      <div
+        className={clsx(
+          "grid transition-[grid-template-rows] duration-[280ms] ease-arc",
+          checked ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">
+          <Callout
+            tone={allCorrect ? "go" : "caution"}
+            title={`${correctCount} of ${question.targets.length} correct`}
+          >
+            {question.why}
+          </Callout>
+        </div>
+      </div>
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-center flex-wrap">
         {!checked ? (
           <Button
             variant="primary"

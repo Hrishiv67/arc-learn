@@ -166,14 +166,21 @@ export function DragMatchQuestion({
         )}
       </DndContext>
 
-      {checked && (
-        <Callout
-          tone={allCorrect ? "go" : "caution"}
-          title={`${correctCount} of ${question.pairs.length} correct`}
-        >
-          {question.why}
-        </Callout>
-      )}
+      <div
+        className={clsx(
+          "grid transition-[grid-template-rows] duration-[280ms] ease-arc",
+          checked ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+        )}
+      >
+        <div className="overflow-hidden">
+          <Callout
+            tone={allCorrect ? "go" : "caution"}
+            title={`${correctCount} of ${question.pairs.length} correct`}
+          >
+            {question.why}
+          </Callout>
+        </div>
+      </div>
 
       <div>
         {!checked ? (

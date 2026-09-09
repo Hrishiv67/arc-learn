@@ -65,8 +65,19 @@ cp .env.example .env.local
   publishing scripts (`supabase/seed.sql`), never in a user-facing request
   path.
 
-Without these set, `proxy.ts` (the auth-refresh middleware) no-ops and the
-app runs entirely on Tier 1 (anonymous, localStorage) progress.
+Without these set, `proxy.ts` (the auth-refresh middleware) no-ops, the
+account screen (`/account`) says plainly that no backend is connected, and
+the app runs entirely on Tier 1 (anonymous, localStorage) progress.
+
+Once they're set, `/account` offers real email+password sign-up and sign-in
+(`lib/supabase/auth.ts`), and `components/account/AccountSync.tsx` (mounted
+once in `app/layout.tsx`) keeps localStorage and Supabase mirrored in both
+directions for whoever's signed in: it pulls remote progress into local
+storage on sign-in (merging by whichever side is further along, so signing
+in on a new device never erases progress), and pushes local writes up to
+Supabase as they happen. Every other component still just reads
+`useProgress()` from `lib/progress/local.ts` — none of them need to know
+whether the data underneath is local-only or synced.
 
 ## Adding or editing a module
 
@@ -187,8 +198,12 @@ should have a box-shadow.
 ## Known gaps / next steps
 
 - **Supabase is untested against a live project.** The migration, RLS
-  policies, and auth code are written correctly against the real SDK but
-  no project exists yet — see "Optional: connecting Supabase" above.
+  policies, auth code, and the two-way local/remote progress sync
+  (`components/account/AccountSync.tsx`) are all wired and written
+  correctly against the real SDK, but no project exists yet — see "Optional:
+  connecting Supabase" above. Creating that project (supabase.com, free
+  tier) and pasting its URL/anon key into `.env.local` is the only thing
+  standing between this and a genuinely live account backend.
 - **The safety-module prerequisite gate is client-side only for anonymous
   users.** There's no server that can see an anonymous user's progress, so
   `lib/progress/gating.ts` is a real route guard but not a cryptographic

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { clsx } from "@/lib/clsx";
+import { Container } from "./Container";
 
 /** Full-bleed photo + navy scrim + bottom-left headline. No gradients, no patterns. */
 export function Hero({
@@ -43,7 +44,7 @@ export function Hero({
             "linear-gradient(180deg, rgba(8,29,41,0.35) 0%, rgba(8,29,41,0.78) 100%)",
         }}
       />
-      <div className="relative z-10 max-w-[1240px] w-full mx-auto px-5 md:px-10 py-8 md:py-12">
+      <Container className="relative z-10 py-8 md:py-12">
         {eyebrow && (
           <span className="block font-heading font-semibold text-[11px] uppercase tracking-[0.04em] text-arc-sky mb-3">
             {eyebrow}
@@ -59,7 +60,7 @@ export function Hero({
         )}
         {actions && <div className="mt-6 flex flex-wrap gap-4">{actions}</div>}
         <p className="sr-only">{alt}</p>
-      </div>
+      </Container>
     </div>
   );
 }

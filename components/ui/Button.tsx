@@ -24,11 +24,11 @@ type ButtonAsLink = CommonProps &
   };
 
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-none font-heading font-semibold uppercase tracking-[0.02em] transition-colors duration-200 ease-arc select-none disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-none font-heading font-black uppercase tracking-[0.02em] transition-colors duration-200 ease-arc select-none disabled:cursor-not-allowed disabled:opacity-50";
 
 const sizes: Record<Size, string> = {
-  md: "min-h-11 px-5 text-[13px]",
-  lg: "min-h-12 px-6 text-sm",
+  md: "min-h-11 min-w-[250px] px-5 text-[13px]",
+  lg: "min-h-12 min-w-[250px] px-6 text-sm",
 };
 
 const variants: Record<Variant, string> = {
