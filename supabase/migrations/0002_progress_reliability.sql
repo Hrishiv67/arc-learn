@@ -20,9 +20,10 @@ begin
   return new;
 end;
 $$;
-create trigger preserve_best_progress before insert or update on public.progress
+create or replace trigger preserve_best_progress before insert or update on public.progress
 for each row execute function public.preserve_progress();
 
 -- A user may edit their email, but cannot grant themselves a teacher role.
 revoke update on public.users from authenticated;
 grant update (email) on public.users to authenticated;
+
