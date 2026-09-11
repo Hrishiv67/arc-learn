@@ -1,4 +1,5 @@
 import { NextResponse, type NextRequest } from "next/server";
+import { getSupabaseConfig } from "./lib/supabase/config";
 import { createServerClient } from "@supabase/ssr";
 
 /**
@@ -9,9 +10,9 @@ import { createServerClient } from "@supabase/ssr";
  * build until a real project is connected.
  */
 export async function proxy(request: NextRequest) {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !key) return NextResponse.next();
+  const config = getSupabaseConfig();
+  if (!config) return NextResponse.next();
+  const { url, key } = config;
 
   // Anonymous (Tier 1) visitors are the overwhelming majority of traffic
   // here by design, and carry no Supabase cookie at all. Without this check
@@ -31,11 +32,13 @@ export async function proxy(request: NextRequest) {
       getAll() {
         return request.cookies.getAll();
       },
-      setAll(cookiesToSet) {
+      setAll(cookiesToSet, headers) {
         for (const { name, value } of cookiesToSet) {
           request.cookies.set(name, value);
         }
         response = NextResponse.next({ request });
+        for (const [name, value] of Object.entries(headers ?? {}))
+          response.headers.set(name, value);
         for (const { name, value, options } of cookiesToSet) {
           response.cookies.set(name, value, options);
         }
@@ -45,7 +48,12 @@ export async function proxy(request: NextRequest) {
 
   // Touch the session so an expiring token gets refreshed before it's read
   // by a Server Component later in the request.
-  await supabase.auth.getUser();
+  try {
+    await supabase.auth.getUser();
+  } catch {
+    /* Public lessons stay available if auth is unreachable. */
+  }
+  response.headers.set("Cache-Control", "private, no-store");
 
   return response;
 }

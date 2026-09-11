@@ -10,11 +10,7 @@ import { ReviewFlag } from "@/components/lesson/ReviewFlag";
 import { LessonRail } from "@/components/lesson/LessonRail";
 import { Container } from "@/components/ui/Container";
 
-export const RESOURCES = [
-  { title: "Module 1 student handout", pages: 4 },
-  { title: "Module 1 worksheets", pages: 3 },
-  { title: "Module 1 instructor guide", pages: 6 },
-];
+export const RESOURCES: { title: string; pages: number; href: string }[] = [];
 
 export function LessonClient({ slug }: { slug: string }) {
   const mod = getModule(slug);
@@ -45,6 +41,22 @@ export function LessonClient({ slug }: { slug: string }) {
           </div>
 
           {mod.needsReview && <ReviewFlag />}
+
+          <nav
+            aria-label="Lesson actions"
+            className="flex flex-wrap gap-4 text-sm"
+          >
+            <TextButton href="/modules">All modules</TextButton>
+            <TextButton href={`/modules/${mod.slug}/quiz`}>
+              Open quiz
+            </TextButton>
+            <button
+              className="text-arc-navy underline"
+              onClick={() => window.print()}
+            >
+              Print / save lesson
+            </button>
+          </nav>
 
           <div
             ref={contentRef}

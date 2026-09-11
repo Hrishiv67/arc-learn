@@ -8,7 +8,11 @@ import { z } from "zod";
 export const moduleProgressSchema = z.object({
   read: z.boolean().default(false),
   quiz: z
-    .object({ score: z.number().int(), total: z.number().int() })
+    .object({
+      score: z.number().int().nonnegative(),
+      total: z.number().int().positive(),
+    })
+    .refine((q) => q.score <= q.total)
     .optional(),
 });
 

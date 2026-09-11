@@ -1,6 +1,6 @@
 // ARC Learn service worker — offline shell for lessons and handouts.
 // Video is allowed to require a connection; everything else should not.
-const CACHE_NAME = "arc-learn-v1";
+const CACHE_NAME = "arc-learn-v2";
 const APP_SHELL = [
   "/",
   "/modules",
@@ -26,7 +26,7 @@ self.addEventListener("activate", (event) => {
       .then((keys) =>
         Promise.all(
           keys
-            .filter((key) => key !== CACHE_NAME)
+            .filter((key) => key.startsWith("arc-learn-") && key !== CACHE_NAME)
             .map((key) => caches.delete(key)),
         ),
       )
@@ -40,6 +40,12 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+  if (
+    url.pathname.startsWith("/auth") ||
+    url.pathname.startsWith("/account") ||
+    request.headers.has("RSC")
+  )
+    return;
 
   // Navigations: network-first, cache fallback, offline page as last resort.
   if (request.mode === "navigate") {
@@ -47,17 +53,24 @@ self.addEventListener("fetch", (event) => {
       fetch(request)
         .then((response) => {
           const copy = response.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
+          if (response.ok)
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
           return response;
         })
         .catch(
-          () =>
-            caches.match(request).then((cached) => cached) ||
-            caches.match("/offline"),
+          async () =>
+            (await caches.match(request)) || (await caches.match("/offline")),
         ),
     );
     return;
   }
+
+  if (
+    !url.pathname.startsWith("/_next/static/") &&
+    !url.pathname.startsWith("/images/") &&
+    !url.pathname.startsWith("/icons/")
+  )
+    return;
 
   // Static assets and images: cache-first, network fallback, cache the result.
   event.respondWith(

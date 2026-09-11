@@ -19,15 +19,14 @@ export function VideoPlaceholder({
   return (
     <div className="bg-arc-mist p-5 md:p-6 flex flex-col gap-4">
       <div className="flex items-center gap-3 flex-wrap">
-        <Badge tone="navy">In production</Badge>
+        <Badge tone="navy">Reading + quiz</Badge>
         <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-          {minutes} min once it&apos;s ready
+          {minutes} min at your pace
         </span>
       </div>
       <div>
         <p className="font-body text-[16px] text-arc-ink mb-2">
-          This module&apos;s video hasn&apos;t been produced yet. Here&apos;s
-          what it will cover:
+          In this lesson, you will learn:
         </p>
         <ul className="font-body text-[16px] text-arc-ink list-disc pl-5 space-y-1">
           {covers.map((c, i) => (
@@ -37,7 +36,7 @@ export function VideoPlaceholder({
       </div>
       <div>
         <Button href={lessonHref} variant="primary">
-          Read the lesson instead
+          Start the lesson
         </Button>
       </div>
     </div>

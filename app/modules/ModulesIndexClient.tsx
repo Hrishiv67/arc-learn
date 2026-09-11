@@ -6,7 +6,7 @@ import { useProgress, getCoursePct } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { isModuleComplete } from "@/lib/schemas/progress";
 import { ProgressRing } from "@/components/ui/StepProgress";
-import { TextButton } from "@/components/ui/Button";
+import { Button, TextButton } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { Container } from "@/components/ui/Container";
@@ -30,6 +30,30 @@ export function ModulesIndexClient() {
             Rocketry for a first-year team
           </h1>
 
+          <p className="mt-3 text-sky-800">
+            A practical path from your first lesson to the launch field.
+          </p>
+          <div className="learning-card mt-6">
+            <div>
+              <span className="eyebrow">Available now · 9-minute reading</span>
+              <h2 className="text-2xl mt-2">This Year&apos;s Challenge</h2>
+              <p className="text-sm text-sky-800 mt-2">
+                Read the lesson, explore the diagrams, and check your
+                understanding.
+              </p>
+            </div>
+            <Button
+              href={
+                progress["this-years-challenge"]?.read
+                  ? "/modules/this-years-challenge/quiz"
+                  : "/modules/this-years-challenge/lesson"
+              }
+            >
+              {progress["this-years-challenge"]?.read
+                ? "Continue to quiz"
+                : "Start learning"}
+            </Button>
+          </div>
           <div className="mt-8 flex flex-col gap-6 md:hidden">
             <ProgressSummary
               coursePct={coursePct}
@@ -86,7 +110,11 @@ export function ModulesIndexClient() {
                             <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">
                               Module {m.order}
                             </span>
-                            {!live && <Badge tone="mist" size="sm">Coming soon</Badge>}
+                            {!live && (
+                              <Badge tone="mist" size="sm">
+                                Coming soon
+                              </Badge>
+                            )}
                           </div>
                           <span className="font-heading font-bold text-[18px] md:text-[20px] text-arc-navy group-hover:text-sky-700 transition-colors duration-200 ease-arc block mt-0.5">
                             {m.title}
@@ -112,10 +140,14 @@ export function ModulesIndexClient() {
                                 </span>
                               )
                             ) : (
-                              <Badge tone="caution" size="sm">Locked</Badge>
+                              <Badge tone="caution" size="sm">
+                                Locked
+                              </Badge>
                             )
                           ) : (
-                            <Badge tone="mist" size="sm">Coming soon</Badge>
+                            <Badge tone="mist" size="sm">
+                              Coming soon
+                            </Badge>
                           )}
                         </div>
                       </div>

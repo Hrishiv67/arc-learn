@@ -185,7 +185,12 @@ export function DragLabelDiagram({
                   wrong && "ring-2 ring-caution",
                 )}
               >
-                <TargetSlot targetId={target.id} filledLabel={label} />
+                <div className="h-full relative">
+                  <span className="absolute -top-3 left-0 text-[10px] font-bold text-arc-navy">
+                    {question.targets.indexOf(target) + 1}
+                  </span>
+                  <TargetSlot targetId={target.id} filledLabel={label} />
+                </div>
               </div>
             );
           }}
@@ -202,6 +207,40 @@ export function DragLabelDiagram({
           </div>
         )}
       </DndContext>
+      <details className="border border-mist-500 rounded-lg p-4">
+        <summary className="text-sm font-bold text-arc-navy">
+          Prefer tapping? Choose answers from a list
+        </summary>
+        <div className="grid sm:grid-cols-2 gap-4 mt-4">
+          {question.targets.map((target, index) => (
+            <label key={target.id} className="text-sm">
+              Diagram position {index + 1}
+              <select
+                className="block w-full border border-navy-300 rounded-lg p-3 mt-2 bg-white"
+                value={placements[target.id] ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setPlacements((prev) => {
+                    const next = { ...prev };
+                    for (const key of Object.keys(next))
+                      if (next[key] === value) delete next[key];
+                    next[target.id] = value;
+                    return next;
+                  });
+                  setChecked(false);
+                }}
+              >
+                <option value="">Choose a part</option>
+                {question.labels.map((label) => (
+                  <option key={label.id} value={label.id}>
+                    {label.text}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+      </details>
 
       <div
         className={clsx(

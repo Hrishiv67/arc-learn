@@ -1,23 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Jost, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/nav/SiteHeader";
 import { SiteFooter } from "@/components/nav/SiteFooter";
 import { TabBar } from "@/components/nav/TabBar";
 import { PwaRegister } from "@/components/PwaRegister";
 import { AccountSync } from "@/components/account/AccountSync";
-
-const jost = Jost({
-  variable: "--font-jost",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "900"],
-});
-
-const nunitoSans = Nunito_Sans({
-  variable: "--font-nunito-sans",
-  subsets: ["latin"],
-  weight: ["300", "500", "700", "900"],
-});
 
 export const metadata: Metadata = {
   title: {
@@ -60,15 +47,17 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html
-      lang="en"
-      className={`${jost.variable} ${nunitoSans.variable} h-full`}
-    >
+    <html lang="en" className="h-full">
       <body className="min-h-full flex flex-col">
         <PwaRegister />
         <AccountSync />
+        <a className="skip-link" href="#main-content">
+          Skip to content
+        </a>
         <SiteHeader links={NAV_LINKS} />
-        <main className="flex-1">{children}</main>
+        <main id="main-content" className="flex-1">
+          {children}
+        </main>
         <SiteFooter />
         <TabBar items={TAB_ITEMS} />
       </body>

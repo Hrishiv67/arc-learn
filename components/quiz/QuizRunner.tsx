@@ -135,11 +135,11 @@ export function QuizRunner({
             </TextButton>
           </div>
 
-          {isFrontier && (
+          {isFrontier && passed && (
             <Callout tone="go" title="You're caught up">
               Every module that&rsquo;s live right now is complete. See your
-              full scorecard — including what&rsquo;s worth a reread — on
-              the results page.
+              full scorecard — including what&rsquo;s worth a reread — on the
+              results page.
             </Callout>
           )}
 

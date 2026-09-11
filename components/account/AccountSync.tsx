@@ -1,63 +1,89 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
-import { fetchRemoteProgress, pushProgress } from "@/lib/progress/sync";
-import { mergeRemoteProgress, readProgress } from "@/lib/progress/local";
+import {
+  fetchRemoteProgress,
+  mergeLocalProgressOnSignUp,
+} from "@/lib/progress/sync";
+import { mergeRemoteProgress, setProgressOwner } from "@/lib/progress/local";
 
-/**
- * Mounted once, globally (app/layout.tsx) — not rendered UI, just wiring.
- * Local storage stays the single source of truth every component reads
- * from (useProgress()); this keeps it mirrored to Supabase for whoever is
- * signed in, in both directions:
- *   - pull: on sign-in (including an already-active session on load),
- *     merge remote progress into local, in case this is a new device.
- *   - push: whenever local progress changes while signed in, mirror the
- *     full local state up to Supabase.
- * A no-op with zero listeners when no Supabase project is configured.
- */
 export function AccountSync() {
-  const userIdRef = useRef<string | null>(null);
-
+  const [failed, setFailed] = useState(false);
   useEffect(() => {
     if (!isSupabaseConfigured()) return;
     const supabase = createClient();
-
-    async function pull(userId: string) {
-      userIdRef.current = userId;
-      const remote = await fetchRemoteProgress(userId);
-      mergeRemoteProgress(remote);
-    }
-
-    supabase.auth.getUser().then(({ data }) => {
-      if (data.user) pull(data.user.id);
-    });
-
-    const { data: subscription } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        if (event === "SIGNED_IN" && session?.user) {
-          pull(session.user.id);
-        } else if (event === "SIGNED_OUT") {
-          userIdRef.current = null;
-        }
-      },
-    );
-
-    const onLocalChange = () => {
-      const userId = userIdRef.current;
-      if (!userId) return;
-      const state = readProgress();
-      for (const [moduleId, moduleProgress] of Object.entries(state)) {
-        pushProgress(userId, moduleId, moduleProgress);
+    let active = true;
+    let userId: string | null = null;
+    let running = false;
+    let pending = false;
+    let merging = false;
+    let timer: ReturnType<typeof setTimeout>;
+    async function sync() {
+      if (!active || !userId) return;
+      if (running) {
+        pending = true;
+        return;
       }
-    };
-    window.addEventListener("arc-learn:progress-changed", onLocalChange);
-
+      running = true;
+      const owner = userId;
+      try {
+        const remote = await fetchRemoteProgress(owner);
+        if (!active || owner !== userId) return;
+        merging = true;
+        mergeRemoteProgress(remote);
+        merging = false;
+        await mergeLocalProgressOnSignUp(owner);
+        if (active && owner === userId) setFailed(false);
+      } catch {
+        if (active && owner === userId) setFailed(true);
+      } finally {
+        merging = false;
+        running = false;
+        if (pending && active) {
+          pending = false;
+          schedule();
+        }
+      }
+    }
+    function schedule() {
+      if (merging) return;
+      clearTimeout(timer);
+      timer = setTimeout(() => {
+        void sync();
+      }, 200);
+    }
+    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+      userId = session?.user.id ?? null;
+      setProgressOwner(userId);
+      // Defer Supabase calls until the auth callback releases its lock.
+      if (userId) schedule();
+      else setFailed(false);
+    });
+    window.addEventListener("arc-learn:progress-changed", schedule);
+    window.addEventListener("online", schedule);
     return () => {
-      subscription.subscription.unsubscribe();
-      window.removeEventListener("arc-learn:progress-changed", onLocalChange);
+      active = false;
+      clearTimeout(timer);
+      data.subscription.unsubscribe();
+      window.removeEventListener("arc-learn:progress-changed", schedule);
+      window.removeEventListener("online", schedule);
     };
   }, []);
-
-  return null;
+  return failed ? (
+    <div
+      role="status"
+      className="bg-caution-tint text-caution px-4 py-2 text-sm text-center"
+    >
+      Progress is saved on this device. Cloud sync is unavailable.{" "}
+      <button
+        className="underline font-bold"
+        onClick={() =>
+          window.dispatchEvent(new Event("arc-learn:progress-changed"))
+        }
+      >
+        Retry sync
+      </button>
+    </div>
+  ) : null;
 }
