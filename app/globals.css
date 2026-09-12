@@ -60,8 +60,37 @@
   --color-danger: #b42025;
   --color-danger-tint: #f8e9e9;
 
-  --font-heading: "Segoe UI", Arial, sans-serif;
-  --font-body: "Segoe UI", Arial, sans-serif;
+  /*
+   * Typography. The American Rocketry Challenge's own site sets headings in
+   * Futura PT Bold and body in Museo Sans (Adobe Typekit) — "Segoe UI" here was
+   * a placeholder, not the brand. Jost is an open Futura revival and Hanken
+   * Grotesk carries Museo Sans' warmth; both are self-hosted via next/font.
+   * To switch to the real faces, point these two at a Typekit kit and change
+   * nothing else.
+   *
+   * Futura is the typeface on the Apollo 11 lunar plaque, which is a better
+   * reason to use it here than brand-matching alone.
+   */
+  --font-heading: var(--font-jost), "Futura PT", Futura, Arial, sans-serif;
+  --font-body: var(--font-hanken), "Museo Sans", "Segoe UI", Arial, sans-serif;
+  /* Instrumentation only. The brand has no mono; telemetry needs one. */
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
+
+  /*
+   * Dark shell. Home, the roadmap and the workshop run on the launch field;
+   * lessons and quizzes stay on paper, because long technical reading is worse
+   * on dark. Both grounds come from the existing navy ramp — no new greys.
+   */
+  --color-shell: #081d29;
+  --color-shell-raised: #0b2837;
+  --color-shell-line: rgba(242, 244, 245, 0.12);
+  --color-shell-ink: #f2f4f5;
+  --color-shell-dim: rgba(242, 244, 245, 0.58);
+  --color-shell-faint: rgba(242, 244, 245, 0.34);
+
+  /* micro-caps: 10px / 600 / wide — measured off real instrumentation type */
+  --micro-size: 10px;
+  --micro-track: 0.2em;
 
   /* Standard Tailwind spacing keeps component sizes consistent. */
   --spacing: 4px;
@@ -619,4 +648,134 @@ summary {
   .skip-link {
     display: none !important;
   }
+}
+
+/* Google sign-in — a second option beside email, never instead of it.
+   Radius 0 and no shadow, like every other control in this system. */
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 20px;
+  background: var(--color-arc-white);
+  border: 1px solid var(--color-navy-200);
+  color: var(--color-arc-ink);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s var(--ease-arc);
+}
+.google-button:hover {
+  background: var(--color-mist-300);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-mist-500);
+}
+
+/* ------------------------------------------------------------------ */
+/* Your vehicle — the build card on the course index.                  */
+/* Dark card on the paper page: the launch field seen from the desk.   */
+/* ------------------------------------------------------------------ */
+.vbuild {
+  background: var(--color-navy-700);
+  padding: 20px;
+  border: 1px solid var(--color-navy-600);
+}
+
+.vbuild__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vbuild__pct {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px; /* circular controls are the one radius exception */
+  border: 1px solid var(--color-navy-400);
+  color: var(--color-arc-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  flex: none;
+}
+
+.vbuild__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 236px;
+  margin-top: 18px;
+  padding-bottom: 14px;
+  background: radial-gradient(
+    ellipse 34% 46% at 50% 46%,
+    rgba(125, 180, 209, 0.16),
+    transparent 72%
+  );
+}
+
+.vbuild__axis {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 14px;
+  width: 1px;
+  background: rgba(242, 244, 245, 0.1);
+}
+
+.vbuild__section {
+  position: relative;
+  display: block;
+  flex: none;
+}
+
+.vbuild__section img {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: 100%;
+}
+
+/* Not yet earned: the section is there as a ghost, so the shape of what you
+   are building is legible from the first day. */
+.vbuild__section[data-earned="false"] img {
+  opacity: 0.16;
+  filter: grayscale(1) brightness(1.5);
+}
+
+.vbuild__section[data-earned="true"] img {
+  opacity: 1;
+}
+
+.vbuild__ground {
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: 10px;
+  height: 1px;
+  background: rgba(242, 244, 245, 0.18);
 }

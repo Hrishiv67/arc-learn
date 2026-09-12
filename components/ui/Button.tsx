@@ -24,7 +24,7 @@ type ButtonAsLink = CommonProps &
   };
 
 const base =
-  "inline-flex items-center justify-center gap-[10px] rounded-[8px] font-heading font-semibold transition-colors duration-200 ease-arc select-none disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-[10px] rounded-none font-heading font-semibold transition-colors duration-200 ease-arc select-none disabled:cursor-not-allowed disabled:opacity-50";
 
 const sizes: Record<Size, string> = {
   md: "min-h-[44px] px-[22px] py-[12px] text-[16px]",
@@ -41,7 +41,14 @@ const variants: Record<Variant, string> = {
   text: "bg-transparent text-arc-navy px-0 min-h-[44px] hover:text-sky-700 active:text-sky-700",
 };
 
-/** Primary CTA (one per screen — red is action, never decoration), outline, or text button. */
+/**
+ * Primary CTA (one per screen — red is action, never decoration), outline, or
+ * text button.
+ *
+ * Square corners: the styleguide's own rule is radius 0 everywhere except
+ * circular controls, and this was the one primitive breaking it. ARC's own site
+ * uses a sharp red rectangle for its calls to action too.
+ */
 export function Button(props: ButtonAsButton | ButtonAsLink) {
   const {
     variant = "primary",

@@ -7,7 +7,7 @@ import { useProgress, recordQuizResult } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { QuizRunner } from "@/components/quiz/QuizRunner";
 import { LessonRail } from "@/components/lesson/LessonRail";
-import { RESOURCES } from "@/app/modules/[slug]/lesson/LessonClient";
+import { RESOURCES } from "../lesson/LessonClient";
 import { getNextModule, MODULES } from "@/content/modules/registry";
 import { Container } from "@/components/ui/Container";
 
