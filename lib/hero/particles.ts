@@ -17,7 +17,7 @@
 export type Puff = {
   /** scroll progress at which this puff is born */
   pb: number;
-  /** 0 = ground pancake rolling across the grass, 1 = column following the vehicle */
+  /** 0 = ground pancake rolling across the grass, 1 = column following the rocket */
   column: boolean;
   ox: number;
   oy: number;
@@ -115,7 +115,7 @@ export function buildField(count: number, sprites: number, seed = 0x5eed): Puff[
 
 /**
  * Evaluate one puff at progress p.
- * `travelAt` supplies the vehicle's height so column puffs are laid down along
+ * `travelAt` supplies the rocket's height so column puffs are laid down along
  * the path it actually took, leaving a trail rather than a plume stuck to the pad.
  * Returns null when the puff has not been born or has fully dissipated.
  */

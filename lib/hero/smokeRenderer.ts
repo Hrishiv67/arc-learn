@@ -2,7 +2,7 @@
  * Canvas compositor for the exhaust: ground cloud, ignition flash, plume, trail.
  *
  * Draw order matters physically. The pad cloud sits nearest the camera at the
- * base, the plume burns through it, and the column the vehicle leaves behind
+ * base, the plume burns through it, and the column the rocket leaves behind
  * rides in front of both. Smoke composites with ordinary alpha — additive would
  * make it glow, which is the single fastest way to make real smoke look fake.
  * Only the ignition flash is additive, because that is genuinely emissive.
@@ -106,12 +106,12 @@ export function createSmokeRenderer(
     const dpr = Math.min(window.devicePixelRatio || 1, opts.maxDpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    if (s.p < 0.068) return;
+    if (s.p < 0.128) return;
 
     const unit = H / 100; // 1 vh
     const px = pad.x;
     const py = pad.y;
-    // the nozzle climbs with the vehicle
+    // the nozzle climbs with the rocket
     const nozzleY = py - s.travel * unit;
 
     ctx.globalCompositeOperation = "source-over";

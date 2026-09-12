@@ -1,8 +1,8 @@
 /**
- * Flight model for an American Rocketry Challenge vehicle.
+ * Flight model for an American Rocketry Challenge rocket.
  *
  * ARC 2027 mission: two raw Grade A Large eggs to 800 ft (244 m), 37-40 s aloft.
- * Modelled as a 0.62 kg vehicle under constant thrust to burnout, then a coast
+ * Modelled as a 0.62 kg rocket under constant thrust to burnout, then a coast
  * against gravity and quadratic drag. Both phases have closed forms, so any
  * time can be evaluated directly — no integration, no accumulated state, and
  * identical results whether the user scrolls forward or backward.
@@ -21,7 +21,7 @@ const V_TERM = Math.sqrt(G / K); // 70.0 m/s
 const RATE = Math.sqrt(G * K); // 0.140 /s
 const PHASE0 = Math.atan(V_BURNOUT / V_TERM);
 
-/** Time from liftoff to apogee (s). ~7.0 s for this vehicle. */
+/** Time from liftoff to apogee (s). ~7.0 s for this rocket. */
 export const T_APOGEE = BURN_TIME + PHASE0 / RATE;
 
 export type FlightState = {

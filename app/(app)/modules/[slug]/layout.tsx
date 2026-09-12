@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
  * Module gate.
  *
  * An account is required before any module, including the first one. The course
- * itself is free — the account exists so a student's progress, and the vehicle
+ * itself is free — the account exists so a student's progress, and the rocket
  * they are assembling from it, survive changing devices.
  *
  * When no Supabase project is configured this falls through instead of locking

@@ -9,7 +9,7 @@ export type ProgressOpts = {
   onFrame: (p: number) => void;
   /** Called once instead, when the viewer prefers reduced motion. */
   onStatic: (p: number) => void;
-  /** Progress to hold for reduced motion — the vehicle armed on the rail. */
+  /** Progress to hold for reduced motion — the rocket armed on the rail. */
   staticP?: number;
 };
 

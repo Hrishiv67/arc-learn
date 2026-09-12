@@ -580,7 +580,7 @@ summary {
 }
 
 /* ------------------------------------------------------------------ */
-/* Your vehicle — the build card on the course index.                  */
+/* Your rocket — the build card on the course index.                  */
 /* Dark card on the paper page: the launch field seen from the desk.   */
 /* ------------------------------------------------------------------ */
 .vbuild {
@@ -613,7 +613,7 @@ summary {
 }
 
 .vbuild {
-  --vb-dia: 34px;
+  --rb-dia: 34px;
 }
 
 .vbuild__stage {

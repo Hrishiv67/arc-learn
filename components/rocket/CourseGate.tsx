@@ -15,7 +15,7 @@ export function CourseGate() {
           <p className="gate__eyebrow">03 / Sign in</p>
           <h2 className="gate__title">Start with module one.</h2>
           <p className="gate__lede">
-            An account saves your progress and the vehicle you are building. The
+            An account saves your progress and the rocket you are building. The
             whole course is free — every module, every quiz, no trial, no
             upgrade.
           </p>

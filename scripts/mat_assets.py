@@ -59,9 +59,9 @@ def recentre(img):
 
     The airframe and the plume were matted from different crops of the source
     frame, so their centres of mass sat 27px apart. Drawn at the same pad
-    position that put the exhaust visibly off the vehicle's axis — the launch
+    position that put the exhaust visibly off the rocket's axis — the launch
     read as smeared rather than symmetric. Centring each sprite on its own mass
-    means "image centre" is the vehicle axis for all of them.
+    means "image centre" is the rocket axis for all of them.
     """
     a = np.asarray(img).astype(np.float32)
     alpha = a[..., 3]
@@ -282,7 +282,7 @@ def replace_sky(p):
     """
     Swap in the sky from the real ARC national-finals frame.
 
-    The launch photo has the right camera (low and close, so the vehicle towers
+    The launch photo has the right camera (low and close, so the rocket towers
     over the horizon) but a featureless overcast sky. The finals photo has real
     cumulus depth and scale but a standing-height camera. Both horizons are flat
     and level, so the skies are interchangeable — this takes the atmosphere from
@@ -391,9 +391,9 @@ def regrade(p):
 
 
 # --------------------------------------------------------------- sections
-# The airframe cut into the sections a real vehicle is built from. A Y-slice of
+# The airframe cut into the sections a real rocket is built from. A Y-slice of
 # a silhouette *is* a rocket section, so the parts stay photographic and stay
-# consistent with the whole vehicle in the hero — no redrawing, no second style.
+# consistent with the whole rocket in the hero — no redrawing, no second style.
 #
 # Fractions are nose-to-tail on the matted sprite, and each carries the module
 # that teaches it.
@@ -438,7 +438,7 @@ def slice_sections():
         y0, y1 = int(round(f0 * H)), int(round(f1 * H))
         part = img.crop((0, y0, W, y1))
 
-        # soften the cut edges very slightly so a stacked vehicle reads as one
+        # soften the cut edges very slightly so a stacked rocket reads as one
         # object rather than five pasted rectangles
         a = np.asarray(part).astype(np.float32)
         fade = 3

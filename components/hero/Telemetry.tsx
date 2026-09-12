@@ -12,7 +12,7 @@ export function Telemetry({ ref }: { ref?: Ref<HTMLDivElement> }) {
     <div className="hero__telemetry" ref={ref} aria-hidden="true">
       <div className="hero__leader">
         <span className="hero__leaderLine" />
-        <span className="hero__leaderText">VEHICLE 01</span>
+        <span className="hero__leaderText">ROCKET 01</span>
       </div>
 
       <dl className="hero__readout">

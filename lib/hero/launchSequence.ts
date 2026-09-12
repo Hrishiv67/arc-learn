@@ -6,7 +6,7 @@
  *
  * Telemetry follows the real flight model. Screen motion does not: a rocket 4 m
  * from the lens physically leaves frame in under three metres of altitude, which
- * would put it gone by 32% scroll. So the vehicle's on-screen travel runs on a
+ * would put it gone by 32% scroll. So the rocket’s on-screen travel runs on a
  * tuned acceleration curve while the numbers stay honest — the brief's
  * "believable progression", not a literal simulation.
  */
@@ -18,16 +18,16 @@ export type Phase = "hold" | "ignition" | "liftoff" | "ascent" | "transition";
 /** Phase boundaries in scroll progress, and the flight time each maps to. */
 const KEYS: Array<{ p: number; t: number; phase: Phase }> = [
   { p: 0.0, t: -3.0, phase: "hold" },
-  { p: 0.07, t: 0.0, phase: "ignition" },
-  { p: 0.16, t: 0.45, phase: "liftoff" },
-  { p: 0.3, t: 1.4, phase: "ascent" },
+  { p: 0.13, t: 0.0, phase: "ignition" },
+  { p: 0.23, t: 0.45, phase: "liftoff" },
+  { p: 0.36, t: 1.4, phase: "ascent" },
   { p: 0.52, t: 2.8, phase: "transition" },
   { p: 1.0, t: 4.21, phase: "transition" },
 ];
 
-/** Scroll progress at which the vehicle has fully cleared the top of frame. */
-const P_MOVE_START = 0.15;
-const P_GONE = 0.38;
+/** Scroll progress at which the rocket has fully cleared the top of frame. */
+const P_MOVE_START = 0.21;
+const P_GONE = 0.44;
 const TRAVEL_GONE = 130; // vh, enough to carry the whole airframe out
 
 export type SceneState = {
@@ -35,13 +35,13 @@ export type SceneState = {
   phase: Phase;
   flight: FlightState;
 
-  /** vh the vehicle has travelled up the frame from its position on the rail */
+  /** vh the rocket has travelled up the frame from its position on the rail */
   travel: number;
   /** 1 at rest, shrinking as it recedes */
   rocketScale: number;
   /** px of vertical-only motion blur */
   rocketBlur: number;
-  /** 0..1, the vehicle fading into haze as it outruns the lens */
+  /** 0..1, the rocket fading into haze as it outruns the lens */
   rocketFade: number;
 
   /** particles emitted per unit time, 0..1 */
@@ -55,12 +55,10 @@ export type SceneState = {
   shake: number;
 
   /**
-   * 0..1 the frame washing out to daylight as the vehicle climbs, which is what
+   * 0..1 the frame washing out to daylight as the rocket climbs, which is what
    * carries the page from the launch into the paper theme the course is set in.
    */
   washout: number;
-  /** 0..1 the course heading arriving inside the pinned frame */
-  handoff: number;
   /** 0..1 instrumentation and nav clearing as the frame goes to paper */
   uiFade: number;
   /** 0..1 opacity of the trajectory rule that carries into the next section */
@@ -101,9 +99,9 @@ export function sequenceAt(pRaw: number): SceneState {
   const { t, phase } = timeAt(p);
   const flight = flightAt(t);
 
-  // --- vehicle ------------------------------------------------------------
+  // --- rocket ------------------------------------------------------------
   // Aggressive, monotonic acceleration. Exponent 2.6 keeps the first moments
-  // almost imperceptible, then the vehicle outruns the eye.
+  // almost imperceptible, then the rocket outruns the eye.
   const rise = span(p, P_MOVE_START, P_GONE);
   const travel = TRAVEL_GONE * Math.pow(rise, 3.4);
 
@@ -114,39 +112,37 @@ export function sequenceAt(pRaw: number): SceneState {
       : (TRAVEL_GONE * 3.4 * Math.pow(rise, 2.4)) / (P_GONE - P_MOVE_START);
   const rocketBlur = Math.min(14, (dTravel / 400) * 14);
   const rocketScale = 1 / (1 + travel / 260);
-  const rocketFade = 1 - span(p, 0.33, 0.43);
+  const rocketFade = 1 - span(p, 0.39, 0.49);
 
   // --- ignition and smoke -------------------------------------------------
-  const flash = Math.pow(1 - span(p, 0.07, 0.1), 2) * (p >= 0.07 ? 1 : 0);
-  const plume = span(p, 0.075, 0.11) * (1 - span(p, 0.34, 0.44));
+  const flash = Math.pow(1 - span(p, 0.13, 0.17), 2) * (p >= 0.13 ? 1 : 0);
+  const plume = span(p, 0.135, 0.18) * (1 - span(p, 0.4, 0.5));
   // hardest emission through ignition and liftoff, trailing off in ascent
   const smokeRate =
-    span(p, 0.07, 0.115) * (1 - 0.55 * span(p, 0.24, 0.38)) * (1 - span(p, 0.38, 0.6));
+    span(p, 0.13, 0.185) * (1 - 0.55 * span(p, 0.3, 0.44)) * (1 - span(p, 0.44, 0.66));
 
   // Physical vibration from a nearby motor: ramps in at ignition, decays as the
-  // vehicle climbs away. Sub-pixel to ~2px, never a game-style screen shake.
+  // rocket climbs away. Sub-pixel to ~2px, never a game-style screen shake.
   const shake =
-    2.6 * smooth(span(p, 0.07, 0.13)) * (1 - 0.75 * span(p, 0.16, 0.36));
+    2.6 * smooth(span(p, 0.13, 0.2)) * (1 - 0.75 * span(p, 0.23, 0.42));
 
   // --- frame travelling up into thinner, darker air -----------------------
   // The launch used to end on an empty sky and then cut to a white page. It now
-  // brightens into that page instead, and the course heading arrives while the
-  // smoke is still clearing, so there is never a frame with nothing in it.
-  const washout = smooth(span(p, 0.34, 0.82));
+  // brightens into that page instead, finishing on the same paper the course is
+  // set on, so the pin releases straight onto the first heading.
+  const washout = smooth(span(p, 0.42, 0.93));
   // the heading waits for the background to actually be paper before it
   // arrives, or it spends half its life as navy text on a dark sky
-  const handoff = smooth(span(p, 0.52, 0.86));
   // everything built to read on the dark plate has to be gone by then
-  const uiFade = 1 - span(p, 0.36, 0.62);
-  const trailLine = span(p, 0.3, 0.46) * (1 - span(p, 0.6, 0.82));
+  const uiFade = 1 - span(p, 0.44, 0.7);
+  const trailLine = span(p, 0.36, 0.52) * (1 - span(p, 0.66, 0.88));
 
   // --- copy ---------------------------------------------------------------
-  // Each word leaves as the vehicle crosses its own baseline, bottom word last.
-  // each line leaves as the vehicle crosses its own baseline, top line first
-  const words = [0, 1, 2].map((i) => 1 - span(p, 0.26 + i * 0.03, 0.34 + i * 0.03));
-  const copyShift = -1.2 * span(p, 0, 0.15) - 16 * Math.pow(span(p, 0.24, 0.54), 1.8);
-  const copyFade = 1 - span(p, 0.26, 0.4);
-  const navFade = (1 - 0.75 * span(p, 0.07, 0.15)) * (1 - span(p, 0.36, 0.6));
+  // each line leaves as the rocket crosses its own baseline, top line first
+  const words = [0, 1, 2].map((i) => 1 - span(p, 0.32 + i * 0.03, 0.4 + i * 0.03));
+  const copyShift = -1.2 * span(p, 0, 0.21) - 16 * Math.pow(span(p, 0.3, 0.6), 1.8);
+  const copyFade = 1 - span(p, 0.32, 0.46);
+  const navFade = (1 - 0.75 * span(p, 0.13, 0.21)) * (1 - span(p, 0.44, 0.68));
 
   return {
     p,
@@ -161,7 +157,6 @@ export function sequenceAt(pRaw: number): SceneState {
     plume,
     shake,
     washout,
-    handoff,
     uiFade,
     trailLine,
     words,
@@ -171,12 +166,12 @@ export function sequenceAt(pRaw: number): SceneState {
   };
 }
 
-/** The status word shown beside the vehicle. */
+/** The status word shown beside the rocket. */
 export function statusLabel(s: SceneState): string {
-  if (s.p < 0.035) return "READY";
-  if (s.p < 0.07) return "ARMED";
-  if (s.p < 0.16) return "IGNITION";
+  if (s.p < 0.07) return "READY";
+  if (s.p < 0.13) return "ARMED";
+  if (s.p < 0.23) return "IGNITION";
   if (s.flight.t < 1.05) return "LIFTOFF";
-  if (s.p < 0.52) return "BURNOUT";
+  if (s.p < 0.58) return "BURNOUT";
   return "ASCENT NOMINAL";
 }

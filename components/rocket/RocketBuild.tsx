@@ -1,14 +1,14 @@
 "use client";
 
 /**
- * Your vehicle, as it stands.
+ * Your rocket, as it stands.
  *
  * Replaces the dashed outline drawing this card used to show. The sections are
  * the same matted photograph the homepage flies and takes apart, so the rocket
  * a student is assembling is recognisably the rocket they watched launch —
  * rather than a second, cartoon rocket that exists only on this screen.
  *
- * Which module earns which part lives in lib/vehicle/sections.ts, shared with
+ * Which module earns which part lives in lib/rocket/sections.ts, shared with
  * the homepage track so the two can never disagree.
  */
 
@@ -17,9 +17,9 @@ import {
   sectionsEarned,
   earnedSectionSet,
   nextSection,
-} from "@/lib/vehicle/sections";
+} from "@/lib/rocket/sections";
 
-export function VehicleBuild({
+export function RocketBuild({
   completeCount,
   total,
 }: {
@@ -36,7 +36,7 @@ export function VehicleBuild({
     <section className="vbuild" aria-labelledby="vbuild-title">
       <div className="vbuild__head">
         <div>
-          <p className="eyebrow text-sky-300">Your vehicle</p>
+          <p className="eyebrow text-sky-300">Your rocket</p>
           <h2 id="vbuild-title" className="text-white text-xl mt-1">
             Build it as you learn.
           </h2>
@@ -49,8 +49,8 @@ export function VehicleBuild({
         role="img"
         aria-label={
           complete
-            ? "Your vehicle is complete"
-            : `Your vehicle is ${earned} of ${SECTIONS.length} sections built`
+            ? "Your rocket is complete"
+            : `Your rocket is ${earned} of ${SECTIONS.length} sections built`
         }
       >
         <span className="vbuild__axis" aria-hidden="true" />
@@ -59,17 +59,17 @@ export function VehicleBuild({
             key={s.id}
             className="vbuild__section"
             data-earned={earnedSet.has(i) ? "true" : "false"}
-            style={{ width: `calc(var(--vb-dia) * ${s.widthD})` }}
+            style={{ width: `calc(var(--rb-dia) * ${s.widthD})` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`/vehicle/cad-${s.id}.png`} alt="" draggable={false} />
+            <img src={`/rocket/cad-${s.id}.png`} alt="" draggable={false} />
           </span>
         ))}
       </div>
 
       <p className="text-sm text-sky-200 mt-3">
         {complete
-          ? "Flight-ready. You built the whole vehicle."
+          ? "Flight-ready. You built the whole rocket."
           : `Next section: ${next.label}`}
       </p>
       <p className="text-xs text-sky-300 mt-1">

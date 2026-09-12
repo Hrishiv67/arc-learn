@@ -70,7 +70,7 @@
   user-select: none;
 }
 
-/* the rail the vehicle stands on: a hairline, because that is all a 1010 rail
+/* the rail the rocket stands on: a hairline, because that is all a 1010 rail
    reads as from this distance */
 .hero__rail {
   position: absolute;
@@ -88,7 +88,7 @@
 }
 
 /*
- * The frame brightening as the vehicle climbs, until it is the same paper the
+ * The frame brightening as the rocket climbs, until it is the same paper the
  * course is printed on. This is what removes the cut: the launch does not end
  * and hand over to a white page, it becomes it.
  */
@@ -103,64 +103,6 @@
     var(--color-arc-white) 58%,
     var(--color-mist-200) 100%
   );
-}
-
-/* the course, arriving inside the pinned frame */
-.hero__handoff {
-  position: absolute;
-  left: 6.5vw;
-  top: 26vh;
-  z-index: 5;
-  opacity: 0;
-  pointer-events: none;
-  will-change: transform, opacity;
-}
-
-.hero__handoffEyebrow {
-  margin: 0 0 2vh;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-sky-800);
-}
-
-.hero__handoffTitle {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(1.9rem, 4.4vw, 4rem);
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.025em;
-  color: var(--color-arc-navy);
-}
-
-/* the exhaust column, resolved into the rule the next section hangs off */
-.hero__trail {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1px;
-  height: 100%;
-  opacity: 0;
-  pointer-events: none;
-  background: linear-gradient(
-    to bottom,
-    rgba(17, 61, 85, 0) 0%,
-    rgba(17, 61, 85, 0.35) 26%,
-    rgba(17, 61, 85, 0.3) 100%
-  );
-}
-
-/* the only overlay: enough to hold white type over bright haze, nothing more */
-.hero__scrim {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(to bottom, rgba(5, 17, 24, 0.55) 0%, rgba(5, 17, 24, 0) 26%),
-    linear-gradient(to right, rgba(5, 17, 24, 0.5) 0%, rgba(5, 17, 24, 0.12) 42%, rgba(5, 17, 24, 0) 62%);
 }
 
 /* --------------------------------------------------------------------- nav */
@@ -609,18 +551,23 @@
 /* ===================================================================== */
 /* 02 — THE COURSE                                                        */
 /* The reason the site exists, so it gets hero-grade treatment: the real   */
-/* thirteen modules, with the vehicle panel kept deliberately quiet beside */
+/* thirteen modules, with the rocket panel kept deliberately quiet beside */
 /* them.                                                                  */
 /* ===================================================================== */
 
 .track {
   position: relative;
   background: var(--color-arc-white);
-  padding: 0 6.5vw 10vh;
+  /*
+   * Tight to the hero on purpose. The launch ends on white and the pin
+   * releases straight onto this heading, so any more padding here reads as the
+   * page having stopped.
+   */
+  padding: 7vh 6.5vw 10vh;
 }
 
 .track__eyebrow {
-  margin: 0 0 2.2vh;
+  margin: 0 0 1.8vh;
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
@@ -648,16 +595,16 @@
 }
 
 .track__body {
-  margin-top: 0;
+  margin-top: 4vh;
 }
 
 /* --- the blow-up: retention, not the point --------------------------- */
 .track {
   /* one body diameter; each part's width comes from its own render */
-  --veh-dia: 66px;
+  --rocket-dia: 66px;
 }
 
-.track__vehicle {
+.track__rocket {
   position: sticky;
   top: 0;
   z-index: 2;
@@ -708,7 +655,7 @@
   min-width: 0;
 }
 
-.track__vehicleLabel {
+.track__rocketLabel {
   margin: 0;
   font-family: var(--font-mono);
   font-size: var(--micro-size);
@@ -859,9 +806,9 @@
     padding: 10vh 6vw 8vh;
   }
   .track {
-    --veh-dia: 40px;
+    --rocket-dia: 40px;
   }
-  .track__vehicle {
+  .track__rocket {
     flex-direction: column;
     align-items: flex-start;
     gap: 14px;

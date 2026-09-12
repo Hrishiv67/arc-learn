@@ -1,6 +1,6 @@
 import { Hero } from "@/components/hero/Hero";
 import { ModuleTrack } from "@/components/course/ModuleTrack";
-import { CourseGate } from "@/components/vehicle/CourseGate";
+import { CourseGate } from "@/components/rocket/CourseGate";
 
 /**
  * One scroll, three beats: the launch, the course it is advertising, and the

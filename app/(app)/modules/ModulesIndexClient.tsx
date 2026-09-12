@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { Container } from "@/components/ui/Container";
 import { clsx } from "@/lib/clsx";
-import { VehicleBuild } from "@/components/vehicle/VehicleBuild";
+import { RocketBuild } from "@/components/rocket/RocketBuild";
 
 export function ModulesIndexClient() {
   const progress = useProgress();
@@ -245,7 +245,7 @@ function ProgressSummary({
           will open through the season.
         </p>
       </div>
-      <VehicleBuild completeCount={completeCount} total={MODULES.length} />
+      <RocketBuild completeCount={completeCount} total={MODULES.length} />
     </div>
   );
 }

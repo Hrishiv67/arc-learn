@@ -1,7 +1,7 @@
 /**
- * The vehicle, and which module earns which part of it.
+ * The rocket, and which module earns which part of it.
  *
- * The course is the point; the vehicle is the reason to come back for the next
+ * The course is the point; the rocket is the reason to come back for the next
  * module. Both the homepage module track and the build card on the course index
  * read this file, so they can never disagree about what a student has earned.
  *
@@ -10,9 +10,9 @@
  * build — and finishes with the nose cone going on at qualification.
  */
 
-export type VehicleSection = {
+export type RocketSection = {
   id: string;
-  /** share of the assembled vehicle's length, nose to tail */
+  /** share of the assembled rocket's length, nose to tail */
   height: number;
   /**
    * The part's width measured in body diameters. Not width/height — the fin
@@ -27,7 +27,7 @@ export type VehicleSection = {
   earns: string;
 };
 
-export const SECTIONS: VehicleSection[] = [
+export const SECTIONS: RocketSection[] = [
   {
     id: "nose",
     height: 0.2244,
@@ -121,11 +121,11 @@ export function earnedSectionSet(
   return new Set(BUILD_ORDER.slice(0, sectionsEarned(completeCount, total)));
 }
 
-/** The next part to be earned, or null when the vehicle is complete. */
+/** The next part to be earned, or null when the rocket is complete. */
 export function nextSection(
   completeCount: number,
   total: number,
-): VehicleSection | null {
+): RocketSection | null {
   const earned = sectionsEarned(completeCount, total);
   if (earned >= BUILD_ORDER.length) return null;
   return SECTIONS[BUILD_ORDER[earned]];

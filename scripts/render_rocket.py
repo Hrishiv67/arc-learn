@@ -1,5 +1,5 @@
 """
-ARC Learn — exploded vehicle renderer.
+ARC Learn — exploded rocket renderer.
 
 Draws the competition rocket the course builds, one section per file, in the
 register of a CAD screenshot rather than an illustration: real cylindrical
@@ -18,7 +18,7 @@ import numpy as np
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "public" / "vehicle"
+OUT = ROOT / "public" / "rocket"
 OUT.mkdir(parents=True, exist_ok=True)
 
 # --- scale -----------------------------------------------------------------
@@ -183,7 +183,7 @@ def main():
                 "heightDiameters": round(img.size[1] / PX, 4),
             }
         )
-    (OUT / "vehicle.json").write_text(json.dumps(manifest, indent=2))
+    (OUT / "rocket.json").write_text(json.dumps(manifest, indent=2))
     print(f"rendered {len(manifest)} parts, {total:.2f} diameters long")
     for m in manifest:
         print(f"  {m['id']:9s} {m['width']}x{m['height']}  w={m['widthDiameters']}d h={m['heightDiameters']}d")

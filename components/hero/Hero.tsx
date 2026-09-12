@@ -17,7 +17,7 @@ const PLATE_HORIZON = 0.711; // fraction of plate height
 const PAD_X = 0.66; // fraction of plate width
 const PAD_Y = 0.782; // fraction of plate height — where the airframe meets ground
 
-/** Vehicle height as a fraction of viewport height, at rest. */
+/** Rocket height as a fraction of viewport height, at rest. */
 const ROCKET_VH = 0.58;
 const ROCKET_VH_MOBILE = 0.46;
 
@@ -51,7 +51,6 @@ export function Hero() {
   const gradeRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef<SVGFEGaussianBlurElement>(null);
-  const handoffRef = useRef<HTMLDivElement>(null);
   const scrimRef = useRef<HTMLDivElement>(null);
 
   const navRef = useRef<HTMLElement>(null);
@@ -75,7 +74,7 @@ export function Hero() {
 
   /**
    * Place the plate by its horizon rather than letting object-fit centre-crop it.
-   * The vehicle has to stand on the ground at every aspect ratio, so the ground
+   * The rocket has to stand on the ground at every aspect ratio, so the ground
    * has to be where we say it is — a centred cover crop slides the horizon
    * around and the rocket ends up floating or buried.
    */
@@ -127,14 +126,14 @@ export function Hero() {
     smoke.current?.resize();
   };
 
-  // Vehicle travel in px, from the sequence's vh figure.
+  // Rocket travel in px, from the sequence's vh figure.
   const travelPx = (vh: number) => (vh / 100) * window.innerHeight;
 
   const paint = (p: number) => {
     const s = sequenceAt(p);
     const L = layout.current;
 
-    // --- camera vibration: the plate, the vehicle and the exhaust only ------
+    // --- camera vibration: the plate, the rocket and the exhaust only ------
     const scene = sceneRef.current;
     if (scene) {
       const a = s.shake;
@@ -143,12 +142,12 @@ export function Hero() {
       scene.style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0)`;
     }
 
-    // --- vehicle ------------------------------------------------------------
+    // --- rocket ------------------------------------------------------------
     const rocket = rocketRef.current;
     if (rocket) {
       const h = L.rocketH * s.rocketScale;
       const y = L.padY - travelPx(s.travel) - h;
-      // Width from the asset itself: the sprite is centred on the vehicle's
+      // Width from the asset itself: the sprite is centred on the rocket’s
       // axis, so half its width is the offset that puts that axis on the pad.
       const aspect =
         rocket.naturalWidth && rocket.naturalHeight
@@ -178,12 +177,6 @@ export function Hero() {
     // the wash, so leaving it up tinted the finished paper frame grey.
     if (scrimRef.current) {
       scrimRef.current.style.opacity = String(s.uiFade);
-    }
-    if (handoffRef.current) {
-      handoffRef.current.style.opacity = String(s.handoff);
-      handoffRef.current.style.transform = `translate3d(0, ${(
-        (1 - s.handoff) * 5
-      ).toFixed(2)}vh, 0)`;
     }
     if (trailRef.current) {
       trailRef.current.style.opacity = String(s.trailLine * 0.5);
@@ -216,7 +209,7 @@ export function Hero() {
       set("vel", `${Math.round(s.flight.vel)} M/S`);
       set("status", statusLabel(s));
       tel.style.opacity = String((0.55 + 0.45 * Math.min(1, s.p * 6)) * s.uiFade);
-      const armed = s.p >= 0.035 && s.p < 0.16;
+      const armed = s.p >= 0.07 && s.p < 0.23;
       tel.dataset.armed = armed ? "true" : "false";
     }
 
@@ -232,7 +225,7 @@ export function Hero() {
       const bar = ind.querySelector<HTMLElement>("[data-bar]");
       if (bar) bar.style.transform = `scaleX(${s.p.toFixed(4)})`;
       const label = ind.querySelector<HTMLElement>("[data-label]");
-      const next = s.p < 0.07 ? "SCROLL TO IGNITE" : statusLabel(s);
+      const next = s.p < 0.13 ? "SCROLL TO IGNITE" : statusLabel(s);
       if (label && label.textContent !== next) label.textContent = next;
       ind.style.opacity = String(s.uiFade);
     }
@@ -300,19 +293,6 @@ export function Hero() {
         </div>
 
         <div className="hero__grade" ref={gradeRef} aria-hidden="true" />
-
-        {/* The course arrives inside the pinned frame, while the smoke is still
-            clearing, so the launch never resolves to an empty screen. */}
-        <div className="hero__handoff" ref={handoffRef}>
-          <p className="hero__handoffEyebrow">02 / The course</p>
-          <h2 className="hero__handoffTitle">
-            Rocketry modules for students
-            <br />
-            new to rocketry.
-          </h2>
-        </div>
-        <div className="hero__trail" ref={trailRef} aria-hidden="true" />
-        <div className="hero__scrim" ref={scrimRef} aria-hidden="true" />
 
         <HeroNav ref={navRef} />
         <HeroCopy

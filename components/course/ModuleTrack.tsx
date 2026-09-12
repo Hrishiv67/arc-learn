@@ -6,7 +6,7 @@ import { UNITS } from "@/content/modules/registry";
 import {
   SECTIONS,
   sectionIndexForModule,
-} from "@/lib/vehicle/sections";
+} from "@/lib/rocket/sections";
 
 /**
  * The course, which is the point of the site.
@@ -15,7 +15,7 @@ import {
  * so it gets the same care — the real thirteen modules, in the real four units,
  * with what each one actually teaches.
  *
- * The exploded vehicle on the left is deliberately secondary. It is there so a
+ * The exploded rocket on the left is deliberately secondary. It is there so a
  * fourteen-year-old has a reason to come back for module four: every module
  * finishes a piece of it. Scrolling a module into view lights up the part it
  * builds, which is the only job that panel has.
@@ -61,31 +61,37 @@ export function ModuleTrack() {
     return () => io.disconnect();
   }, []);
 
-  // The heading for this section lives in the hero's final frame (Hero.tsx,
-  // .hero__handoff) so the launch lands directly on it. Repeating it here
-  // showed the same title twice, a screen apart.
   return (
     <section className="track" id="course" aria-label="The course">
+      <div className="track__intro">
+        <p className="track__eyebrow">02 / The course</p>
+        <h2 className="track__title">
+          Rocketry modules for students
+          <br />
+          new to rocketry.
+        </h2>
+      </div>
+
       <div className="track__body">
         {/* A blow-up, read left to right like an engineering drawing: nose at
             the left, fin can at the right, gaps where the joints are. Sticky,
             so the part a module builds lights up while that module is read. */}
-        <aside className="track__vehicle" aria-hidden="true">
+        <aside className="track__rocket" aria-hidden="true">
           <div className="track__exploded">
             {SECTIONS.map((s, i) => (
               <span
                 key={s.id}
                 className="track__part"
                 data-active={i === active ? "true" : "false"}
-                style={{ width: `calc(var(--veh-dia) * ${s.widthD})` }}
+                style={{ width: `calc(var(--rocket-dia) * ${s.widthD})` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/vehicle/cad-${s.id}.png`} alt="" draggable={false} />
+                <img src={`/rocket/cad-${s.id}.png`} alt="" draggable={false} />
               </span>
             ))}
           </div>
           <div className="track__caption">
-            <p className="track__vehicleLabel">Your vehicle</p>
+            <p className="track__rocketLabel">Your rocket</p>
             <p className="track__partName">{SECTIONS[active].label}</p>
             <p className="track__partEarns">{SECTIONS[active].earns}</p>
           </div>
