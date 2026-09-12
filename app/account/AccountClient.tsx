@@ -202,32 +202,6 @@ function AuthForm({ onDone }: { onDone: () => void }) {
           {error}
         </Callout>
       )}
-      {mode === "signin" && (
-        <TextButton
-          type="button"
-          disabled={submitting || !email}
-          onClick={async () => {
-            setSubmitting(true);
-            setError(null);
-            try {
-              await resendConfirmation(email);
-              setNotice(
-                "If your account needs confirmation, a new email is on its way.",
-              );
-            } catch (err) {
-              setError(
-                err instanceof Error
-                  ? err.message
-                  : "Could not send the email. Try again.",
-              );
-            } finally {
-              setSubmitting(false);
-            }
-          }}
-        >
-          Resend confirmation email
-        </TextButton>
-      )}
       <Input
         label="Email"
         type="email"
@@ -258,6 +232,35 @@ function AuthForm({ onDone }: { onDone: () => void }) {
             ? "Create account"
             : "Sign in"}
       </Button>
+      {mode === "signin" && email.trim() && (
+        <p className="-mt-2 text-center text-sm text-sky-800">
+          Still waiting for your confirmation email?{" "}
+          <TextButton
+            type="button"
+            disabled={submitting}
+            onClick={async () => {
+              setSubmitting(true);
+              setError(null);
+              try {
+                await resendConfirmation(email);
+                setNotice(
+                  "If your account needs confirmation, a new email is on its way.",
+                );
+              } catch (err) {
+                setError(
+                  err instanceof Error
+                    ? err.message
+                    : "Could not send the email. Try again.",
+                );
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+          >
+            Resend it
+          </TextButton>
+        </p>
+      )}
       <div className="auth-divider">
         <span>or</span>
       </div>
