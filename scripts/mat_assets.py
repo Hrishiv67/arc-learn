@@ -53,6 +53,32 @@ def sky_model(a):
     return sm[:H]
 
 
+def recentre(img):
+    """
+    Shift a sprite so its alpha centroid sits on the image's centre line.
+
+    The airframe and the plume were matted from different crops of the source
+    frame, so their centres of mass sat 27px apart. Drawn at the same pad
+    position that put the exhaust visibly off the vehicle's axis — the launch
+    read as smeared rather than symmetric. Centring each sprite on its own mass
+    means "image centre" is the vehicle axis for all of them.
+    """
+    a = np.asarray(img).astype(np.float32)
+    alpha = a[..., 3]
+    if alpha.sum() <= 0:
+        return img
+    xs = np.arange(a.shape[1])
+    cx = float((xs * alpha.sum(axis=0)).sum() / alpha.sum())
+    shift = int(round(a.shape[1] / 2 - cx))
+    if shift == 0:
+        return img
+    pad = abs(shift) * 2
+    out = np.zeros((a.shape[0], a.shape[1] + pad, 4), dtype=np.float32)
+    x0 = pad // 2 + shift
+    out[:, x0:x0 + a.shape[1], :] = a
+    return Image.fromarray(out.astype(np.uint8), "RGBA")
+
+
 def unmix(obs, bg, alpha):
     """Recover foreground colour given observed = a*F + (1-a)*BG."""
     a = np.clip(alpha, 1e-3, 1.0)[..., None]
@@ -87,7 +113,7 @@ def mat_rocket(a, sky):
     rgb = g * 255
 
     out = np.dstack([rgb, alpha * 255]).astype(np.uint8)
-    Image.fromarray(out, "RGBA").save(OUT / "rocket.png")
+    recentre(Image.fromarray(out, "RGBA")).save(OUT / "rocket.png")
     return alpha
 
 
@@ -117,7 +143,7 @@ def mat_flame(a, sky):
     g = g * (1 - core) + np.clip(g + 0.42, 0, 1.25) * core
     rgb = np.clip(g, 0, 1) * 255
     out = np.dstack([rgb, alpha * 255]).astype(np.uint8)
-    Image.fromarray(out, "RGBA").save(OUT / "flame.png")
+    recentre(Image.fromarray(out, "RGBA")).save(OUT / "flame.png")
 
 
 # ------------------------------------------------------------------- smoke
@@ -444,7 +470,6 @@ def main():
     mat_rocket(a, sky)
     mat_flame(a, sky)
     n = mat_smoke(a)
-    sections = slice_sections()
 
     plate = clean_plate(a, sky)
     Image.fromarray(plate.astype(np.uint8)).save(WORK / "plate-clean.jpg", quality=92)
@@ -464,7 +489,7 @@ def main():
     img.resize((2560, int(2560 * ch / W)), Image.LANCZOS).save(OUT / "plate.jpg", quality=88)
     img.resize((1280, int(1280 * ch / W)), Image.LANCZOS).save(OUT / "plate-sm.jpg", quality=86)
 
-    print(f"plate {img.size}  horizon_frac={(TREELINE_Y - top) / ch:.3f}  smoke_tiles={n}  sections={sections}")
+    print(f"plate {img.size}  horizon_frac={(TREELINE_Y - top) / ch:.3f}  smoke_tiles={n}")
 
 
 if __name__ == "__main__":

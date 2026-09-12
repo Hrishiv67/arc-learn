@@ -61,21 +61,11 @@ export function ModuleTrack() {
     return () => io.disconnect();
   }, []);
 
+  // The heading for this section lives in the hero's final frame (Hero.tsx,
+  // .hero__handoff) so the launch lands directly on it. Repeating it here
+  // showed the same title twice, a screen apart.
   return (
     <section className="track" id="course" aria-label="The course">
-      <div className="track__intro">
-        <p className="track__eyebrow">02 / The course</p>
-        <h2 className="track__title">
-          Rocketry modules for students
-          <br />
-          new to rocketry.
-        </h2>
-        <p className="track__lede">
-          Thirteen of them, from your first launch rail to a qualifying flight.
-          Read it, take the quiz, and finish another part of the rocket.
-        </p>
-      </div>
-
       <div className="track__body">
         {/* A blow-up, read left to right like an engineering drawing: nose at
             the left, fin can at the right, gaps where the joints are. Sticky,

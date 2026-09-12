@@ -72,7 +72,7 @@
    * reason to use it here than brand-matching alone.
    */
   --font-heading: var(--font-jost), "Futura PT", Futura, Arial, sans-serif;
-  --font-body: var(--font-hanken), "Museo Sans", "Segoe UI", Arial, sans-serif;
+  --font-body: var(--font-museo), "Museo Sans", "Segoe UI", Arial, sans-serif;
   /* Instrumentation only. The brand has no mono; telemetry needs one. */
   --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
 

@@ -52,6 +52,7 @@ export function Hero() {
   const trailRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef<SVGFEGaussianBlurElement>(null);
   const handoffRef = useRef<HTMLDivElement>(null);
+  const scrimRef = useRef<HTMLDivElement>(null);
 
   const navRef = useRef<HTMLElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
@@ -147,8 +148,14 @@ export function Hero() {
     if (rocket) {
       const h = L.rocketH * s.rocketScale;
       const y = L.padY - travelPx(s.travel) - h;
+      // Width from the asset itself: the sprite is centred on the vehicle's
+      // axis, so half its width is the offset that puts that axis on the pad.
+      const aspect =
+        rocket.naturalWidth && rocket.naturalHeight
+          ? rocket.naturalWidth / rocket.naturalHeight
+          : 0.136;
       rocket.style.height = `${h}px`;
-      rocket.style.transform = `translate3d(${(L.padX - (h * 0.128) / 2).toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      rocket.style.transform = `translate3d(${(L.padX - (h * aspect) / 2).toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
       rocket.style.opacity = String(s.rocketFade);
       // Y-only blur; the filter is only mounted while it is actually doing work
       rocket.style.filter = s.rocketBlur > 0.5 ? "url(#arc-vblur)" : "none";
@@ -166,6 +173,11 @@ export function Hero() {
     // --- brightening into the course ----------------------------------------
     if (gradeRef.current) {
       gradeRef.current.style.opacity = String(s.washout);
+    }
+    // The scrim exists to hold white type over a bright sky. It is painted over
+    // the wash, so leaving it up tinted the finished paper frame grey.
+    if (scrimRef.current) {
+      scrimRef.current.style.opacity = String(s.uiFade);
     }
     if (handoffRef.current) {
       handoffRef.current.style.opacity = String(s.handoff);
@@ -206,6 +218,13 @@ export function Hero() {
       tel.style.opacity = String((0.55 + 0.45 * Math.min(1, s.p * 6)) * s.uiFade);
       const armed = s.p >= 0.035 && s.p < 0.16;
       tel.dataset.armed = armed ? "true" : "false";
+    }
+
+    // First paint only happens once the layout is known; before that the plate
+    // would render at its natural 2560px and the airframe at 1295px tall, both
+    // pinned to the top-left corner, for a frame. That was the flash on load.
+    if (sectionRef.current && sectionRef.current.dataset.ready !== "true") {
+      sectionRef.current.dataset.ready = "true";
     }
 
     const ind = indicatorRef.current;
@@ -286,14 +305,14 @@ export function Hero() {
             clearing, so the launch never resolves to an empty screen. */}
         <div className="hero__handoff" ref={handoffRef}>
           <p className="hero__handoffEyebrow">02 / The course</p>
-          <p className="hero__handoffTitle">
+          <h2 className="hero__handoffTitle">
             Rocketry modules for students
             <br />
             new to rocketry.
-          </p>
+          </h2>
         </div>
         <div className="hero__trail" ref={trailRef} aria-hidden="true" />
-        <div className="hero__scrim" aria-hidden="true" />
+        <div className="hero__scrim" ref={scrimRef} aria-hidden="true" />
 
         <HeroNav ref={navRef} />
         <HeroCopy
