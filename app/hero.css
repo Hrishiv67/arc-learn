@@ -13,7 +13,12 @@
 /* -------------------------------------------------------------------- hero */
 .hero {
   position: relative;
-  height: 108vh; /* the scroll budget the launch is scrubbed across */
+  /*
+   * 28vh of scrub — roughly two turns of a wheel for the whole launch. Shorter
+   * than this (it was 8vh) and a single notch skips the entire sequence, which
+   * reads as a glitch rather than as speed.
+   */
+  height: 128vh;
 }
 
 .hero__pin {
@@ -28,6 +33,15 @@
   position: absolute;
   inset: 0;
   will-change: transform;
+  /* The plate and airframe are sized and placed in JavaScript. Until that has
+     run they would paint at their natural size in the top-left corner, which
+     is the flash that used to happen on load. */
+  opacity: 0;
+}
+
+.hero[data-ready="true"] .hero__scene {
+  opacity: 1;
+  transition: opacity 0.24s var(--ease-arc);
 }
 
 .hero__plate {
@@ -95,7 +109,7 @@
 .hero__handoff {
   position: absolute;
   left: 6.5vw;
-  top: 34vh;
+  top: 26vh;
   z-index: 5;
   opacity: 0;
   pointer-events: none;
@@ -393,7 +407,7 @@
 /* ------------------------------------------------------------ responsive */
 @media (max-width: 767px) {
   .hero {
-    height: 104vh;
+    height: 124vh;
   }
 
   .hero__copy {
@@ -516,7 +530,7 @@
   max-width: 46ch;
   font-size: 1rem;
   line-height: 1.6;
-  color: var(--color-sky-800);
+  color: var(--color-read);
 }
 
 .gate__actions {
@@ -602,7 +616,7 @@
 .track {
   position: relative;
   background: var(--color-arc-white);
-  padding: 13vh 6.5vw 10vh;
+  padding: 0 6.5vw 10vh;
 }
 
 .track__eyebrow {
@@ -630,11 +644,11 @@
   max-width: 56ch;
   font-size: 1.05rem;
   line-height: 1.6;
-  color: var(--color-sky-800);
+  color: var(--color-read);
 }
 
 .track__body {
-  margin-top: 7vh;
+  margin-top: 0;
 }
 
 /* --- the blow-up: retention, not the point --------------------------- */
@@ -650,7 +664,7 @@
   display: flex;
   align-items: center;
   gap: 36px;
-  padding: 26px 0 22px;
+  padding: 30px 0 22px;
   margin-bottom: 3vh;
   background: var(--color-arc-white);
   border-bottom: 1px solid var(--color-mist-500);
@@ -716,7 +730,7 @@
   margin: 3px 0 0;
   font-size: 0.88rem;
   line-height: 1.45;
-  color: var(--color-sky-800);
+  color: var(--color-read-dim);
 }
 
 /* --- the modules ------------------------------------------------------ */
@@ -802,7 +816,7 @@
   margin-top: 5px;
   font-size: 0.92rem;
   line-height: 1.5;
-  color: var(--color-sky-800);
+  color: var(--color-read-dim);
   max-width: 52ch;
 }
 
