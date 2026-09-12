@@ -76,3 +76,25 @@ test("an invalid confirmation link gives a recoverable error", async ({
     page.getByRole("alert").filter({ hasText: "could not be verified" }),
   ).toContainText("could not be verified");
 });
+
+test("technical terms reveal plain-language definitions", async ({ page }) => {
+  await page.goto("/modules/this-years-challenge/lesson");
+  await page.getByRole("button", { name: /apogee — see definition/i }).click();
+  await expect(page.getByRole("tooltip")).toContainText(
+    "The rocket climbs, slows, stops gaining altitude",
+  );
+});
+
+test("the rocket workshop lets learners choose a paint color", async ({
+  page,
+}) => {
+  await page.goto("/modules");
+  const skyBlue = page.getByRole("button", { name: "Sky blue" });
+  await skyBlue.click();
+  await expect(skyBlue).toHaveAttribute("aria-pressed", "true");
+  await page.reload();
+  await expect(page.getByRole("button", { name: "Sky blue" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+});
