@@ -1,10 +1,36 @@
 import type { Metadata, Viewport } from "next";
+import { Jost, Hanken_Grotesk, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
-import { SiteHeader } from "@/components/nav/SiteHeader";
-import { SiteFooter } from "@/components/nav/SiteFooter";
-import { TabBar } from "@/components/nav/TabBar";
+// Imported here rather than @import-ed from globals.css so the dev server
+// watches it directly and hot-reloads edits.
+import "./hero.css";
 import { PwaRegister } from "@/components/PwaRegister";
 import { AccountSync } from "@/components/account/AccountSync";
+
+/*
+ * ARC sets headings in Futura PT and body in Museo Sans. Jost is an open Futura
+ * revival; Hanken Grotesk covers Museo Sans. Plex Mono is instrumentation only.
+ */
+const jost = Jost({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-jost",
+  display: "swap",
+});
+
+const hanken = Hanken_Grotesk({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--font-hanken",
+  display: "swap",
+});
+
+const plexMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["500", "600"],
+  variable: "--font-plex-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -28,38 +54,18 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-const NAV_LINKS = [
-  { href: "/modules", label: "Course" },
-  { href: "/modules/this-years-challenge", label: "Module 1" },
-];
-
-const TAB_ITEMS = [
-  { href: "/modules", label: "Course", icon: "home" as const },
-  {
-    href: "/modules/this-years-challenge",
-    label: "Module 1",
-    icon: "list" as const,
-  },
-  { href: "/account", label: "Account", icon: "user" as const },
-];
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="h-full">
+    <html
+      lang="en"
+      className={`h-full ${jost.variable} ${hanken.variable} ${plexMono.variable}`}
+    >
       <body className="min-h-full flex flex-col">
         <PwaRegister />
         <AccountSync />
-        <a className="skip-link" href="#main-content">
-          Skip to content
-        </a>
-        <SiteHeader links={NAV_LINKS} />
-        <main id="main-content" className="flex-1">
-          {children}
-        </main>
-        <SiteFooter />
-        <TabBar items={TAB_ITEMS} />
+        {children}
       </body>
     </html>
   );

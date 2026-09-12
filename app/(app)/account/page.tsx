@@ -6,9 +6,9 @@ export const metadata: Metadata = { title: "Account" };
 export default async function AccountPage({
   searchParams,
 }: {
-  searchParams: Promise<{ auth_error?: string }>;
+  searchParams: Promise<{ auth_error?: string; next?: string }>;
 }) {
-  const { auth_error } = await searchParams;
+  const { auth_error, next } = await searchParams;
   return (
     <>
       {auth_error && (
@@ -20,7 +20,7 @@ export default async function AccountPage({
           request a new confirmation email.
         </p>
       )}
-      <AccountClient />
+      <AccountClient next={next} />
     </>
   );
 }

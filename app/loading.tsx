@@ -1,5 +1,5 @@
-import { RocketLoader } from "@/components/engagement/RocketLoader";
+import { Loading } from "@/components/ui/Loading";
 
-export default function Loading() {
-  return <RocketLoader />;
+export default function RootLoading() {
+  return <Loading />;
 }

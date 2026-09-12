@@ -10,6 +10,7 @@ import { useSupabaseUser } from "@/lib/supabase/useUser";
 import {
   signUpWithPassword,
   signInWithPassword,
+  signInWithGoogle,
   signOut,
   resendConfirmation,
 } from "@/lib/supabase/auth";
@@ -17,7 +18,7 @@ import { Callout } from "@/components/ui/Callout";
 import { Input } from "@/components/ui/Input";
 import { Button, TextButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { RocketLoader } from "@/components/engagement/RocketLoader";
+import { Loading } from "@/components/ui/Loading";
 
 /**
  * Tier 2 — optional account. Email + password only, nothing else. Real
@@ -25,8 +26,15 @@ import { RocketLoader } from "@/components/engagement/RocketLoader";
  * .env.example); with no project configured this screen still explains the
  * flow honestly rather than faking a sign-in.
  */
-export function AccountClient() {
+export function AccountClient({ next }: { next?: string }) {
   const router = useRouter();
+  /**
+   * Where to go once signed in — the module that sent them here, not always the
+   * index. Only same-site paths are honoured; an absolute URL here would be an
+   * open redirect.
+   */
+  const nextPath =
+    next && next.startsWith("/") && !next.startsWith("//") ? next : "/modules";
   const progress = useProgress();
   const { user, loading } = useSupabaseUser();
   const configured = isSupabaseConfigured();
@@ -36,7 +44,7 @@ export function AccountClient() {
     isModuleComplete(progress[m.id]),
   ).length;
 
-  if (loading) return <RocketLoader label="Finding your saved mission…" />;
+  if (loading) return <Loading label="Finding your saved progress…" />;
 
   if (user) {
     return (
@@ -94,7 +102,7 @@ export function AccountClient() {
 
         <aside className="auth-card">
           {configured ? (
-            <AuthForm onDone={() => router.push("/modules")} />
+            <AuthForm onDone={() => router.push(nextPath)} />
           ) : (
             <div className="flex flex-col gap-5">
               <h2 className="font-heading font-bold text-arc-navy text-[22px]">
@@ -112,6 +120,36 @@ export function AccountClient() {
         </aside>
       </div>
     </Container>
+  );
+}
+
+/**
+ * Only rendered when the Google provider has actually been enabled in the
+ * Supabase dashboard — otherwise the button would fail on click. Email and
+ * password remains the complete path on its own.
+ */
+const googleEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH === "1";
+
+function GoogleMark() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 48 48" aria-hidden="true">
+      <path
+        fill="#4285F4"
+        d="M45.1 24.5c0-1.6-.1-3.2-.4-4.7H24v8.9h11.8c-.5 2.7-2 5-4.4 6.6v5.5h7.1c4.1-3.8 6.6-9.4 6.6-16.3z"
+      />
+      <path
+        fill="#34A853"
+        d="M24 46c5.9 0 10.9-2 14.5-5.3l-7.1-5.5c-2 1.3-4.5 2.1-7.4 2.1-5.7 0-10.5-3.8-12.2-9H4.5v5.7C8.1 41.2 15.4 46 24 46z"
+      />
+      <path
+        fill="#FBBC05"
+        d="M11.8 28.3c-.4-1.3-.7-2.7-.7-4.3s.2-2.9.7-4.3v-5.7H4.5C2.9 17.2 2 20.5 2 24s.9 6.8 2.5 9.7l7.3-5.4z"
+      />
+      <path
+        fill="#EA4335"
+        d="M24 10.7c3.2 0 6.1 1.1 8.4 3.3l6.3-6.3C34.9 4.1 29.9 2 24 2 15.4 2 8.1 6.8 4.5 14.3l7.3 5.7c1.7-5.2 6.5-9.3 12.2-9.3z"
+      />
+    </svg>
   );
 }
 
@@ -201,6 +239,30 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         <Callout tone="caution" title="Couldn't do that">
           {error}
         </Callout>
+      )}
+      {googleEnabled && (
+        <>
+          <button
+            type="button"
+            className="google-button"
+            onClick={async () => {
+              setError(null);
+              try {
+                await signInWithGoogle(
+                  `${window.location.origin}/auth/callback`,
+                );
+              } catch {
+                setError("Could not reach Google. Try email instead.");
+              }
+            }}
+          >
+            <GoogleMark />
+            Continue with Google
+          </button>
+          <p className="auth-divider">
+            <span>or use an email address</span>
+          </p>
+        </>
       )}
       <Input
         label="Email"

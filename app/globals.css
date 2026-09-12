@@ -60,8 +60,37 @@
   --color-danger: #b42025;
   --color-danger-tint: #f8e9e9;
 
-  --font-heading: "Segoe UI", Arial, sans-serif;
-  --font-body: "Segoe UI", Arial, sans-serif;
+  /*
+   * Typography. The American Rocketry Challenge's own site sets headings in
+   * Futura PT Bold and body in Museo Sans (Adobe Typekit) — "Segoe UI" here was
+   * a placeholder, not the brand. Jost is an open Futura revival and Hanken
+   * Grotesk carries Museo Sans' warmth; both are self-hosted via next/font.
+   * To switch to the real faces, point these two at a Typekit kit and change
+   * nothing else.
+   *
+   * Futura is the typeface on the Apollo 11 lunar plaque, which is a better
+   * reason to use it here than brand-matching alone.
+   */
+  --font-heading: var(--font-jost), "Futura PT", Futura, Arial, sans-serif;
+  --font-body: var(--font-hanken), "Museo Sans", "Segoe UI", Arial, sans-serif;
+  /* Instrumentation only. The brand has no mono; telemetry needs one. */
+  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
+
+  /*
+   * Dark shell. Home, the roadmap and the workshop run on the launch field;
+   * lessons and quizzes stay on paper, because long technical reading is worse
+   * on dark. Both grounds come from the existing navy ramp — no new greys.
+   */
+  --color-shell: #081d29;
+  --color-shell-raised: #0b2837;
+  --color-shell-line: rgba(242, 244, 245, 0.12);
+  --color-shell-ink: #f2f4f5;
+  --color-shell-dim: rgba(242, 244, 245, 0.58);
+  --color-shell-faint: rgba(242, 244, 245, 0.34);
+
+  /* micro-caps: 10px / 600 / wide — measured off real instrumentation type */
+  --micro-size: 10px;
+  --micro-track: 0.2em;
 
   /* Standard Tailwind spacing keeps component sizes consistent. */
   --spacing: 4px;
@@ -456,117 +485,6 @@
   font-size: 11px;
   font-weight: 800;
 }
-.rocket-loader-shell {
-  display: grid;
-  min-height: calc(100vh - 160px);
-  place-items: center;
-}
-.rocket-loader {
-  width: min(100%, 680px);
-  padding: 26px 26px 30px;
-  overflow: hidden;
-  border-radius: 24px;
-  background: var(--color-arc-navy);
-  text-align: center;
-  box-shadow: 0 24px 70px rgba(8, 29, 41, 0.2);
-}
-.rocket-loader-sky {
-  position: relative;
-  height: 230px;
-  overflow: hidden;
-  border-radius: 16px;
-  background:
-    radial-gradient(
-      circle at 28% 24%,
-      rgba(125, 180, 209, 0.35),
-      transparent 2px
-    ),
-    linear-gradient(180deg, #0b2837 0%, #174f6b 72%, #7db4d1 100%);
-}
-.rocket-loader-ship {
-  position: absolute;
-  left: calc(50% - 36px);
-  bottom: 34px;
-  color: var(--color-arc-navy);
-  animation: rocket-takeoff 1.6s ease-in-out infinite;
-}
-.rocket-loader-flame {
-  position: absolute;
-  left: 27px;
-  top: 87px;
-  width: 18px;
-  height: 42px;
-  border-radius: 50% 50% 65% 65%;
-  background: linear-gradient(#ffd37a, #b42025 72%, transparent);
-  transform-origin: top;
-  animation: rocket-flame 260ms ease-in-out infinite alternate;
-}
-.rocket-loader-cloud {
-  position: absolute;
-  bottom: 10px;
-  width: 120px;
-  height: 28px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  filter: blur(1px);
-  animation: rocket-cloud 1.6s ease-out infinite;
-}
-.rocket-loader-cloud-one {
-  left: calc(50% - 105px);
-}
-.rocket-loader-cloud-two {
-  right: calc(50% - 105px);
-  animation-delay: 180ms;
-}
-.rocket-loader-star {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 99px;
-  background: white;
-  opacity: 0.75;
-}
-.rocket-loader-star-one {
-  left: 20%;
-  top: 18%;
-}
-.rocket-loader-star-two {
-  right: 24%;
-  top: 32%;
-}
-.rocket-loader-star-three {
-  left: 34%;
-  top: 48%;
-}
-@keyframes rocket-takeoff {
-  0%,
-  100% {
-    transform: translateY(4px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
-@keyframes rocket-flame {
-  from {
-    transform: scaleY(0.75);
-    opacity: 0.75;
-  }
-  to {
-    transform: scaleY(1.12);
-    opacity: 1;
-  }
-}
-@keyframes rocket-cloud {
-  from {
-    transform: translateX(0) scale(0.65);
-    opacity: 0.75;
-  }
-  to {
-    transform: translateX(20px) scale(1.15);
-    opacity: 0;
-  }
-}
 .prose-lesson {
   font-size: 17px;
   line-height: 1.85;
@@ -619,4 +537,155 @@ summary {
   .skip-link {
     display: none !important;
   }
+}
+
+/* Google sign-in — a second option beside email, never instead of it.
+   Radius 0 and no shadow, like every other control in this system. */
+.google-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 48px;
+  padding: 12px 20px;
+  background: var(--color-arc-white);
+  border: 1px solid var(--color-navy-200);
+  color: var(--color-arc-ink);
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  transition: background-color 0.2s var(--ease-arc);
+}
+.google-button:hover {
+  background: var(--color-mist-300);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 4px 0;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--color-mist-500);
+}
+
+/* ------------------------------------------------------------------ */
+/* Your vehicle — the build card on the course index.                  */
+/* Dark card on the paper page: the launch field seen from the desk.   */
+/* ------------------------------------------------------------------ */
+.vbuild {
+  background: var(--color-navy-700);
+  padding: 20px;
+  border: 1px solid var(--color-navy-600);
+}
+
+.vbuild__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.vbuild__pct {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 999px; /* circular controls are the one radius exception */
+  border: 1px solid var(--color-navy-400);
+  color: var(--color-arc-white);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  flex: none;
+}
+
+.vbuild {
+  --vb-dia: 34px;
+}
+
+.vbuild__stage {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 96px;
+  margin-top: 18px;
+  padding-bottom: 14px;
+}
+
+.vbuild__section {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: none;
+  transition: opacity 0.4s var(--ease-arc);
+}
+
+.vbuild__section img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+/* Not yet earned: the part is there as a ghost, so the shape of what you are
+   building is legible from the first day. */
+.vbuild__section[data-earned="false"] img {
+  opacity: 0.3;
+  filter: grayscale(1) brightness(1.6);
+}
+
+.vbuild__section[data-earned="true"] img {
+  opacity: 1;
+}
+
+
+
+/* Route loading: a hairline and a label. See components/ui/Loading.tsx. */
+.loading {
+  max-width: 420px;
+}
+.loading__track {
+  display: block;
+  position: relative;
+  height: 2px;
+  overflow: hidden;
+  background: var(--color-mist-500);
+}
+.loading__bar {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  background: var(--color-arc-navy);
+  animation: loading-sweep 1.15s var(--ease-arc) infinite;
+}
+.loading__label {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+@keyframes loading-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(363%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading__bar { animation: none; width: 100%; opacity: 0.45; }
 }

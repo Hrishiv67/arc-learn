@@ -1,0 +1,881 @@
+/*
+ * The launch sequence.
+ *
+ * Lives on the dark shell (ARC navy-800) rather than the paper theme the rest
+ * of the course uses. Colours come from the brand tokens in globals.css; the
+ * only values hard-coded here are the atmospheric scrims, which are navy at low
+ * alpha and exist purely so white type survives sitting on a bright cloud.
+ *
+ * Radius 0, no shadows, and exactly one red element (the ARMED state) — the
+ * three rules the styleguide sets for every other screen in this app.
+ */
+
+/* -------------------------------------------------------------------- hero */
+.hero {
+  position: relative;
+  height: 108vh; /* the scroll budget the launch is scrubbed across */
+}
+
+.hero__pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-shell);
+}
+
+.hero__scene {
+  position: absolute;
+  inset: 0;
+  will-change: transform;
+}
+
+.hero__plate {
+  position: absolute;
+  top: 0;
+  left: 0;
+  max-width: none;
+  transform-origin: 0 0;
+  user-select: none;
+}
+
+.hero__fx {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero__rocket {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: auto;
+  transform-origin: 50% 100%;
+  will-change: transform;
+  user-select: none;
+}
+
+/* the rail the vehicle stands on: a hairline, because that is all a 1010 rail
+   reads as from this distance */
+.hero__rail {
+  position: absolute;
+  left: var(--pad-x, 66%);
+  top: calc(var(--pad-y, 78%) - 1px);
+  width: 1px;
+  height: 5.5vh;
+  margin-left: -3px;
+  background: linear-gradient(
+    to bottom,
+    rgba(242, 244, 245, 0) 0%,
+    rgba(242, 244, 245, 0.5) 35%,
+    rgba(242, 244, 245, 0.22) 100%
+  );
+}
+
+/*
+ * The frame brightening as the vehicle climbs, until it is the same paper the
+ * course is printed on. This is what removes the cut: the launch does not end
+ * and hand over to a white page, it becomes it.
+ */
+.hero__grade {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    var(--color-arc-white) 0%,
+    var(--color-arc-white) 58%,
+    var(--color-mist-200) 100%
+  );
+}
+
+/* the course, arriving inside the pinned frame */
+.hero__handoff {
+  position: absolute;
+  left: 6.5vw;
+  top: 34vh;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero__handoffEyebrow {
+  margin: 0 0 2vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+
+.hero__handoffTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 4.4vw, 4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--color-arc-navy);
+}
+
+/* the exhaust column, resolved into the rule the next section hangs off */
+.hero__trail {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(17, 61, 85, 0) 0%,
+    rgba(17, 61, 85, 0.35) 26%,
+    rgba(17, 61, 85, 0.3) 100%
+  );
+}
+
+/* the only overlay: enough to hold white type over bright haze, nothing more */
+.hero__scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(to bottom, rgba(5, 17, 24, 0.55) 0%, rgba(5, 17, 24, 0) 26%),
+    linear-gradient(to right, rgba(5, 17, 24, 0.5) 0%, rgba(5, 17, 24, 0.12) 42%, rgba(5, 17, 24, 0) 62%);
+}
+
+/* --------------------------------------------------------------------- nav */
+.hero__nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.1rem 3.2vw;
+  opacity: var(--nav-fade, 1);
+  z-index: 4;
+}
+
+.hero__mark {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.16em;
+  color: var(--color-shell-ink);
+}
+
+.hero__mark span {
+  opacity: 0.45;
+  margin: 0 0.35em;
+  font-weight: 400;
+}
+
+.hero__links {
+  display: flex;
+  align-items: center;
+  gap: 2.6vw;
+}
+
+.hero__links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--color-shell-dim);
+  transition: color 0.28s var(--ease-arc);
+}
+
+.hero__links a:hover {
+  color: var(--color-shell-ink);
+}
+
+.hero__start {
+  color: var(--color-shell-ink) !important;
+  border-bottom: 1px solid rgba(242, 244, 245, 0.35);
+  padding-bottom: 3px;
+}
+
+/* -------------------------------------------------------------------- copy */
+.hero__copy {
+  position: absolute;
+  left: 6.5vw;
+  top: 15.5vh;
+  z-index: 3;
+  max-width: 52vw;
+  will-change: transform;
+}
+
+.hero__eyebrow {
+  margin: 0 0 2.6vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(242, 244, 245, 0.66);
+  text-shadow: 0 0 16px rgba(4, 14, 20, 0.85);
+}
+
+.hero__title {
+  margin: 0;
+  font-weight: 800;
+  font-size: clamp(3.6rem, 12.4vw, 15rem);
+  line-height: 0.82;
+  letter-spacing: -0.022em;
+  text-transform: uppercase;
+  color: var(--color-shell-ink);
+}
+
+.hero__word {
+  display: block;
+  will-change: transform, opacity;
+}
+
+.hero__sub {
+  margin-top: 4.2vh;
+}
+
+.hero__lede {
+  margin: 0;
+  max-width: 34ch;
+  font-size: clamp(0.95rem, 1.15vw, 1.15rem);
+  line-height: 1.5;
+  color: rgba(242, 244, 245, 0.76);
+}
+
+/* aerospace interface, not a marketing pill: a rule, and nothing else */
+.hero__cta {
+  display: inline-block;
+  margin-top: 3.4vh;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(242, 244, 245, 0.45);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  color: var(--color-shell-ink);
+  transition: border-color 0.3s var(--ease-arc);
+}
+
+.hero__cta span {
+  display: inline-block;
+  margin-left: 0.7em;
+  transition: transform 0.34s var(--ease-arc);
+}
+
+.hero__cta:hover {
+  border-color: var(--color-shell-ink);
+}
+
+.hero__cta:hover span {
+  transform: translateX(5px);
+}
+
+/* --------------------------------------------------------------- telemetry */
+.hero__telemetry {
+  position: absolute;
+  left: calc(var(--pad-x, 66%) + 76px);
+  top: 41vh;
+  z-index: 3;
+  font-family: var(--font-mono);
+  text-shadow:
+    0 0 18px rgba(4, 14, 20, 0.95),
+    0 0 6px rgba(4, 14, 20, 0.8),
+    0 1px 2px rgba(4, 14, 20, 0.9);
+}
+
+.hero__leader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2.4vh;
+  margin-left: -46px;
+}
+
+.hero__leaderLine {
+  width: 38px;
+  height: 1px;
+  background: rgba(242, 244, 245, 0.34);
+}
+
+.hero__leaderText {
+  margin-left: 10px;
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  color: rgba(242, 244, 245, 0.55);
+}
+
+.hero__readout {
+  margin: 0;
+  display: grid;
+  gap: 1.15vh;
+}
+
+.hero__readout > div {
+  display: grid;
+  grid-template-columns: 120px auto;
+  column-gap: 14px;
+  align-items: baseline;
+}
+
+.hero__readout dt {
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  color: rgba(242, 244, 245, 0.5);
+  white-space: nowrap;
+}
+
+.hero__readout dd {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  color: rgba(242, 244, 245, 0.92);
+}
+
+/* the one use of ARC red in the whole hero */
+.hero__telemetry[data-armed="true"] .hero__status {
+  color: #e2565b;
+}
+
+/* --------------------------------------------------------------- indicator */
+.hero__indicator {
+  position: absolute;
+  left: 6.5vw;
+  bottom: 4.6vh;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  color: rgba(242, 244, 245, 0.55);
+  text-shadow: 0 0 16px rgba(4, 14, 20, 0.9);
+}
+
+.hero__indicatorIndex {
+  color: rgba(242, 244, 245, 0.72);
+}
+
+.hero__indicatorTrack {
+  position: relative;
+  width: 118px;
+  height: 1px;
+  background: rgba(242, 244, 245, 0.2);
+}
+
+.hero__indicatorBar {
+  position: absolute;
+  inset: 0;
+  background: rgba(242, 244, 245, 0.8);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+}
+
+.hero__defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------ responsive */
+@media (max-width: 767px) {
+  .hero {
+    height: 104vh;
+  }
+
+  .hero__copy {
+    left: 6vw;
+    top: auto;
+    bottom: 16vh;
+    max-width: 88vw;
+  }
+
+  .hero__title {
+    font-size: 13.6vw;
+  }
+
+  .hero__lede {
+    font-size: 0.95rem;
+    max-width: 26ch;
+  }
+
+  /* instrumentation moves to the bottom rail rather than shrinking in place */
+  .hero__telemetry {
+    left: 6vw;
+    top: 11vh;
+  }
+
+  .hero__leader {
+    display: none;
+  }
+
+  .hero__readout {
+    grid-template-columns: repeat(2, auto);
+    gap: 0.5vh 2rem;
+  }
+
+  .hero__readout > div {
+    grid-template-columns: 54px auto;
+  }
+
+  .hero__readout > div:nth-child(n + 4) {
+    display: none;
+  }
+
+  .hero__indicator {
+    left: 6vw;
+    bottom: 3.4vh;
+    gap: 12px;
+  }
+
+  .hero__indicatorTrack {
+    width: 72px;
+  }
+
+  .hero__links a:not(.hero__start) {
+    display: none;
+  }
+
+  .hero__nav {
+    padding: 1.5rem 6vw;
+  }
+}
+
+/* ---------------------------------------------------------- reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .hero {
+    height: 100vh;
+  }
+
+  .hero__pin {
+    position: relative;
+  }
+
+  .hero__cta span,
+  .hero__cta,
+  .hero__links a {
+    transition: none;
+  }
+}
+
+/* ===================================================================== */
+/* 03 — SIGN IN                                                           */
+/* Short on purpose: the course above is the pitch, this is just the door. */
+/* ===================================================================== */
+
+.gate {
+  position: relative;
+  background: var(--color-mist-200);
+  border-top: 1px solid var(--color-mist-500);
+  padding: 12vh 6.5vw 12vh;
+}
+
+.gate__inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5vh 5vw;
+  align-items: flex-end;
+  justify-content: space-between;
+  max-width: 1000px;
+}
+
+.gate__eyebrow {
+  margin: 0 0 2vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+
+.gate__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--color-arc-navy);
+}
+
+.gate__lede {
+  margin: 2.2vh 0 0;
+  max-width: 46ch;
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--color-sky-800);
+}
+
+.gate__actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.6vh;
+}
+
+/* ARC's own call to action: a sharp red rectangle and a long thin arrow.
+   The one red element on this screen. */
+.gate__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  padding: 17px 26px;
+  background: var(--color-arc-red);
+  color: var(--color-arc-white);
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  transition: background-color 0.24s var(--ease-arc);
+}
+
+.gate__cta:hover {
+  background: var(--color-red-600);
+}
+
+.gate__ctaArrow {
+  position: relative;
+  width: 34px;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.28s var(--ease-arc);
+}
+
+.gate__ctaArrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -3px;
+  width: 7px;
+  height: 7px;
+  border-top: 1px solid currentColor;
+  border-right: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+.gate__cta:hover .gate__ctaArrow {
+  width: 44px;
+}
+
+.gate__signin {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.24s var(--ease-arc);
+}
+
+.gate__signin:hover {
+  border-bottom-color: var(--color-sky-800);
+}
+
+@media (max-width: 767px) {
+  .gate {
+    padding: 9vh 6vw 9vh;
+  }
+}
+
+/* ===================================================================== */
+/* 02 — THE COURSE                                                        */
+/* The reason the site exists, so it gets hero-grade treatment: the real   */
+/* thirteen modules, with the vehicle panel kept deliberately quiet beside */
+/* them.                                                                  */
+/* ===================================================================== */
+
+.track {
+  position: relative;
+  background: var(--color-arc-white);
+  padding: 13vh 6.5vw 10vh;
+}
+
+.track__eyebrow {
+  margin: 0 0 2.2vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+
+.track__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.2vw, 4.1rem);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: var(--color-arc-navy);
+}
+
+.track__lede {
+  margin: 3vh 0 0;
+  max-width: 56ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--color-sky-800);
+}
+
+.track__body {
+  margin-top: 7vh;
+}
+
+/* --- the blow-up: retention, not the point --------------------------- */
+.track {
+  /* one body diameter; each part's width comes from its own render */
+  --veh-dia: 66px;
+}
+
+.track__vehicle {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 26px 0 22px;
+  margin-bottom: 3vh;
+  background: var(--color-arc-white);
+  border-bottom: 1px solid var(--color-mist-500);
+}
+
+.track__exploded {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.track__part {
+  position: relative;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    opacity 0.4s var(--ease-arc),
+    filter 0.4s var(--ease-arc);
+  /* on paper an inactive part has to go grey and slightly darker — lightening
+     it, as you would on a dark ground, makes it vanish into the page */
+  opacity: 0.5;
+  filter: grayscale(1) brightness(0.94);
+}
+
+.track__part[data-active="true"] {
+  opacity: 1;
+  filter: none;
+}
+
+.track__part img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+.track__caption {
+  min-width: 0;
+}
+
+.track__vehicleLabel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+
+.track__partName {
+  margin: 7px 0 0;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-arc-navy);
+}
+
+.track__partEarns {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--color-sky-800);
+}
+
+/* --- the modules ------------------------------------------------------ */
+.track__unit {
+  margin-bottom: 7vh;
+}
+
+.track__unitHead {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--color-navy-300);
+}
+
+.track__unitIndex {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+  flex: none;
+}
+
+.track__unitTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-arc-navy);
+  flex: 1;
+}
+
+.track__unitGoal {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-700);
+}
+
+.track__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.track__rowLink {
+  display: grid;
+  grid-template-columns: 44px 1fr 128px 62px;
+  gap: 20px;
+  align-items: baseline;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-mist-500);
+  transition: background-color 0.2s var(--ease-arc);
+}
+
+.track__rowLink:hover {
+  background: var(--color-mist-300);
+}
+
+.track__num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-navy-400);
+}
+
+.track__moduleTitle {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--color-arc-navy);
+}
+
+.track__summary {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--color-sky-800);
+  max-width: 52ch;
+}
+
+.track__meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-navy-400);
+}
+
+.track__mins {
+  display: block;
+}
+
+.track__builds {
+  display: block;
+  margin-top: 5px;
+  color: var(--color-sky-700);
+}
+
+.track__status {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--color-navy-400);
+}
+
+.track__status[data-live="true"] {
+  color: var(--color-arc-red);
+}
+
+@media (max-width: 900px) {
+  .track {
+    padding: 10vh 6vw 8vh;
+  }
+  .track {
+    --veh-dia: 40px;
+  }
+  .track__vehicle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0 14px;
+  }
+  .track__exploded {
+    max-width: 100%;
+    overflow-x: auto;
+    gap: 8px;
+  }
+  .track__rowLink {
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    padding: 18px 0;
+  }
+  .track__meta,
+  .track__status {
+    grid-column: 2;
+    text-align: left;
+  }
+  .track__meta {
+    margin-top: 8px;
+  }
+  .track__status {
+    margin-top: 6px;
+  }
+  .track__unitHead {
+    flex-wrap: wrap;
+    gap: 6px 14px;
+  }
+}
