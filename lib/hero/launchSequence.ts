@@ -54,8 +54,15 @@ export type SceneState = {
   /** px, physical camera vibration; never applied to UI text */
   shake: number;
 
-  /** 0..1 how far the frame has travelled into darker air */
-  darken: number;
+  /**
+   * 0..1 the frame washing out to daylight as the vehicle climbs, which is what
+   * carries the page from the launch into the paper theme the course is set in.
+   */
+  washout: number;
+  /** 0..1 the course heading arriving inside the pinned frame */
+  handoff: number;
+  /** 0..1 instrumentation and nav clearing as the frame goes to paper */
+  uiFade: number;
   /** 0..1 opacity of the trajectory rule that carries into the next section */
   trailLine: number;
 
@@ -122,7 +129,15 @@ export function sequenceAt(pRaw: number): SceneState {
     2.6 * smooth(span(p, 0.07, 0.13)) * (1 - 0.75 * span(p, 0.16, 0.36));
 
   // --- frame travelling up into thinner, darker air -----------------------
-  const darken = smooth(span(p, 0.46, 0.86));
+  // The launch used to end on an empty sky and then cut to a white page. It now
+  // brightens into that page instead, and the course heading arrives while the
+  // smoke is still clearing, so there is never a frame with nothing in it.
+  const washout = smooth(span(p, 0.42, 0.92));
+  // the heading waits for the background to actually be paper before it
+  // arrives, or it spends half its life as navy text on a dark sky
+  const handoff = smooth(span(p, 0.63, 0.95));
+  // everything built to read on the dark plate has to be gone by then
+  const uiFade = 1 - span(p, 0.46, 0.74);
   const trailLine = span(p, 0.36, 0.56) * (1 - 0.15 * span(p, 0.95, 1));
 
   // --- copy ---------------------------------------------------------------
@@ -134,7 +149,7 @@ export function sequenceAt(pRaw: number): SceneState {
   ];
   const copyShift = -1.2 * span(p, 0, 0.15) - 16 * Math.pow(span(p, 0.24, 0.54), 1.8);
   const copyFade = 1 - span(p, 0.3, 0.46);
-  const navFade = 1 - 0.75 * span(p, 0.07, 0.15) - 0.25 * span(p, 0.6, 0.8);
+  const navFade = (1 - 0.75 * span(p, 0.07, 0.15)) * (1 - span(p, 0.46, 0.72));
 
   return {
     p,
@@ -148,7 +163,9 @@ export function sequenceAt(pRaw: number): SceneState {
     flash,
     plume,
     shake,
-    darken,
+    washout,
+    handoff,
+    uiFade,
     trailLine,
     words,
     copyShift,

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "nose",
+    "lengthUnits": 1.75,
+    "share": 0.2244,
+    "width": 262,
+    "height": 150
+  },
+  {
+    "id": "payload",
+    "lengthUnits": 1.35,
+    "share": 0.1731,
+    "width": 202,
+    "height": 150
+  },
+  {
+    "id": "body",
+    "lengthUnits": 1.7,
+    "share": 0.2179,
+    "width": 255,
+    "height": 150
+  },
+  {
+    "id": "recovery",
+    "lengthUnits": 1.35,
+    "share": 0.1731,
+    "width": 202,
+    "height": 150
+  },
+  {
+    "id": "fincan",
+    "lengthUnits": 1.65,
+    "share": 0.2115,
+    "width": 248,
+    "height": 228
+  }
+]

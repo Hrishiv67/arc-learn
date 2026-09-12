@@ -1,4 +1,4 @@
-import { RocketLoader } from "@/components/engagement/RocketLoader";
+import { Loading } from "@/components/ui/Loading";
 
 /**
  * Shown instantly by Next.js while a route segment's real content streams
@@ -10,7 +10,7 @@ import { RocketLoader } from "@/components/engagement/RocketLoader";
  */
 export function RouteSkeleton({ withRail = true }: { withRail?: boolean }) {
   return (
-    <RocketLoader
+    <Loading
       label={
         withRail ? "Fueling your next lesson…" : "Opening the flight plan…"
       }

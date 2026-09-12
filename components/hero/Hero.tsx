@@ -51,6 +51,7 @@ export function Hero() {
   const gradeRef = useRef<HTMLDivElement>(null);
   const trailRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef<SVGFEGaussianBlurElement>(null);
+  const handoffRef = useRef<HTMLDivElement>(null);
 
   const navRef = useRef<HTMLElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
@@ -156,15 +157,21 @@ export function Hero() {
       blurRef.current.setAttribute("stdDeviation", `0 ${s.rocketBlur.toFixed(1)}`);
     }
     if (railRef.current) {
-      railRef.current.style.opacity = String(0.55 * (1 - s.darken * 0.8));
+      railRef.current.style.opacity = String(0.55 * (1 - s.washout));
     }
 
     // --- exhaust ------------------------------------------------------------
     smoke.current?.draw(s, (pb) => sequenceAt(pb).travel, { x: L.padX, y: L.padY });
 
-    // --- travelling up into darker air --------------------------------------
+    // --- brightening into the course ----------------------------------------
     if (gradeRef.current) {
-      gradeRef.current.style.opacity = String(s.darken);
+      gradeRef.current.style.opacity = String(s.washout);
+    }
+    if (handoffRef.current) {
+      handoffRef.current.style.opacity = String(s.handoff);
+      handoffRef.current.style.transform = `translate3d(0, ${(
+        (1 - s.handoff) * 5
+      ).toFixed(2)}vh, 0)`;
     }
     if (trailRef.current) {
       trailRef.current.style.opacity = String(s.trailLine * 0.5);
@@ -196,7 +203,7 @@ export function Hero() {
       set("alt", `${Math.round(s.flight.alt)} M`);
       set("vel", `${Math.round(s.flight.vel)} M/S`);
       set("status", statusLabel(s));
-      tel.style.opacity = String(0.55 + 0.45 * Math.min(1, s.p * 6));
+      tel.style.opacity = String((0.55 + 0.45 * Math.min(1, s.p * 6)) * s.uiFade);
       const armed = s.p >= 0.035 && s.p < 0.16;
       tel.dataset.armed = armed ? "true" : "false";
     }
@@ -208,7 +215,7 @@ export function Hero() {
       const label = ind.querySelector<HTMLElement>("[data-label]");
       const next = s.p < 0.07 ? "SCROLL TO IGNITE" : statusLabel(s);
       if (label && label.textContent !== next) label.textContent = next;
-      ind.style.opacity = String(1 - Math.max(0, (s.p - 0.7) / 0.2));
+      ind.style.opacity = String(s.uiFade);
     }
   };
 
@@ -274,6 +281,17 @@ export function Hero() {
         </div>
 
         <div className="hero__grade" ref={gradeRef} aria-hidden="true" />
+
+        {/* The course arrives inside the pinned frame, while the smoke is still
+            clearing, so the launch never resolves to an empty screen. */}
+        <div className="hero__handoff" ref={handoffRef}>
+          <p className="hero__handoffEyebrow">02 / The course</p>
+          <p className="hero__handoffTitle">
+            Rocketry modules for students
+            <br />
+            new to rocketry.
+          </p>
+        </div>
         <div className="hero__trail" ref={trailRef} aria-hidden="true" />
         <div className="hero__scrim" aria-hidden="true" />
 

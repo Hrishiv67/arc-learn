@@ -18,7 +18,7 @@ import { Callout } from "@/components/ui/Callout";
 import { Input } from "@/components/ui/Input";
 import { Button, TextButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
-import { RocketLoader } from "@/components/engagement/RocketLoader";
+import { Loading } from "@/components/ui/Loading";
 
 /**
  * Tier 2 — optional account. Email + password only, nothing else. Real
@@ -44,7 +44,7 @@ export function AccountClient({ next }: { next?: string }) {
     isModuleComplete(progress[m.id]),
   ).length;
 
-  if (loading) return <RocketLoader label="Finding your saved mission…" />;
+  if (loading) return <Loading label="Finding your saved progress…" />;
 
   if (user) {
     return (

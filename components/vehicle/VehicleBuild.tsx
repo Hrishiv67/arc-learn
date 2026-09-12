@@ -59,13 +59,12 @@ export function VehicleBuild({
             key={s.id}
             className="vbuild__section"
             data-earned={earnedSet.has(i) ? "true" : "false"}
-            style={{ height: `${s.height * 100}%` }}
+            style={{ width: `calc(var(--vb-dia) * ${s.ratio})` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`/hero/section-${s.id}.png`} alt="" draggable={false} />
+            <img src={`/vehicle/cad-${s.id}.png`} alt="" draggable={false} />
           </span>
         ))}
-        <span className="vbuild__ground" aria-hidden="true" />
       </div>
 
       <p className="text-sm text-sky-200 mt-3">

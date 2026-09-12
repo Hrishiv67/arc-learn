@@ -28,10 +28,11 @@ export function HeroCopy({
 
       <div className="hero__sub" ref={subRef}>
         <p className="hero__lede">
-          Master the engineering behind competitive rocketry.
+          Rocketry modules for students new to rocketry. Thirteen lessons, from
+          your first launch rail to a qualifying flight. Free.
         </p>
         <Link className="hero__cta" href="/account?next=/modules">
-          BEGIN THE MISSION <span aria-hidden="true">→</span>
+          START MODULE 01 <span aria-hidden="true">→</span>
         </Link>
       </div>
     </div>

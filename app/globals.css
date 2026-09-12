@@ -485,117 +485,6 @@
   font-size: 11px;
   font-weight: 800;
 }
-.rocket-loader-shell {
-  display: grid;
-  min-height: calc(100vh - 160px);
-  place-items: center;
-}
-.rocket-loader {
-  width: min(100%, 680px);
-  padding: 26px 26px 30px;
-  overflow: hidden;
-  border-radius: 24px;
-  background: var(--color-arc-navy);
-  text-align: center;
-  box-shadow: 0 24px 70px rgba(8, 29, 41, 0.2);
-}
-.rocket-loader-sky {
-  position: relative;
-  height: 230px;
-  overflow: hidden;
-  border-radius: 16px;
-  background:
-    radial-gradient(
-      circle at 28% 24%,
-      rgba(125, 180, 209, 0.35),
-      transparent 2px
-    ),
-    linear-gradient(180deg, #0b2837 0%, #174f6b 72%, #7db4d1 100%);
-}
-.rocket-loader-ship {
-  position: absolute;
-  left: calc(50% - 36px);
-  bottom: 34px;
-  color: var(--color-arc-navy);
-  animation: rocket-takeoff 1.6s ease-in-out infinite;
-}
-.rocket-loader-flame {
-  position: absolute;
-  left: 27px;
-  top: 87px;
-  width: 18px;
-  height: 42px;
-  border-radius: 50% 50% 65% 65%;
-  background: linear-gradient(#ffd37a, #b42025 72%, transparent);
-  transform-origin: top;
-  animation: rocket-flame 260ms ease-in-out infinite alternate;
-}
-.rocket-loader-cloud {
-  position: absolute;
-  bottom: 10px;
-  width: 120px;
-  height: 28px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  filter: blur(1px);
-  animation: rocket-cloud 1.6s ease-out infinite;
-}
-.rocket-loader-cloud-one {
-  left: calc(50% - 105px);
-}
-.rocket-loader-cloud-two {
-  right: calc(50% - 105px);
-  animation-delay: 180ms;
-}
-.rocket-loader-star {
-  position: absolute;
-  width: 4px;
-  height: 4px;
-  border-radius: 99px;
-  background: white;
-  opacity: 0.75;
-}
-.rocket-loader-star-one {
-  left: 20%;
-  top: 18%;
-}
-.rocket-loader-star-two {
-  right: 24%;
-  top: 32%;
-}
-.rocket-loader-star-three {
-  left: 34%;
-  top: 48%;
-}
-@keyframes rocket-takeoff {
-  0%,
-  100% {
-    transform: translateY(4px);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
-}
-@keyframes rocket-flame {
-  from {
-    transform: scaleY(0.75);
-    opacity: 0.75;
-  }
-  to {
-    transform: scaleY(1.12);
-    opacity: 1;
-  }
-}
-@keyframes rocket-cloud {
-  from {
-    transform: translateX(0) scale(0.65);
-    opacity: 0.75;
-  }
-  to {
-    transform: translateX(20px) scale(1.15);
-    opacity: 0;
-  }
-}
 .prose-lesson {
   font-size: 17px;
   line-height: 1.85;
@@ -723,59 +612,80 @@ summary {
   flex: none;
 }
 
+.vbuild {
+  --vb-dia: 34px;
+}
+
 .vbuild__stage {
   position: relative;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  height: 236px;
+  justify-content: center;
+  gap: 7px;
+  min-height: 96px;
   margin-top: 18px;
   padding-bottom: 14px;
-  background: radial-gradient(
-    ellipse 34% 46% at 50% 46%,
-    rgba(125, 180, 209, 0.16),
-    transparent 72%
-  );
-}
-
-.vbuild__axis {
-  position: absolute;
-  left: 50%;
-  top: 0;
-  bottom: 14px;
-  width: 1px;
-  background: rgba(242, 244, 245, 0.1);
 }
 
 .vbuild__section {
   position: relative;
-  display: block;
+  display: flex;
+  align-items: center;
   flex: none;
+  transition: opacity 0.4s var(--ease-arc);
 }
 
 .vbuild__section img {
   display: block;
-  width: auto;
+  width: 100%;
   max-width: none;
-  height: 100%;
+  height: auto;
 }
 
-/* Not yet earned: the section is there as a ghost, so the shape of what you
-   are building is legible from the first day. */
+/* Not yet earned: the part is there as a ghost, so the shape of what you are
+   building is legible from the first day. */
 .vbuild__section[data-earned="false"] img {
-  opacity: 0.16;
-  filter: grayscale(1) brightness(1.5);
+  opacity: 0.3;
+  filter: grayscale(1) brightness(1.6);
 }
 
 .vbuild__section[data-earned="true"] img {
   opacity: 1;
 }
 
-.vbuild__ground {
+
+
+/* Route loading: a hairline and a label. See components/ui/Loading.tsx. */
+.loading {
+  max-width: 420px;
+}
+.loading__track {
+  display: block;
+  position: relative;
+  height: 2px;
+  overflow: hidden;
+  background: var(--color-mist-500);
+}
+.loading__bar {
   position: absolute;
-  left: 12%;
-  right: 12%;
-  bottom: 10px;
-  height: 1px;
-  background: rgba(242, 244, 245, 0.18);
+  inset: 0 auto 0 0;
+  width: 38%;
+  background: var(--color-arc-navy);
+  animation: loading-sweep 1.15s var(--ease-arc) infinite;
+}
+.loading__label {
+  margin-top: 14px;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+@keyframes loading-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(363%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .loading__bar { animation: none; width: 100%; opacity: 0.45; }
 }

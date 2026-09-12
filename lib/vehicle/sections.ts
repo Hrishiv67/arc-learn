@@ -14,6 +14,8 @@ export type VehicleSection = {
   id: string;
   /** share of the assembled vehicle's length, nose to tail */
   height: number;
+  /** width : height of the rendered part, for laying the blow-up out */
+  ratio: number;
   label: string;
   /** for tight columns */
   short: string;
@@ -24,35 +26,40 @@ export type VehicleSection = {
 export const SECTIONS: VehicleSection[] = [
   {
     id: "nose",
-    height: 0.18,
+    height: 0.2244,
+    ratio: 1.7467,
     label: "Nose cone",
     short: "Nose cone",
     earns: "Trim drag and hit the altitude window",
   },
   {
     id: "payload",
-    height: 0.18,
+    height: 0.1731,
+    ratio: 1.3467,
     label: "Payload bay",
     short: "Payload bay",
     earns: "Carry two eggs and get them back intact",
   },
   {
-    id: "body-upper",
-    height: 0.21,
+    id: "body",
+    height: 0.2179,
+    ratio: 1.7,
     label: "Body tube",
     short: "Body tube",
     earns: "Lay out an airframe that holds together",
   },
   {
-    id: "body-lower",
-    height: 0.205,
+    id: "recovery",
+    height: 0.1731,
+    ratio: 1.3467,
     label: "Recovery bay",
     short: "Recovery bay",
     earns: "Size a parachute and pack it properly",
   },
   {
     id: "fincan",
-    height: 0.225,
+    height: 0.2115,
+    ratio: 1.0877,
     label: "Fin can and motor",
     short: "Fin can",
     earns: "Fly straight on the right motor",

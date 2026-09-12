@@ -66,14 +66,13 @@ export function ModuleTrack() {
       <div className="track__intro">
         <p className="track__eyebrow">02 / The course</p>
         <h2 className="track__title">
-          Thirteen modules.
+          Rocketry modules for students
           <br />
-          One qualifying flight.
+          new to rocketry.
         </h2>
         <p className="track__lede">
-          Written for a team with no rocketry background. Each module is a short
-          reading and a quiz you can actually fail — and each one finishes a
-          piece of the rocket you fly at the end.
+          Thirteen of them, from your first launch rail to a qualifying flight.
+          Read it, take the quiz, and finish another part of the rocket.
         </p>
       </div>
 
@@ -88,10 +87,10 @@ export function ModuleTrack() {
                 key={s.id}
                 className="track__part"
                 data-active={i === active ? "true" : "false"}
-                style={{ width: `calc(var(--veh-len) * ${s.height})` }}
+                style={{ width: `calc(var(--veh-dia) * ${s.ratio})` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={`/hero/section-${s.id}.png`} alt="" draggable={false} />
+                <img src={`/vehicle/cad-${s.id}.png`} alt="" draggable={false} />
               </span>
             ))}
           </div>

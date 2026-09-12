@@ -73,14 +73,53 @@
   );
 }
 
-/* travelling up into thinner, darker air — not a fade to black */
+/*
+ * The frame brightening as the vehicle climbs, until it is the same paper the
+ * course is printed on. This is what removes the cut: the launch does not end
+ * and hand over to a white page, it becomes it.
+ */
 .hero__grade {
   position: absolute;
   inset: 0;
   opacity: 0;
   pointer-events: none;
-  background:
-    linear-gradient(to bottom, #040e14 0%, rgba(6, 20, 28, 0.86) 42%, rgba(8, 29, 41, 0.55) 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--color-arc-white) 0%,
+    var(--color-arc-white) 58%,
+    var(--color-mist-200) 100%
+  );
+}
+
+/* the course, arriving inside the pinned frame */
+.hero__handoff {
+  position: absolute;
+  left: 6.5vw;
+  top: 34vh;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero__handoffEyebrow {
+  margin: 0 0 2vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+
+.hero__handoffTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 4.4vw, 4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--color-arc-navy);
 }
 
 /* the exhaust column, resolved into the rule the next section hangs off */
@@ -94,9 +133,9 @@
   pointer-events: none;
   background: linear-gradient(
     to bottom,
-    rgba(242, 244, 245, 0) 0%,
-    rgba(242, 244, 245, 0.55) 26%,
-    rgba(242, 244, 245, 0.5) 100%
+    rgba(17, 61, 85, 0) 0%,
+    rgba(17, 61, 85, 0.35) 26%,
+    rgba(17, 61, 85, 0.3) 100%
   );
 }
 
@@ -439,8 +478,8 @@
 
 .gate {
   position: relative;
-  background: var(--color-shell);
-  border-top: 1px solid var(--color-shell-line);
+  background: var(--color-mist-200);
+  border-top: 1px solid var(--color-mist-500);
   padding: 12vh 6.5vw 12vh;
 }
 
@@ -460,7 +499,7 @@
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-shell-dim);
+  color: var(--color-sky-800);
 }
 
 .gate__title {
@@ -469,7 +508,7 @@
   font-size: clamp(1.8rem, 3.2vw, 3rem);
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--color-shell-ink);
+  color: var(--color-arc-navy);
 }
 
 .gate__lede {
@@ -477,7 +516,7 @@
   max-width: 46ch;
   font-size: 1rem;
   line-height: 1.6;
-  color: rgba(242, 244, 245, 0.68);
+  color: var(--color-sky-800);
 }
 
 .gate__actions {
@@ -538,13 +577,13 @@
   font-weight: 600;
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
-  color: var(--color-shell-dim);
+  color: var(--color-sky-800);
   border-bottom: 1px solid transparent;
   transition: border-color 0.24s var(--ease-arc);
 }
 
 .gate__signin:hover {
-  border-bottom-color: var(--color-shell-dim);
+  border-bottom-color: var(--color-sky-800);
 }
 
 @media (max-width: 767px) {
@@ -562,7 +601,7 @@
 
 .track {
   position: relative;
-  background: var(--color-shell);
+  background: var(--color-arc-white);
   padding: 13vh 6.5vw 10vh;
 }
 
@@ -573,7 +612,7 @@
   font-weight: 600;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-shell-dim);
+  color: var(--color-sky-800);
 }
 
 .track__title {
@@ -583,7 +622,7 @@
   font-weight: 700;
   line-height: 1.0;
   letter-spacing: -0.025em;
-  color: var(--color-shell-ink);
+  color: var(--color-arc-navy);
 }
 
 .track__lede {
@@ -591,7 +630,7 @@
   max-width: 56ch;
   font-size: 1.05rem;
   line-height: 1.6;
-  color: rgba(242, 244, 245, 0.7);
+  color: var(--color-sky-800);
 }
 
 .track__body {
@@ -600,9 +639,8 @@
 
 /* --- the blow-up: retention, not the point --------------------------- */
 .track {
-  /* the airframe is 166 x 1295 in the matte, so length is 7.8 diameters */
-  --veh-dia: 62px;
-  --veh-len: calc(var(--veh-dia) * 7.8);
+  /* one body diameter; each part's width comes from its own render */
+  --veh-dia: 66px;
 }
 
 .track__vehicle {
@@ -612,28 +650,32 @@
   display: flex;
   align-items: center;
   gap: 36px;
-  padding: 22px 0 20px;
+  padding: 26px 0 22px;
   margin-bottom: 3vh;
-  background: var(--color-shell);
-  border-bottom: 1px solid var(--color-shell-line);
+  background: var(--color-arc-white);
+  border-bottom: 1px solid var(--color-mist-500);
 }
 
 .track__exploded {
   display: flex;
   align-items: center;
-  gap: 11px;
+  gap: 10px;
   flex: none;
 }
 
 .track__part {
   position: relative;
-  height: var(--veh-dia);
   flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   transition:
     opacity 0.4s var(--ease-arc),
     filter 0.4s var(--ease-arc);
-  opacity: 0.26;
-  filter: saturate(0.15);
+  /* on paper an inactive part has to go grey and slightly darker — lightening
+     it, as you would on a dark ground, makes it vanish into the page */
+  opacity: 0.5;
+  filter: grayscale(1) brightness(0.94);
 }
 
 .track__part[data-active="true"] {
@@ -641,16 +683,11 @@
   filter: none;
 }
 
-/* the sprites are drawn nose-up; turned a quarter turn they read as a
-   drawing rather than a launch */
 .track__part img {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: var(--veh-dia);
+  display: block;
+  width: 100%;
   max-width: none;
   height: auto;
-  transform: translate(-50%, -50%) rotate(-90deg);
 }
 
 .track__caption {
@@ -664,7 +701,7 @@
   font-weight: 600;
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
-  color: var(--color-shell-faint);
+  color: var(--color-sky-800);
 }
 
 .track__partName {
@@ -672,14 +709,14 @@
   font-family: var(--font-heading);
   font-size: 1.05rem;
   font-weight: 600;
-  color: var(--color-shell-ink);
+  color: var(--color-arc-navy);
 }
 
 .track__partEarns {
   margin: 3px 0 0;
   font-size: 0.88rem;
   line-height: 1.45;
-  color: rgba(242, 244, 245, 0.55);
+  color: var(--color-sky-800);
 }
 
 /* --- the modules ------------------------------------------------------ */
@@ -692,7 +729,7 @@
   align-items: baseline;
   gap: 16px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(242, 244, 245, 0.22);
+  border-bottom: 1px solid var(--color-navy-300);
 }
 
 .track__unitIndex {
@@ -701,7 +738,7 @@
   font-weight: 600;
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
-  color: var(--color-shell-faint);
+  color: var(--color-sky-800);
   flex: none;
 }
 
@@ -711,7 +748,7 @@
   font-size: 1.35rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--color-shell-ink);
+  color: var(--color-arc-navy);
   flex: 1;
 }
 
@@ -721,7 +758,7 @@
   font-weight: 600;
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
-  color: var(--color-arc-sky);
+  color: var(--color-sky-700);
 }
 
 .track__list {
@@ -736,12 +773,12 @@
   gap: 20px;
   align-items: baseline;
   padding: 20px 0;
-  border-bottom: 1px solid var(--color-shell-line);
+  border-bottom: 1px solid var(--color-mist-500);
   transition: background-color 0.2s var(--ease-arc);
 }
 
 .track__rowLink:hover {
-  background: rgba(125, 180, 209, 0.05);
+  background: var(--color-mist-300);
 }
 
 .track__num {
@@ -749,7 +786,7 @@
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
-  color: var(--color-shell-faint);
+  color: var(--color-navy-400);
 }
 
 .track__moduleTitle {
@@ -757,7 +794,7 @@
   font-family: var(--font-heading);
   font-size: 1.08rem;
   font-weight: 600;
-  color: var(--color-shell-ink);
+  color: var(--color-arc-navy);
 }
 
 .track__summary {
@@ -765,7 +802,7 @@
   margin-top: 5px;
   font-size: 0.92rem;
   line-height: 1.5;
-  color: rgba(242, 244, 245, 0.58);
+  color: var(--color-sky-800);
   max-width: 52ch;
 }
 
@@ -776,7 +813,7 @@
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-shell-faint);
+  color: var(--color-navy-400);
 }
 
 .track__mins {
@@ -786,7 +823,7 @@
 .track__builds {
   display: block;
   margin-top: 5px;
-  color: rgba(125, 180, 209, 0.75);
+  color: var(--color-sky-700);
 }
 
 .track__status {
@@ -796,11 +833,11 @@
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   text-align: right;
-  color: var(--color-shell-faint);
+  color: var(--color-navy-400);
 }
 
 .track__status[data-live="true"] {
-  color: var(--color-shell-ink);
+  color: var(--color-arc-red);
 }
 
 @media (max-width: 900px) {
@@ -808,7 +845,7 @@
     padding: 10vh 6vw 8vh;
   }
   .track {
-    --veh-dia: 44px;
+    --veh-dia: 40px;
   }
   .track__vehicle {
     flex-direction: column;
