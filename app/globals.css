@@ -129,11 +129,48 @@
   text-transform: uppercase;
   color: var(--color-sky-800);
 }
+.home-hero-section {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 78% 28%,
+      rgba(125, 180, 209, 0.2),
+      transparent 31%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #fbfdfe 100%);
+}
+.home-hero-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image:
+    linear-gradient(rgba(17, 61, 85, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17, 61, 85, 0.055) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(
+    to right,
+    transparent 10%,
+    black 65%,
+    transparent
+  );
+}
 .home-hero {
   display: grid;
   grid-template-columns: 1.1fr 1fr;
   gap: 64px;
   align-items: center;
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.hero-eyebrow > span {
+  width: 28px;
+  height: 2px;
+  background: var(--color-arc-red);
 }
 .hero-title {
   font-size: clamp(44px, 5.3vw, 76px);
@@ -150,6 +187,7 @@
   border-radius: 20px;
   overflow: hidden;
   background: #113d55;
+  box-shadow: 0 28px 70px rgba(8, 29, 41, 0.2);
 }
 .hero-photo::after {
   content: "";
@@ -166,6 +204,73 @@
 }
 .hero-photo-caption .eyebrow {
   color: white;
+}
+.hero-mission-card,
+.hero-flight-tag {
+  position: absolute;
+  z-index: 2;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: white;
+}
+.hero-mission-card {
+  top: 24px;
+  left: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 999px;
+  background: rgba(8, 29, 41, 0.7);
+  font-size: 12px;
+}
+.hero-mission-card span:last-child {
+  display: flex;
+  gap: 7px;
+}
+.hero-mission-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: #65d49b;
+  box-shadow: 0 0 0 5px rgba(101, 212, 155, 0.18);
+}
+.hero-flight-tag {
+  top: 86px;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  padding: 12px 18px;
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+  background: rgba(180, 32, 37, 0.88);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.hero-flight-tag strong {
+  margin-top: 2px;
+  font-size: 13px;
+  letter-spacing: 0;
+}
+.hero-proof {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-top: 26px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-mist-500);
+  color: var(--color-sky-800);
+  font-size: 12px;
+}
+.hero-proof span {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 5px;
+}
+.hero-proof strong {
+  color: var(--color-arc-navy);
+  font-size: 15px;
 }
 .learning-card {
   padding: 36px;
@@ -203,6 +308,264 @@
 }
 .roadmap-unit[open] .roadmap-chevron {
   transform: rotate(180deg);
+}
+.rocket-workshop {
+  padding: 22px;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--color-arc-navy);
+  box-shadow: 0 16px 40px rgba(8, 29, 41, 0.14);
+}
+.rocket-workshop .eyebrow {
+  color: var(--color-sky-300);
+}
+.rocket-workshop-level {
+  display: inline-flex;
+  min-width: 46px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 999px;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+}
+.rocket-blueprint {
+  position: relative;
+  display: grid;
+  height: 235px;
+  margin-top: 10px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 12px;
+  background:
+    linear-gradient(rgba(125, 180, 209, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(125, 180, 209, 0.09) 1px, transparent 1px),
+    #0b2837;
+  background-size: 20px 20px;
+}
+.rocket-blueprint svg {
+  width: 164px;
+  height: 230px;
+}
+.rocket-drawing {
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+.rocket-drawing-outline {
+  fill: transparent;
+  stroke: rgba(196, 221, 234, 0.38);
+  stroke-dasharray: 7 6;
+}
+.rocket-drawing-fill {
+  fill: color-mix(in srgb, var(--rocket-accent) 72%, white);
+  stroke: var(--rocket-accent);
+  transition: clip-path 500ms var(--ease-arc);
+}
+.rocket-drawing-fill circle {
+  fill: var(--color-arc-sky);
+}
+.rocket-center-line,
+.rocket-ground-line,
+.rocket-orbit-line {
+  fill: none;
+  stroke: rgba(125, 180, 209, 0.28);
+  stroke-width: 1;
+  stroke-dasharray: 4 5;
+}
+.rocket-paint {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--color-arc-navy);
+  border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.45);
+}
+.rocket-paint[aria-pressed="true"] {
+  box-shadow: 0 0 0 3px white;
+}
+.auth-card {
+  padding: 24px;
+  border: 1px solid var(--color-mist-500);
+  border-radius: 18px;
+  background: white;
+  box-shadow: 0 20px 55px rgba(8, 29, 41, 0.11);
+}
+.auth-card input {
+  border-radius: 8px;
+}
+.auth-mode-switch {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  padding: 4px;
+  border-radius: 10px;
+  background: var(--color-mist-300);
+}
+.auth-mode-switch button {
+  min-height: 42px;
+  border-radius: 7px;
+  color: var(--color-sky-800);
+  font-size: 14px;
+  font-weight: 700;
+}
+.auth-mode-switch button.is-active {
+  background: white;
+  color: var(--color-arc-navy);
+  box-shadow: 0 3px 12px rgba(8, 29, 41, 0.09);
+}
+.auth-divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 10px;
+  color: var(--color-sky-800);
+  font-size: 12px;
+}
+.auth-divider::before,
+.auth-divider::after {
+  content: "";
+  height: 1px;
+  background: var(--color-mist-500);
+}
+.account-benefits {
+  display: grid;
+  gap: 2px;
+  overflow: hidden;
+  border: 1px solid var(--color-mist-500);
+  border-radius: 14px;
+  background: var(--color-mist-500);
+}
+.account-benefit {
+  display: grid;
+  grid-template-columns: 42px 1fr;
+  gap: 14px;
+  align-items: start;
+  padding: 18px;
+  background: white;
+}
+.account-benefit > span {
+  display: inline-flex;
+  width: 34px;
+  height: 34px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: var(--color-go-tint);
+  color: var(--color-go);
+  font-size: 11px;
+  font-weight: 800;
+}
+.rocket-loader-shell {
+  display: grid;
+  min-height: calc(100vh - 160px);
+  place-items: center;
+}
+.rocket-loader {
+  width: min(100%, 680px);
+  padding: 26px 26px 30px;
+  overflow: hidden;
+  border-radius: 24px;
+  background: var(--color-arc-navy);
+  text-align: center;
+  box-shadow: 0 24px 70px rgba(8, 29, 41, 0.2);
+}
+.rocket-loader-sky {
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+  border-radius: 16px;
+  background:
+    radial-gradient(
+      circle at 28% 24%,
+      rgba(125, 180, 209, 0.35),
+      transparent 2px
+    ),
+    linear-gradient(180deg, #0b2837 0%, #174f6b 72%, #7db4d1 100%);
+}
+.rocket-loader-ship {
+  position: absolute;
+  left: calc(50% - 36px);
+  bottom: 34px;
+  color: var(--color-arc-navy);
+  animation: rocket-takeoff 1.6s ease-in-out infinite;
+}
+.rocket-loader-flame {
+  position: absolute;
+  left: 27px;
+  top: 87px;
+  width: 18px;
+  height: 42px;
+  border-radius: 50% 50% 65% 65%;
+  background: linear-gradient(#ffd37a, #b42025 72%, transparent);
+  transform-origin: top;
+  animation: rocket-flame 260ms ease-in-out infinite alternate;
+}
+.rocket-loader-cloud {
+  position: absolute;
+  bottom: 10px;
+  width: 120px;
+  height: 28px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.82);
+  filter: blur(1px);
+  animation: rocket-cloud 1.6s ease-out infinite;
+}
+.rocket-loader-cloud-one {
+  left: calc(50% - 105px);
+}
+.rocket-loader-cloud-two {
+  right: calc(50% - 105px);
+  animation-delay: 180ms;
+}
+.rocket-loader-star {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 99px;
+  background: white;
+  opacity: 0.75;
+}
+.rocket-loader-star-one {
+  left: 20%;
+  top: 18%;
+}
+.rocket-loader-star-two {
+  right: 24%;
+  top: 32%;
+}
+.rocket-loader-star-three {
+  left: 34%;
+  top: 48%;
+}
+@keyframes rocket-takeoff {
+  0%,
+  100% {
+    transform: translateY(4px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+@keyframes rocket-flame {
+  from {
+    transform: scaleY(0.75);
+    opacity: 0.75;
+  }
+  to {
+    transform: scaleY(1.12);
+    opacity: 1;
+  }
+}
+@keyframes rocket-cloud {
+  from {
+    transform: translateX(0) scale(0.65);
+    opacity: 0.75;
+  }
+  to {
+    transform: translateX(20px) scale(1.15);
+    opacity: 0;
+  }
 }
 .prose-lesson {
   font-size: 17px;

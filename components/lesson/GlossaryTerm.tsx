@@ -35,7 +35,7 @@ export function GlossaryTerm({
         type="button"
         aria-expanded={open}
         aria-describedby={panelId}
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(true)}
         onMouseEnter={() => setOpen(true)}
         onFocus={() => setOpen(true)}
         onBlur={(e) => {
@@ -46,7 +46,7 @@ export function GlossaryTerm({
         onKeyDown={(e) => {
           if (e.key === "Escape") setOpen(false);
         }}
-        className="underline decoration-dotted decoration-sky-700 underline-offset-4 decoration-1 text-arc-ink [font:inherit] cursor-help"
+        className="rounded-[4px] bg-sky-100 px-1 py-0.5 font-semibold text-arc-navy underline decoration-dotted decoration-sky-700 underline-offset-4 decoration-1 cursor-help transition-colors hover:bg-sky-200 focus:bg-sky-200"
       >
         {children}
         <span className="sr-only"> — see definition</span>
@@ -55,7 +55,7 @@ export function GlossaryTerm({
         id={panelId}
         role="tooltip"
         hidden={!open}
-        className="absolute z-30 top-full left-1/2 -translate-x-1/2 mt-2 w-[240px] bg-arc-white p-3.5 text-left"
+        className="absolute z-30 top-full left-1/2 -translate-x-1/2 mt-2 w-[260px] rounded-[10px] border border-mist-500 bg-arc-white p-4 text-left"
         style={{ boxShadow: "var(--shadow-overlay)" }}
       >
         <span className="block font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">

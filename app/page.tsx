@@ -5,51 +5,78 @@ import { Container } from "@/components/ui/Container";
 export default function HomePage() {
   return (
     <>
-      <Container className="py-12 md:py-20">
-        <div className="home-hero">
-          <div>
-            <p className="eyebrow">A small step toward your first flight</p>
-            <h1 className="hero-title">
-              Big ideas.
-              <br />
-              Real rockets.
-              <br />
-              <span>Your first flight.</span>
-            </h1>
-            <p className="mt-6 text-lg text-sky-800 max-w-[44ch]">
-              Learn the American Rocketry Challenge, one clear lesson at a time.
-              Made for curious students and first-year teams.
-            </p>
-            <div className="flex flex-wrap gap-3 mt-8">
-              <Button href="/modules/this-years-challenge/lesson" size="lg">
-                Start learning ↗
-              </Button>
-              <Button href="/modules" variant="outline" size="lg">
-                Explore the course
-              </Button>
-            </div>
-            <p className="mt-4 text-sm text-sky-800">
-              Free to learn · No account needed · Go at your pace
-            </p>
-          </div>
-          <div className="hero-photo">
-            <Image
-              src="/images/hero-launch-field.jpg"
-              alt="Student teams celebrating at the American Rocketry Challenge"
-              fill
-              priority
-              sizes="(max-width: 767px) 100vw, 45vw"
-              className="object-cover"
-            />
-            <div className="hero-photo-caption">
-              <span className="eyebrow">From classroom to launch field</span>
-              <p className="text-white text-2xl font-heading font-bold mt-2">
-                Every team starts somewhere.
+      <section className="home-hero-section">
+        <Container className="py-12 md:py-20 relative z-10">
+          <div className="home-hero">
+            <div>
+              <p className="eyebrow hero-eyebrow">
+                <span aria-hidden="true" /> A small step toward your first
+                flight
               </p>
+              <h1 className="hero-title">
+                Big ideas.
+                <br />
+                Real rockets.
+                <br />
+                <span>Your first flight.</span>
+              </h1>
+              <p className="mt-6 text-lg text-sky-800 max-w-[44ch]">
+                Learn the American Rocketry Challenge, one clear lesson at a
+                time. Made for curious students and first-year teams.
+              </p>
+              <div className="flex flex-wrap gap-3 mt-8">
+                <Button href="/modules/this-years-challenge/lesson" size="lg">
+                  Start learning ↗
+                </Button>
+                <Button href="/modules" variant="outline" size="lg">
+                  Explore the course
+                </Button>
+              </div>
+              <p className="mt-4 text-sm text-sky-800">
+                Free to learn · No account needed · Go at your pace
+              </p>
+              <div className="hero-proof" aria-label="Course details">
+                <span>
+                  <strong>9 min</strong> first lesson
+                </span>
+                <span>
+                  <strong>11</strong> quiz questions
+                </span>
+                <span>
+                  <strong>13</strong> rocket milestones
+                </span>
+              </div>
+            </div>
+            <div className="hero-photo">
+              <Image
+                src="/images/hero-launch-field.jpg"
+                alt="Student teams celebrating at the American Rocketry Challenge"
+                fill
+                priority
+                sizes="(max-width: 767px) 100vw, 45vw"
+                className="object-cover"
+              />
+              <div className="hero-photo-caption">
+                <span className="eyebrow">From classroom to launch field</span>
+                <p className="text-white text-2xl font-heading font-bold mt-2">
+                  Every team starts somewhere.
+                </p>
+              </div>
+              <div className="hero-mission-card">
+                <span className="hero-mission-pulse" aria-hidden="true" />
+                <span>
+                  <strong>Mission 01</strong>
+                  Ready to launch
+                </span>
+              </div>
+              <div className="hero-flight-tag" aria-hidden="true">
+                <span>Altitude</span>
+                <strong>Target locked</strong>
+              </div>
             </div>
           </div>
-        </div>
-      </Container>
+        </Container>
+      </section>
       <section className="border-y border-mist-500 bg-mist-200">
         <Container className="grid sm:grid-cols-3 gap-8 py-8">
           {[
@@ -66,7 +93,7 @@ export default function HomePage() {
             [
               "03",
               "Pick up where you left off",
-              "Your reading progress and best score stay saved on this device.",
+              "Every completed module builds another piece of your personal rocket.",
             ],
           ].map(([number, title, body]) => (
             <div key={number}>

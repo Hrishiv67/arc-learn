@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
 import { Container } from "@/components/ui/Container";
 import { clsx } from "@/lib/clsx";
+import { RocketWorkshop } from "@/components/engagement/RocketWorkshop";
 
 export function ModulesIndexClient() {
   const progress = useProgress();
@@ -244,6 +245,7 @@ function ProgressSummary({
           will open through the season.
         </p>
       </div>
+      <RocketWorkshop completeCount={completeCount} total={MODULES.length} />
     </div>
   );
 }

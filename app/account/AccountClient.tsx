@@ -17,6 +17,7 @@ import { Callout } from "@/components/ui/Callout";
 import { Input } from "@/components/ui/Input";
 import { Button, TextButton } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
+import { RocketLoader } from "@/components/engagement/RocketLoader";
 
 /**
  * Tier 2 — optional account. Email + password only, nothing else. Real
@@ -35,18 +36,14 @@ export function AccountClient() {
     isModuleComplete(progress[m.id]),
   ).length;
 
-  if (loading)
-    return (
-      <Container className="py-12">
-        <p role="status">Loading your account…</p>
-      </Container>
-    );
+  if (loading) return <RocketLoader label="Finding your saved mission…" />;
 
   if (user) {
     return (
-      <Container className="py-8 md:py-12">
-        <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[42px]">
-          Your account
+      <Container className="py-10 md:py-16">
+        <p className="eyebrow">Mission control</p>
+        <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-2">
+          Your progress is cleared for launch.
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-8 md:gap-12 mt-8 items-start">
           <div className="flex flex-col gap-6 min-w-0">
@@ -55,7 +52,7 @@ export function AccountClient() {
             </Callout>
             <WhatWeStore />
           </div>
-          <aside className="bg-mist-300 p-5 md:p-6 flex flex-col gap-5">
+          <aside className="auth-card flex flex-col gap-5">
             <h2 className="font-heading font-bold text-arc-navy text-[22px]">
               Signed in
             </h2>
@@ -80,23 +77,22 @@ export function AccountClient() {
   }
 
   return (
-    <Container className="py-8 md:py-12">
-      <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[42px]">
-        Save your progress
+    <Container className="py-10 md:py-16">
+      <p className="eyebrow">Optional account</p>
+      <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-2 max-w-[17ch]">
+        Take your progress with you.
       </h1>
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-8 md:gap-12 mt-8 items-start">
+      <p className="text-lg text-sky-800 mt-3 max-w-[54ch]">
+        Start here, finish on another device, and keep your best quiz scores.
+        Creating an account takes only an email and password.
+      </p>
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] gap-8 md:gap-14 mt-10 items-start">
         <div className="flex flex-col gap-6 min-w-0">
-          <Callout
-            tone="info"
-            title={`${doneCount} of ${MODULES.length} modules complete`}
-          >
-            Saved on this device right now. An account keeps it in sync across
-            devices — it is never required to use the course.
-          </Callout>
+          <AccountBenefits doneCount={doneCount} />
           <WhatWeStore />
         </div>
 
-        <aside className="bg-mist-300 p-5 md:p-6">
+        <aside className="auth-card">
           {configured ? (
             <AuthForm onDone={() => router.push("/modules")} />
           ) : (
@@ -154,47 +150,57 @@ function AuthForm({ onDone }: { onDone: () => void }) {
 
   return (
     <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
-      <h2 className="font-heading font-bold text-arc-navy text-[22px]">
-        {mode === "signup" ? "Create an account" : "Sign in"}
-      </h2>
-      <Callout tone="info" title="Ask a parent or teacher first">
-        You do not need an account to use the course.
-      </Callout>
-      {notice && (
-        <p role="status" className="text-info">
-          {notice}
+      <div
+        className="auth-mode-switch"
+        role="tablist"
+        aria-label="Account action"
+      >
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "signup"}
+          className={mode === "signup" ? "is-active" : undefined}
+          onClick={() => {
+            setMode("signup");
+            setError(null);
+            setNotice(null);
+          }}
+        >
+          Create account
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mode === "signin"}
+          className={mode === "signin" ? "is-active" : undefined}
+          onClick={() => {
+            setMode("signin");
+            setError(null);
+            setNotice(null);
+          }}
+        >
+          Sign in
+        </button>
+      </div>
+      <div>
+        <h2 className="font-heading font-bold text-arc-navy text-[24px]">
+          {mode === "signup" ? "Save this mission" : "Welcome back"}
+        </h2>
+        <p className="text-sm text-sky-800 mt-1">
+          {mode === "signup"
+            ? "No profile setup, username, or personal details."
+            : "Continue from the last device you used."}
         </p>
+      </div>
+      {notice && (
+        <Callout tone="go" title="Check your inbox">
+          {notice}
+        </Callout>
       )}
       {error && (
         <Callout tone="caution" title="Couldn't do that">
           {error}
         </Callout>
-      )}
-      {mode === "signin" && (
-        <TextButton
-          type="button"
-          disabled={submitting || !email}
-          onClick={async () => {
-            setSubmitting(true);
-            setError(null);
-            try {
-              await resendConfirmation(email);
-              setNotice(
-                "If your account needs confirmation, a new email is on its way.",
-              );
-            } catch (err) {
-              setError(
-                err instanceof Error
-                  ? err.message
-                  : "Could not send the email. Try again.",
-              );
-            } finally {
-              setSubmitting(false);
-            }
-          }}
-        >
-          Resend confirmation email
-        </TextButton>
       )}
       <Input
         label="Email"
@@ -214,6 +220,11 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
+      {mode === "signup" && (
+        <p className="-mt-3 text-xs text-sky-800">
+          Use at least 6 characters. Ask a parent or teacher before signing up.
+        </p>
+      )}
       <Button type="submit" variant="primary" fullWidth disabled={submitting}>
         {submitting
           ? "Working…"
@@ -221,22 +232,76 @@ function AuthForm({ onDone }: { onDone: () => void }) {
             ? "Create account"
             : "Sign in"}
       </Button>
-      <TextButton
+      {mode === "signin" && email.trim() && (
+        <p className="-mt-2 text-center text-sm text-sky-800">
+          Still waiting for your confirmation email?{" "}
+          <TextButton
+            type="button"
+            disabled={submitting}
+            onClick={async () => {
+              setSubmitting(true);
+              setError(null);
+              try {
+                await resendConfirmation(email);
+                setNotice(
+                  "If your account needs confirmation, a new email is on its way.",
+                );
+              } catch (err) {
+                setError(
+                  err instanceof Error
+                    ? err.message
+                    : "Could not send the email. Try again.",
+                );
+              } finally {
+                setSubmitting(false);
+              }
+            }}
+          >
+            Resend it
+          </TextButton>
+        </p>
+      )}
+      <div className="auth-divider">
+        <span>or</span>
+      </div>
+      <button
         type="button"
-        onClick={() => {
-          setMode(mode === "signup" ? "signin" : "signup");
-          setError(null);
-          setNotice(null);
-        }}
+        className="text-sm font-semibold text-arc-navy underline underline-offset-4"
+        onClick={() => router.push("/modules")}
       >
-        {mode === "signup"
-          ? "Already have an account? Sign in"
-          : "New here? Create an account"}
-      </TextButton>
-      <TextButton type="button" onClick={() => router.push("/modules")}>
-        Continue without an account
-      </TextButton>
+        Keep learning without an account
+      </button>
     </form>
+  );
+}
+
+function AccountBenefits({ doneCount }: { doneCount: number }) {
+  const benefits = [
+    ["Pick up anywhere", "Your reading and quiz progress follows you."],
+    [
+      "Keep your best score",
+      "Retakes improve your record instead of replacing it.",
+    ],
+    ["Stay private", "We only need an email. No name, school, or photo."],
+  ];
+  return (
+    <section aria-labelledby="account-benefits-title">
+      <p className="eyebrow">Current flight log</p>
+      <h2 id="account-benefits-title" className="text-2xl mt-2">
+        {doneCount} of {MODULES.length} modules complete
+      </h2>
+      <div className="account-benefits mt-5">
+        {benefits.map(([title, body], index) => (
+          <div key={title} className="account-benefit">
+            <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
+            <div>
+              <h3 className="text-lg">{title}</h3>
+              <p className="text-sm text-sky-800 mt-1">{body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }
 
