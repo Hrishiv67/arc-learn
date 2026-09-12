@@ -61,18 +61,39 @@ export function ModulesIndexClient() {
             />
           </div>
 
-          <div className="mt-10 flex flex-col gap-8">
+          <div className="mt-10">
+            <div className="flex items-end justify-between gap-4 border-b border-mist-600 pb-3">
+              <div>
+                <span className="eyebrow">Course roadmap</span>
+                <h2 className="text-2xl mt-1">What you&apos;ll learn</h2>
+              </div>
+              <span className="hidden sm:block text-sm text-sky-800">
+                4 units · 13 modules
+              </span>
+            </div>
             {UNITS.map((u) => (
-              <section key={u.unit}>
-                <div className="flex items-baseline gap-2.5 flex-wrap">
-                  <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-                    Unit {u.unit}
+              <details
+                key={u.unit}
+                className="roadmap-unit border-b border-mist-600"
+                open={u.unit === 1}
+              >
+                <summary className="grid grid-cols-[44px_1fr_auto] items-center gap-3 py-5 list-none">
+                  <span className="roadmap-unit-number" aria-hidden="true">
+                    {String(u.unit).padStart(2, "0")}
                   </span>
-                  <h2 className="font-heading font-bold text-arc-navy text-[22px] md:text-[26px]">
-                    {u.title}
-                  </h2>
-                </div>
-                <div className="mt-3 border-b border-mist-600">
+                  <span>
+                    <span className="block font-heading font-bold text-arc-navy text-[20px] md:text-[22px]">
+                      {u.title}
+                    </span>
+                    <span className="block text-[13px] text-sky-800 mt-0.5">
+                      {u.modules.length} modules
+                    </span>
+                  </span>
+                  <span className="roadmap-chevron" aria-hidden="true">
+                    ⌄
+                  </span>
+                </summary>
+                <div className="pb-4">
                   {u.modules.map((m) => {
                     const live = m.status === "live";
                     const unlocked = live && isModuleUnlocked(m, progress);
@@ -86,7 +107,7 @@ export function ModulesIndexClient() {
                           // floor) below WCAG contrast. The lock icon and
                           // Coming soon/Locked badge already carry the
                           // "not available" meaning at full opacity.
-                          "grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_130px] gap-[14px] items-center min-h-[64px] px-[14px] py-[16px] border-t border-mist-600 transition-colors duration-200 ease-arc",
+                          "grid grid-cols-[44px_1fr] md:grid-cols-[52px_1fr_130px] gap-[14px] items-center min-h-[64px] px-[14px] py-[14px] border-t border-mist-500 transition-colors duration-200 ease-arc",
                           clickable && "group hover:bg-mist-300",
                         )}
                       >
@@ -165,7 +186,7 @@ export function ModulesIndexClient() {
                     );
                   })}
                 </div>
-              </section>
+              </details>
             ))}
           </div>
         </div>
@@ -219,8 +240,8 @@ function ProgressSummary({
           What is live
         </span>
         <p className="font-body text-[16px] text-arc-ink mt-2.5">
-          Module 1 is complete. The remaining twelve are being written and will
-          open through the season.
+          Module 1 is available now. The remaining twelve are being written and
+          will open through the season.
         </p>
       </div>
     </div>

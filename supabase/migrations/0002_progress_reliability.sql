@@ -27,3 +27,7 @@ for each row execute function public.preserve_progress();
 revoke update on public.users from authenticated;
 grant update (email) on public.users to authenticated;
 
+-- This function is only an internal auth.users trigger target. Prevent clients
+-- from invoking its SECURITY DEFINER privileges through the exposed schema.
+revoke execute on function public.handle_new_user() from public, anon, authenticated;
+
