@@ -106,7 +106,7 @@ export function createSmokeRenderer(
     const dpr = Math.min(window.devicePixelRatio || 1, opts.maxDpr);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    if (s.p < 0.098) return;
+    if (s.p < 0.068) return;
 
     const unit = H / 100; // 1 vh
     const px = pad.x;

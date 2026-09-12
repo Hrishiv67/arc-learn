@@ -13,7 +13,7 @@
 /* -------------------------------------------------------------------- hero */
 .hero {
   position: relative;
-  height: 180vh; /* the scroll budget the launch is scrubbed across */
+  height: 130vh; /* the scroll budget the launch is scrubbed across */
 }
 
 .hero__pin {
@@ -354,7 +354,7 @@
 /* ------------------------------------------------------------ responsive */
 @media (max-width: 767px) {
   .hero {
-    height: 150vh;
+    height: 115vh;
   }
 
   .hero__copy {
@@ -433,364 +433,54 @@
 }
 
 /* ===================================================================== */
-/* 02 — THE VEHICLE                                                       */
-/* The airframe from the hero, brought back as a schematic and pulled      */
-/* apart. Same dark shell, same instrumentation type, so the cut from      */
-/* footage to drawing reads as one continuous document.                   */
+/* 03 — SIGN IN                                                           */
+/* Short on purpose: the course above is the pitch, this is just the door. */
 /* ===================================================================== */
 
-.vehicle {
-  position: relative;
-  height: 230vh;
-  background: var(--color-shell);
-}
-
-.vehicle__pin {
-  position: sticky;
-  top: 0;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.vehicle__intro {
-  position: absolute;
-  left: 6.5vw;
-  top: 50%;
-  transform: translateY(-50%);
-  max-width: 34vw;
-  z-index: 2;
-}
-
-.vehicle__eyebrow {
-  margin: 0 0 2.4vh;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-shell-dim);
-}
-
-.vehicle__title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(2rem, 3.5vw, 3.6rem);
-  font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.02em;
-  color: var(--color-shell-ink);
-}
-
-.vehicle__lede {
-  margin: 3vh 0 0;
-  max-width: 34ch;
-  font-size: 1rem;
-  line-height: 1.55;
-  color: rgba(242, 244, 245, 0.7);
-}
-
-/* the vehicle itself, centred and slightly right of the copy */
-.vehicle {
-  /* one place to change the vehicle's size; the width follows the real
-     airframe's 166:1295 aspect */
-  --vehicle-h: 58vh;
-  --vehicle-w: calc(var(--vehicle-h) * 0.1282);
-}
-
-.vehicle__stage {
-  position: absolute;
-  left: 62%;
-  top: calc(50vh - var(--vehicle-h) / 2);
-  width: 0;
-  height: var(--vehicle-h);
-  will-change: transform;
-}
-
-/*
- * A soft column of light behind the airframe. The sections are graded to match
- * the hero's plate, which means they are nearly black — on the dark shell they
- * would be invisible without something to read against. This is the seamless
- * backdrop a real studio shot of a vehicle would be taken on, not a glow.
- */
-.vehicle__stage::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -14vh;
-  width: 46vh;
-  height: 92vh;
-  transform: translateX(-50%);
-  background: radial-gradient(
-    ellipse 38% 52% at 50% 50%,
-    rgba(125, 180, 209, 0.3),
-    rgba(125, 180, 209, 0.1) 42%,
-    transparent 74%
-  );
-  pointer-events: none;
-}
-
-.vehicle__part {
-  position: absolute;
-  left: 0;
-  width: var(--vehicle-w);
-  margin-left: calc(var(--vehicle-w) / -2);
-  will-change: transform;
-}
-
-.vehicle__part img {
-  display: block;
-  width: 100%;
-  /* Tailwind's preflight caps images at max-width:100%, which collapses them
-     to nothing inside a zero-width stage. The part carries the width instead. */
-  max-width: none;
-  height: auto;
-  /* The sections carry their own exposure from the pipeline (see
-     slice_sections in scripts/mat_assets.py), so nothing is needed here. */
-  user-select: none;
-}
-
-.vehicle__labels {
-  position: absolute;
-  inset: 0;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  z-index: 2;
-}
-
-.vehicle__label {
-  position: absolute;
-  left: calc(62% + 42px);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-top: -16px;
-  opacity: 0;
-  will-change: transform, opacity;
-}
-
-.vehicle__leader {
-  width: 34px;
-  height: 1px;
-  background: rgba(242, 244, 245, 0.3);
-  flex: none;
-}
-
-.vehicle__labelBody {
-  display: block;
-  padding: 4px 0;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.28s var(--ease-arc);
-}
-
-.vehicle__labelBody:hover {
-  border-bottom-color: rgba(242, 244, 245, 0.45);
-}
-
-.vehicle__partName {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--color-shell-ink);
-}
-
-.vehicle__partModule {
-  display: block;
-  margin-top: 3px;
-  font-family: var(--font-mono);
-  font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: var(--micro-track);
-  text-transform: uppercase;
-  color: var(--color-shell-faint);
-}
-
-@media (max-width: 900px) {
-  /*
-   * Re-composed rather than shrunk. The copy sits at the top instead of being
-   * centred over the diagram, the vehicle moves to the left edge so the leader
-   * lines have somewhere to go, and the labels drop to two tight lines.
-   */
-  .vehicle {
-    --vehicle-h: 38vh;
-    height: 190vh;
-  }
-  .vehicle__intro {
-    left: 6vw;
-    top: 5vh;
-    transform: none;
-    max-width: 88vw;
-  }
-  .vehicle__title {
-    font-size: clamp(1.6rem, 7vw, 2.4rem);
-  }
-  .vehicle__lede {
-    margin-top: 2vh;
-    font-size: 0.9rem;
-  }
-  .vehicle__stage {
-    left: 17%;
-    top: calc(62vh - var(--vehicle-h) / 2);
-  }
-  .vehicle__stage::before {
-    width: 34vh;
-    height: 66vh;
-  }
-  .vehicle__label {
-    left: calc(17% + 26px);
-    margin-top: -14px;
-    gap: 8px;
-    max-width: 62vw;
-  }
-  .vehicle__labels {
-    top: 12vh;
-  }
-  .vehicle__leader {
-    width: 18px;
-  }
-  .vehicle__partName {
-    font-size: 12px;
-  }
-  .vehicle__partModule {
-    font-size: 9px;
-    letter-spacing: 0.14em;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .vehicle {
-    height: 100vh;
-  }
-  .vehicle__pin {
-    position: relative;
-  }
-}
-
-/* ===================================================================== */
-/* 03 — THE COURSE, AND THE ACCOUNT                                       */
-/* Last dark section before the paper theme takes over for reading.       */
-/* ===================================================================== */
-
-.course {
+.gate {
   position: relative;
   background: var(--color-shell);
-  padding: 16vh 6.5vw 14vh;
-  border-bottom: 1px solid var(--color-shell-line);
-}
-
-.course__eyebrow {
-  margin: 0 0 2.2vh;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--color-shell-dim);
-}
-
-.course__title {
-  margin: 0;
-  font-family: var(--font-heading);
-  font-size: clamp(1.9rem, 3.4vw, 3.4rem);
-  font-weight: 700;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  color: var(--color-shell-ink);
-}
-
-.course__lede {
-  margin: 2.4vh 0 0;
-  max-width: 52ch;
-  font-size: 1rem;
-  line-height: 1.6;
-  color: rgba(242, 244, 245, 0.68);
-}
-
-.course__units {
-  margin: 9vh 0 0;
-  padding: 0;
-  list-style: none;
   border-top: 1px solid var(--color-shell-line);
-  max-width: 920px;
+  padding: 12vh 6.5vw 12vh;
 }
 
-.course__unit {
-  display: grid;
-  grid-template-columns: 56px 1fr auto;
-  align-items: baseline;
-  gap: 1.5rem;
-  padding: 1.6rem 0;
-  border-bottom: 1px solid var(--color-shell-line);
-}
-
-.course__unitIndex {
-  font-family: var(--font-mono);
-  font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: var(--micro-track);
-  color: var(--color-shell-faint);
-}
-
-.course__unitTitle {
-  display: block;
-  font-family: var(--font-heading);
-  font-size: 1.12rem;
-  font-weight: 600;
-  color: var(--color-shell-ink);
-}
-
-.course__unitMeta {
-  display: block;
-  margin-top: 4px;
-  font-family: var(--font-mono);
-  font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: var(--micro-track);
-  text-transform: uppercase;
-  color: var(--color-shell-faint);
-}
-
-.course__unitAssembly {
-  font-family: var(--font-mono);
-  font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: var(--micro-track);
-  text-transform: uppercase;
-  color: var(--color-arc-sky);
-}
-
-.course__gate {
+.gate__inner {
   display: flex;
   flex-wrap: wrap;
-  gap: 4vh 4vw;
+  gap: 5vh 5vw;
   align-items: flex-end;
   justify-content: space-between;
-  margin-top: 12vh;
-  padding-top: 6vh;
-  border-top: 1px solid var(--color-shell-line);
-  max-width: 920px;
+  max-width: 1000px;
 }
 
-.course__gateTitle {
+.gate__eyebrow {
+  margin: 0 0 2vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-shell-dim);
+}
+
+.gate__title {
   margin: 0;
   font-family: var(--font-heading);
-  font-size: clamp(1.5rem, 2.4vw, 2.2rem);
+  font-size: clamp(1.8rem, 3.2vw, 3rem);
   font-weight: 700;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.02em;
   color: var(--color-shell-ink);
 }
 
-.course__gateLede {
-  margin: 1.6vh 0 0;
-  max-width: 44ch;
-  font-size: 0.98rem;
+.gate__lede {
+  margin: 2.2vh 0 0;
+  max-width: 46ch;
+  font-size: 1rem;
   line-height: 1.6;
   color: rgba(242, 244, 245, 0.68);
 }
 
-.course__gateActions {
+.gate__actions {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -798,8 +488,8 @@
 }
 
 /* ARC's own call to action: a sharp red rectangle and a long thin arrow.
-   This is the one red element on this screen. */
-.course__cta {
+   The one red element on this screen. */
+.gate__cta {
   display: inline-flex;
   align-items: center;
   gap: 18px;
@@ -814,11 +504,11 @@
   transition: background-color 0.24s var(--ease-arc);
 }
 
-.course__cta:hover {
+.gate__cta:hover {
   background: var(--color-red-600);
 }
 
-.course__ctaArrow {
+.gate__ctaArrow {
   position: relative;
   width: 34px;
   height: 1px;
@@ -826,7 +516,7 @@
   transition: width 0.28s var(--ease-arc);
 }
 
-.course__ctaArrow::after {
+.gate__ctaArrow::after {
   content: "";
   position: absolute;
   right: 0;
@@ -838,11 +528,11 @@
   transform: rotate(45deg);
 }
 
-.course__cta:hover .course__ctaArrow {
+.gate__cta:hover .gate__ctaArrow {
   width: 44px;
 }
 
-.course__signin {
+.gate__signin {
   font-family: var(--font-mono);
   font-size: var(--micro-size);
   font-weight: 600;
@@ -853,23 +543,302 @@
   transition: border-color 0.24s var(--ease-arc);
 }
 
-.course__signin:hover {
+.gate__signin:hover {
   border-bottom-color: var(--color-shell-dim);
 }
 
 @media (max-width: 767px) {
-  .course {
-    padding: 12vh 6vw 10vh;
+  .gate {
+    padding: 9vh 6vw 9vh;
   }
-  .course__unit {
-    grid-template-columns: 40px 1fr;
-    gap: 1rem;
+}
+
+/* ===================================================================== */
+/* 02 — THE COURSE                                                        */
+/* The reason the site exists, so it gets hero-grade treatment: the real   */
+/* thirteen modules, with the vehicle panel kept deliberately quiet beside */
+/* them.                                                                  */
+/* ===================================================================== */
+
+.track {
+  position: relative;
+  background: var(--color-shell);
+  padding: 13vh 6.5vw 10vh;
+}
+
+.track__eyebrow {
+  margin: 0 0 2.2vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-shell-dim);
+}
+
+.track__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.2vw, 4.1rem);
+  font-weight: 700;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  color: var(--color-shell-ink);
+}
+
+.track__lede {
+  margin: 3vh 0 0;
+  max-width: 56ch;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(242, 244, 245, 0.7);
+}
+
+.track__body {
+  margin-top: 7vh;
+}
+
+/* --- the blow-up: retention, not the point --------------------------- */
+.track {
+  /* the airframe is 166 x 1295 in the matte, so length is 7.8 diameters */
+  --veh-dia: 62px;
+  --veh-len: calc(var(--veh-dia) * 7.8);
+}
+
+.track__vehicle {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  padding: 22px 0 20px;
+  margin-bottom: 3vh;
+  background: var(--color-shell);
+  border-bottom: 1px solid var(--color-shell-line);
+}
+
+.track__exploded {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  flex: none;
+}
+
+.track__part {
+  position: relative;
+  height: var(--veh-dia);
+  flex: none;
+  transition:
+    opacity 0.4s var(--ease-arc),
+    filter 0.4s var(--ease-arc);
+  opacity: 0.26;
+  filter: saturate(0.15);
+}
+
+.track__part[data-active="true"] {
+  opacity: 1;
+  filter: none;
+}
+
+/* the sprites are drawn nose-up; turned a quarter turn they read as a
+   drawing rather than a launch */
+.track__part img {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--veh-dia);
+  max-width: none;
+  height: auto;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+.track__caption {
+  min-width: 0;
+}
+
+.track__vehicleLabel {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-shell-faint);
+}
+
+.track__partName {
+  margin: 7px 0 0;
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-shell-ink);
+}
+
+.track__partEarns {
+  margin: 3px 0 0;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(242, 244, 245, 0.55);
+}
+
+/* --- the modules ------------------------------------------------------ */
+.track__unit {
+  margin-bottom: 7vh;
+}
+
+.track__unitHead {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(242, 244, 245, 0.22);
+}
+
+.track__unitIndex {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-shell-faint);
+  flex: none;
+}
+
+.track__unitTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-shell-ink);
+  flex: 1;
+}
+
+.track__unitGoal {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-arc-sky);
+}
+
+.track__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.track__rowLink {
+  display: grid;
+  grid-template-columns: 44px 1fr 128px 62px;
+  gap: 20px;
+  align-items: baseline;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--color-shell-line);
+  transition: background-color 0.2s var(--ease-arc);
+}
+
+.track__rowLink:hover {
+  background: rgba(125, 180, 209, 0.05);
+}
+
+.track__num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--color-shell-faint);
+}
+
+.track__moduleTitle {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 1.08rem;
+  font-weight: 600;
+  color: var(--color-shell-ink);
+}
+
+.track__summary {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: rgba(242, 244, 245, 0.58);
+  max-width: 52ch;
+}
+
+.track__meta {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-shell-faint);
+}
+
+.track__mins {
+  display: block;
+}
+
+.track__builds {
+  display: block;
+  margin-top: 5px;
+  color: rgba(125, 180, 209, 0.75);
+}
+
+.track__status {
+  font-family: var(--font-mono);
+  font-size: var(--micro-size);
+  font-weight: 600;
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--color-shell-faint);
+}
+
+.track__status[data-live="true"] {
+  color: var(--color-shell-ink);
+}
+
+@media (max-width: 900px) {
+  .track {
+    padding: 10vh 6vw 8vh;
   }
-  .course__unitAssembly {
+  .track {
+    --veh-dia: 44px;
+  }
+  .track__vehicle {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px 0 14px;
+  }
+  .track__exploded {
+    max-width: 100%;
+    overflow-x: auto;
+    gap: 8px;
+  }
+  .track__rowLink {
+    grid-template-columns: 34px 1fr;
+    gap: 12px;
+    padding: 18px 0;
+  }
+  .track__meta,
+  .track__status {
     grid-column: 2;
+    text-align: left;
+  }
+  .track__meta {
+    margin-top: 8px;
+  }
+  .track__status {
     margin-top: 6px;
   }
-  .course__gate {
-    margin-top: 8vh;
+  .track__unitHead {
+    flex-wrap: wrap;
+    gap: 6px 14px;
   }
 }

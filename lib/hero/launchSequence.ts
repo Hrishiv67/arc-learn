@@ -18,16 +18,16 @@ export type Phase = "hold" | "ignition" | "liftoff" | "ascent" | "transition";
 /** Phase boundaries in scroll progress, and the flight time each maps to. */
 const KEYS: Array<{ p: number; t: number; phase: Phase }> = [
   { p: 0.0, t: -3.0, phase: "hold" },
-  { p: 0.1, t: 0.0, phase: "ignition" },
-  { p: 0.22, t: 0.45, phase: "liftoff" },
-  { p: 0.38, t: 1.4, phase: "ascent" },
-  { p: 0.62, t: 2.8, phase: "transition" },
+  { p: 0.07, t: 0.0, phase: "ignition" },
+  { p: 0.16, t: 0.45, phase: "liftoff" },
+  { p: 0.3, t: 1.4, phase: "ascent" },
+  { p: 0.52, t: 2.8, phase: "transition" },
   { p: 1.0, t: 4.21, phase: "transition" },
 ];
 
 /** Scroll progress at which the vehicle has fully cleared the top of frame. */
-const P_MOVE_START = 0.22;
-const P_GONE = 0.5;
+const P_MOVE_START = 0.15;
+const P_GONE = 0.38;
 const TRAVEL_GONE = 130; // vh, enough to carry the whole airframe out
 
 export type SceneState = {
@@ -98,43 +98,43 @@ export function sequenceAt(pRaw: number): SceneState {
   // Aggressive, monotonic acceleration. Exponent 2.6 keeps the first moments
   // almost imperceptible, then the vehicle outruns the eye.
   const rise = span(p, P_MOVE_START, P_GONE);
-  const travel = TRAVEL_GONE * Math.pow(rise, 3);
+  const travel = TRAVEL_GONE * Math.pow(rise, 3.4);
 
   // derivative of travel, for blur — high speed smears along one axis only
   const dTravel =
     rise <= 0
       ? 0
-      : (TRAVEL_GONE * 3 * Math.pow(rise, 2)) / (P_GONE - P_MOVE_START);
+      : (TRAVEL_GONE * 3.4 * Math.pow(rise, 2.4)) / (P_GONE - P_MOVE_START);
   const rocketBlur = Math.min(14, (dTravel / 400) * 14);
   const rocketScale = 1 / (1 + travel / 260);
-  const rocketFade = 1 - span(p, 0.44, 0.56);
+  const rocketFade = 1 - span(p, 0.33, 0.43);
 
   // --- ignition and smoke -------------------------------------------------
-  const flash = Math.pow(1 - span(p, 0.1, 0.135), 2) * (p >= 0.1 ? 1 : 0);
-  const plume = span(p, 0.105, 0.15) * (1 - span(p, 0.46, 0.58));
+  const flash = Math.pow(1 - span(p, 0.07, 0.1), 2) * (p >= 0.07 ? 1 : 0);
+  const plume = span(p, 0.075, 0.11) * (1 - span(p, 0.34, 0.44));
   // hardest emission through ignition and liftoff, trailing off in ascent
   const smokeRate =
-    span(p, 0.1, 0.155) * (1 - 0.55 * span(p, 0.32, 0.5)) * (1 - span(p, 0.5, 0.74));
+    span(p, 0.07, 0.115) * (1 - 0.55 * span(p, 0.24, 0.38)) * (1 - span(p, 0.38, 0.6));
 
   // Physical vibration from a nearby motor: ramps in at ignition, decays as the
   // vehicle climbs away. Sub-pixel to ~2px, never a game-style screen shake.
   const shake =
-    2.4 * smooth(span(p, 0.1, 0.18)) * (1 - 0.75 * span(p, 0.22, 0.48));
+    2.6 * smooth(span(p, 0.07, 0.13)) * (1 - 0.75 * span(p, 0.16, 0.36));
 
   // --- frame travelling up into thinner, darker air -----------------------
-  const darken = smooth(span(p, 0.6, 0.94));
-  const trailLine = span(p, 0.48, 0.68) * (1 - 0.15 * span(p, 0.95, 1));
+  const darken = smooth(span(p, 0.46, 0.86));
+  const trailLine = span(p, 0.36, 0.56) * (1 - 0.15 * span(p, 0.95, 1));
 
   // --- copy ---------------------------------------------------------------
   // Each word leaves as the vehicle crosses its own baseline, bottom word last.
   const words: [number, number, number] = [
-    1 - span(p, 0.4, 0.49),
-    1 - span(p, 0.435, 0.525),
-    1 - span(p, 0.47, 0.56),
+    1 - span(p, 0.29, 0.37),
+    1 - span(p, 0.32, 0.4),
+    1 - span(p, 0.35, 0.43),
   ];
-  const copyShift = -1.2 * span(p, 0, 0.22) - 16 * Math.pow(span(p, 0.34, 0.68), 1.8);
-  const copyFade = 1 - span(p, 0.42, 0.6);
-  const navFade = 1 - 0.75 * span(p, 0.1, 0.2) - 0.25 * span(p, 0.7, 0.88);
+  const copyShift = -1.2 * span(p, 0, 0.15) - 16 * Math.pow(span(p, 0.24, 0.54), 1.8);
+  const copyFade = 1 - span(p, 0.3, 0.46);
+  const navFade = 1 - 0.75 * span(p, 0.07, 0.15) - 0.25 * span(p, 0.6, 0.8);
 
   return {
     p,
@@ -159,10 +159,10 @@ export function sequenceAt(pRaw: number): SceneState {
 
 /** The status word shown beside the vehicle. */
 export function statusLabel(s: SceneState): string {
-  if (s.p < 0.05) return "READY";
-  if (s.p < 0.1) return "ARMED";
-  if (s.p < 0.22) return "IGNITION";
+  if (s.p < 0.035) return "READY";
+  if (s.p < 0.07) return "ARMED";
+  if (s.p < 0.16) return "IGNITION";
   if (s.flight.t < 1.05) return "LIFTOFF";
-  if (s.p < 0.62) return "BURNOUT";
+  if (s.p < 0.52) return "BURNOUT";
   return "ASCENT NOMINAL";
 }

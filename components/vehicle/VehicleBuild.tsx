@@ -8,37 +8,16 @@
  * a student is assembling is recognisably the rocket they watched launch —
  * rather than a second, cartoon rocket that exists only on this screen.
  *
- * Sections are earned bottom-up, the order you actually build one: fin can and
- * motor first, nose cone last.
+ * Which module earns which part lives in lib/vehicle/sections.ts, shared with
+ * the homepage track so the two can never disagree.
  */
 
-type Section = {
-  id: string;
-  /** share of the vehicle's height, nose to tail */
-  height: number;
-  label: string;
-};
-
-/** Nose to tail, matching public/hero/sections.json. */
-const SECTIONS: Section[] = [
-  { id: "nose", height: 0.18, label: "Nose cone" },
-  { id: "payload", height: 0.18, label: "Payload bay" },
-  { id: "body-upper", height: 0.21, label: "Body tube" },
-  { id: "body-lower", height: 0.205, label: "Recovery bay" },
-  { id: "fincan", height: 0.225, label: "Fin can and motor" },
-];
-
-/** Build order — tail first. Indices into SECTIONS. */
-const BUILD_ORDER = [4, 3, 2, 1, 0];
-
-/** How many sections are earned at a given completion. */
-function sectionsEarned(completeCount: number, total: number): number {
-  if (total <= 0) return 0;
-  return Math.min(
-    SECTIONS.length,
-    Math.floor((completeCount / total) * SECTIONS.length + 1e-9),
-  );
-}
+import {
+  SECTIONS,
+  sectionsEarned,
+  earnedSectionSet,
+  nextSection,
+} from "@/lib/vehicle/sections";
 
 export function VehicleBuild({
   completeCount,
@@ -49,9 +28,9 @@ export function VehicleBuild({
 }) {
   const pct = total === 0 ? 0 : Math.round((completeCount / total) * 100);
   const earned = sectionsEarned(completeCount, total);
-  const earnedSet = new Set(BUILD_ORDER.slice(0, earned));
-  const nextIndex = BUILD_ORDER[earned];
-  const complete = earned >= SECTIONS.length;
+  const earnedSet = earnedSectionSet(completeCount, total);
+  const next = nextSection(completeCount, total);
+  const complete = next === null;
 
   return (
     <section className="vbuild" aria-labelledby="vbuild-title">
@@ -92,7 +71,7 @@ export function VehicleBuild({
       <p className="text-sm text-sky-200 mt-3">
         {complete
           ? "Flight-ready. You built the whole vehicle."
-          : `Next section: ${SECTIONS[nextIndex].label}`}
+          : `Next section: ${next.label}`}
       </p>
       <p className="text-xs text-sky-300 mt-1">
         {earned} of {SECTIONS.length} sections · {completeCount} of {total}{" "}

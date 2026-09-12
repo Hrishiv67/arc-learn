@@ -197,7 +197,7 @@ export function Hero() {
       set("vel", `${Math.round(s.flight.vel)} M/S`);
       set("status", statusLabel(s));
       tel.style.opacity = String(0.55 + 0.45 * Math.min(1, s.p * 6));
-      const armed = s.p >= 0.05 && s.p < 0.22;
+      const armed = s.p >= 0.035 && s.p < 0.16;
       tel.dataset.armed = armed ? "true" : "false";
     }
 
@@ -206,7 +206,7 @@ export function Hero() {
       const bar = ind.querySelector<HTMLElement>("[data-bar]");
       if (bar) bar.style.transform = `scaleX(${s.p.toFixed(4)})`;
       const label = ind.querySelector<HTMLElement>("[data-label]");
-      const next = s.p < 0.1 ? "SCROLL TO IGNITE" : statusLabel(s);
+      const next = s.p < 0.07 ? "SCROLL TO IGNITE" : statusLabel(s);
       if (label && label.textContent !== next) label.textContent = next;
       ind.style.opacity = String(1 - Math.max(0, (s.p - 0.7) / 0.2));
     }

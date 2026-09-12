@@ -1,19 +1,23 @@
 import { Hero } from "@/components/hero/Hero";
-import { VehicleExploded } from "@/components/vehicle/VehicleExploded";
+import { ModuleTrack } from "@/components/course/ModuleTrack";
 import { CourseGate } from "@/components/vehicle/CourseGate";
 
 /**
- * The homepage runs outside the app chrome (see app/(app)/layout.tsx) because
- * the launch is full-bleed and carries its own navigation.
+ * One scroll, three beats: the launch, the course it is advertising, and the
+ * account that saves your place in it.
  *
- * One continuous scroll: the launch, the vehicle it flew taken apart into the
- * modules that teach each section, then the account the build is saved to.
+ * The launch is short on purpose. It exists to get a student past the fold —
+ * the course is what they came for, so it arrives almost immediately and gets
+ * the most room.
+ *
+ * Runs outside the app chrome (see app/(app)/layout.tsx) because the hero is
+ * full-bleed and carries its own navigation.
  */
 export default function HomePage() {
   return (
     <>
       <Hero />
-      <VehicleExploded />
+      <ModuleTrack />
       <CourseGate />
     </>
   );
