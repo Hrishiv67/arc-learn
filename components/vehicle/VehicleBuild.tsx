@@ -59,7 +59,7 @@ export function VehicleBuild({
             key={s.id}
             className="vbuild__section"
             data-earned={earnedSet.has(i) ? "true" : "false"}
-            style={{ width: `calc(var(--vb-dia) * ${s.ratio})` }}
+            style={{ width: `calc(var(--vb-dia) * ${s.widthD})` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={`/vehicle/cad-${s.id}.png`} alt="" draggable={false} />

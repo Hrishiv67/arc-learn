@@ -87,7 +87,7 @@ export function ModuleTrack() {
                 key={s.id}
                 className="track__part"
                 data-active={i === active ? "true" : "false"}
-                style={{ width: `calc(var(--veh-dia) * ${s.ratio})` }}
+                style={{ width: `calc(var(--veh-dia) * ${s.widthD})` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={`/vehicle/cad-${s.id}.png`} alt="" draggable={false} />

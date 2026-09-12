@@ -175,12 +175,18 @@ def main():
                 "share": round(length_u / total, 4),
                 "width": img.size[0],
                 "height": img.size[1],
+                # Width measured in body diameters. The layout must scale parts
+                # by this and not by width/height: the fin can's image is taller
+                # than a diameter because the fins stick out past the tube, so
+                # sizing it by aspect shrinks its body against every other part.
+                "widthDiameters": round(img.size[0] / PX, 4),
+                "heightDiameters": round(img.size[1] / PX, 4),
             }
         )
     (OUT / "vehicle.json").write_text(json.dumps(manifest, indent=2))
     print(f"rendered {len(manifest)} parts, {total:.2f} diameters long")
     for m in manifest:
-        print(f"  {m['id']:9s} {m['width']}x{m['height']}  share={m['share']}")
+        print(f"  {m['id']:9s} {m['width']}x{m['height']}  w={m['widthDiameters']}d h={m['heightDiameters']}d")
 
 
 if __name__ == "__main__":

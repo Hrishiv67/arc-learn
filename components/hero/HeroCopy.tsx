@@ -3,7 +3,7 @@
 import type { RefObject } from "react";
 import Link from "next/link";
 
-const WORDS = ["BUILD.", "TEST.", "FLY."];
+const WORDS = ["ARC", "LEARN"];
 
 export function HeroCopy({
   copyRef,
@@ -28,8 +28,8 @@ export function HeroCopy({
 
       <div className="hero__sub" ref={subRef}>
         <p className="hero__lede">
-          Rocketry modules for students new to rocketry. Thirteen lessons, from
-          your first launch rail to a qualifying flight. Free.
+          A free rocketry course for students new to rocketry. Thirteen modules,
+          from your first launch rail to a qualifying flight.
         </p>
         <Link className="hero__cta" href="/account?next=/modules">
           START MODULE 01 <span aria-hidden="true">→</span>

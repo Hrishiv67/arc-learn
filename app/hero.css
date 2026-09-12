@@ -13,7 +13,7 @@
 /* -------------------------------------------------------------------- hero */
 .hero {
   position: relative;
-  height: 130vh; /* the scroll budget the launch is scrubbed across */
+  height: 108vh; /* the scroll budget the launch is scrubbed across */
 }
 
 .hero__pin {
@@ -393,7 +393,7 @@
 /* ------------------------------------------------------------ responsive */
 @media (max-width: 767px) {
   .hero {
-    height: 115vh;
+    height: 104vh;
   }
 
   .hero__copy {

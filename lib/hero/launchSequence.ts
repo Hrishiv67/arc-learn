@@ -66,8 +66,8 @@ export type SceneState = {
   /** 0..1 opacity of the trajectory rule that carries into the next section */
   trailLine: number;
 
-  /** per-word opacity for BUILD / TEST / FLY */
-  words: [number, number, number];
+  /** per-word opacity for the headline, in order */
+  words: number[];
   /** vh the copy column has drifted up */
   copyShift: number;
   /** 0..1 */
@@ -132,24 +132,21 @@ export function sequenceAt(pRaw: number): SceneState {
   // The launch used to end on an empty sky and then cut to a white page. It now
   // brightens into that page instead, and the course heading arrives while the
   // smoke is still clearing, so there is never a frame with nothing in it.
-  const washout = smooth(span(p, 0.42, 0.92));
+  const washout = smooth(span(p, 0.34, 0.82));
   // the heading waits for the background to actually be paper before it
   // arrives, or it spends half its life as navy text on a dark sky
-  const handoff = smooth(span(p, 0.63, 0.95));
+  const handoff = smooth(span(p, 0.52, 0.86));
   // everything built to read on the dark plate has to be gone by then
-  const uiFade = 1 - span(p, 0.46, 0.74);
-  const trailLine = span(p, 0.36, 0.56) * (1 - 0.15 * span(p, 0.95, 1));
+  const uiFade = 1 - span(p, 0.36, 0.62);
+  const trailLine = span(p, 0.3, 0.46) * (1 - span(p, 0.6, 0.82));
 
   // --- copy ---------------------------------------------------------------
   // Each word leaves as the vehicle crosses its own baseline, bottom word last.
-  const words: [number, number, number] = [
-    1 - span(p, 0.29, 0.37),
-    1 - span(p, 0.32, 0.4),
-    1 - span(p, 0.35, 0.43),
-  ];
+  // each line leaves as the vehicle crosses its own baseline, top line first
+  const words = [0, 1, 2].map((i) => 1 - span(p, 0.26 + i * 0.03, 0.34 + i * 0.03));
   const copyShift = -1.2 * span(p, 0, 0.15) - 16 * Math.pow(span(p, 0.24, 0.54), 1.8);
-  const copyFade = 1 - span(p, 0.3, 0.46);
-  const navFade = (1 - 0.75 * span(p, 0.07, 0.15)) * (1 - span(p, 0.46, 0.72));
+  const copyFade = 1 - span(p, 0.26, 0.4);
+  const navFade = (1 - 0.75 * span(p, 0.07, 0.15)) * (1 - span(p, 0.36, 0.6));
 
   return {
     p,

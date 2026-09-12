@@ -14,8 +14,12 @@ export type VehicleSection = {
   id: string;
   /** share of the assembled vehicle's length, nose to tail */
   height: number;
-  /** width : height of the rendered part, for laying the blow-up out */
-  ratio: number;
+  /**
+   * The part's width measured in body diameters. Not width/height — the fin
+   * can's image is taller than a diameter because the fins stick out past the
+   * tube, so sizing by aspect shrinks its body against every other part.
+   */
+  widthD: number;
   label: string;
   /** for tight columns */
   short: string;
@@ -27,7 +31,7 @@ export const SECTIONS: VehicleSection[] = [
   {
     id: "nose",
     height: 0.2244,
-    ratio: 1.7467,
+    widthD: 1.7467,
     label: "Nose cone",
     short: "Nose cone",
     earns: "Trim drag and hit the altitude window",
@@ -35,7 +39,7 @@ export const SECTIONS: VehicleSection[] = [
   {
     id: "payload",
     height: 0.1731,
-    ratio: 1.3467,
+    widthD: 1.3467,
     label: "Payload bay",
     short: "Payload bay",
     earns: "Carry two eggs and get them back intact",
@@ -43,7 +47,7 @@ export const SECTIONS: VehicleSection[] = [
   {
     id: "body",
     height: 0.2179,
-    ratio: 1.7,
+    widthD: 1.7,
     label: "Body tube",
     short: "Body tube",
     earns: "Lay out an airframe that holds together",
@@ -51,7 +55,7 @@ export const SECTIONS: VehicleSection[] = [
   {
     id: "recovery",
     height: 0.1731,
-    ratio: 1.3467,
+    widthD: 1.3467,
     label: "Recovery bay",
     short: "Recovery bay",
     earns: "Size a parachute and pack it properly",
@@ -59,7 +63,7 @@ export const SECTIONS: VehicleSection[] = [
   {
     id: "fincan",
     height: 0.2115,
-    ratio: 1.0877,
+    widthD: 1.6533,
     label: "Fin can and motor",
     short: "Fin can",
     earns: "Fly straight on the right motor",
