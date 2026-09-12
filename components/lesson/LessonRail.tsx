@@ -34,15 +34,13 @@ export function LessonRail({
 }: {
   steps: LessonStep[];
   contentRef?: RefObject<HTMLElement | null>;
-  resources: { title: string; pages: number }[];
+  resources: { title: string; pages: number; href: string }[];
 }) {
   const doneCount = steps.filter((s) => s.state === "done").length;
   const pct = (doneCount / steps.length) * 100;
   const progress = useProgress();
   const coursePct = getCoursePct(progress);
-  const [sections, setSections] = useState<{ id: string; label: string }[]>(
-    [],
-  );
+  const [sections, setSections] = useState<{ id: string; label: string }[]>([]);
   const [active, setActive] = useState<string | null>(null);
 
   useEffect(() => {
@@ -51,7 +49,9 @@ export function LessonRail({
     const headings = Array.from(
       root.querySelectorAll<HTMLHeadingElement>("h2[id]"),
     );
-    setSections(headings.map((h) => ({ id: h.id, label: h.textContent ?? "" })));
+    setSections(
+      headings.map((h) => ({ id: h.id, label: h.textContent ?? "" })),
+    );
     if (headings.length === 0) return;
 
     // The artifact this rail is modeled on observes whole <section> blocks
@@ -172,35 +172,38 @@ export function LessonRail({
           </div>
         )}
 
-        <div className="border-t border-mist-600 pt-4">
-          <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-            Downloads
-          </span>
-          <div className="flex flex-col gap-3 mt-3">
-            {resources.map((r) => (
-              <a
-                key={r.title}
-                href="#"
-                onClick={(e) => e.preventDefault()}
-                className="flex gap-2.5 items-start no-underline"
-              >
-                <Icon
-                  name="download"
-                  size={15}
-                  className="text-sky-800 mt-0.5 shrink-0"
-                />
-                <span>
-                  <span className="font-body font-bold text-[15px] text-arc-navy block">
-                    {r.title}
+        {resources.length > 0 && (
+          <div className="border-t border-mist-600 pt-4">
+            <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
+              Downloads
+            </span>
+            <div className="flex flex-col gap-3 mt-3">
+              {resources.map((r) => (
+                <a
+                  key={r.title}
+                  href={r.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex gap-2.5 items-start no-underline"
+                >
+                  <Icon
+                    name="download"
+                    size={15}
+                    className="text-sky-800 mt-0.5 shrink-0"
+                  />
+                  <span>
+                    <span className="font-body font-bold text-[15px] text-arc-navy block">
+                      {r.title}
+                    </span>
+                    <span className="font-body text-[13px] text-sky-800">
+                      PDF · {r.pages} pages
+                    </span>
                   </span>
-                  <span className="font-body text-[13px] text-sky-800">
-                    PDF · {r.pages} pages
-                  </span>
-                </span>
-              </a>
-            ))}
+                </a>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

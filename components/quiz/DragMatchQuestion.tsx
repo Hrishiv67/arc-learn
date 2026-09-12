@@ -165,6 +165,41 @@ export function DragMatchQuestion({
           </div>
         )}
       </DndContext>
+      <details className="border border-mist-500 rounded-lg p-4">
+        <summary className="text-sm font-bold text-arc-navy">
+          Prefer tapping? Choose answers from a list
+        </summary>
+        <div className="grid gap-4 mt-4">
+          {definitions.map((def) => (
+            <label key={def.id} className="text-sm">
+              {def.definition}
+              <select
+                aria-label={def.definition}
+                className="block w-full border border-navy-300 rounded-lg p-3 mt-2 bg-white"
+                value={placements[def.id] ?? ""}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setPlacements((prev) => {
+                    const next = { ...prev };
+                    for (const key of Object.keys(next))
+                      if (next[key] === value) delete next[key];
+                    next[def.id] = value;
+                    return next;
+                  });
+                  setChecked(false);
+                }}
+              >
+                <option value="">Choose a term</option>
+                {question.pairs.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.term}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ))}
+        </div>
+      </details>
 
       <div
         className={clsx(

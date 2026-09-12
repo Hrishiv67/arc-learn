@@ -15,14 +15,12 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        launchOptions: { executablePath: "/opt/pw-browsers/chromium" },
       },
     },
     {
       name: "mobile-chromium",
       use: {
         ...devices["Pixel 7"],
-        launchOptions: { executablePath: "/opt/pw-browsers/chromium" },
       },
     },
   ],

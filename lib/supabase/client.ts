@@ -1,4 +1,5 @@
 import { createBrowserClient } from "@supabase/ssr";
+import { getSupabaseConfig } from "./config";
 import type { Database } from "./types";
 
 /**
@@ -8,10 +9,7 @@ import type { Database } from "./types";
  * throwing, so the app works with zero backend configured.
  */
 export function isSupabaseConfigured(): boolean {
-  return !!(
-    process.env.NEXT_PUBLIC_SUPABASE_URL &&
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  return getSupabaseConfig() !== null;
 }
 
 /**
@@ -21,8 +19,7 @@ export function isSupabaseConfigured(): boolean {
  * first — constructing this before those vars are set throws at runtime.
  */
 export function createClient() {
-  return createBrowserClient<Database>(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-  );
+  const config = getSupabaseConfig();
+  if (!config) throw new Error("Account sync is not configured.");
+  return createBrowserClient<Database>(config.url, config.key);
 }

@@ -18,16 +18,22 @@ export function useSupabaseUser(): { user: User | null; loading: boolean } {
     const supabase = createClient();
     let cancelled = false;
 
-    supabase.auth.getUser().then(({ data }) => {
-      if (!cancelled) {
-        setUser(data.user ?? null);
-        setLoading(false);
-      }
-    });
+    supabase.auth
+      .getUser()
+      .then(({ data }) => {
+        if (!cancelled) {
+          setUser(data.user ?? null);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
 
     const { data: subscription } = supabase.auth.onAuthStateChange(
       (_event, session) => {
         setUser(session?.user ?? null);
+        setLoading(false);
       },
     );
 

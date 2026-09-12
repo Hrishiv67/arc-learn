@@ -9,7 +9,8 @@ import {
 } from "@/lib/schemas/progress";
 import { MODULES } from "@/content/modules/registry";
 
-const STORAGE_KEY = "arc-learn:progress:v1";
+const ANONYMOUS_KEY = "arc-learn:progress:v1";
+let STORAGE_KEY = ANONYMOUS_KEY;
 const EMPTY_PROGRESS: ProgressState = {};
 
 // useSyncExternalStore calls getSnapshot on every render and treats a new
@@ -17,6 +18,7 @@ const EMPTY_PROGRESS: ProgressState = {};
 // fresh object every call, returning it unconditionally caused an infinite
 // render loop. Cache by the raw string so an unchanged localStorage value
 // returns the exact same reference.
+const memoryOnly = new Map<string, ProgressState>();
 let cachedRaw: string | null = null;
 let cachedState: ProgressState = EMPTY_PROGRESS;
 
@@ -27,11 +29,13 @@ let cachedState: ProgressState = EMPTY_PROGRESS;
  */
 export function readProgress(): ProgressState {
   if (typeof window === "undefined") return EMPTY_PROGRESS;
+  const memory = memoryOnly.get(STORAGE_KEY);
+  if (memory) return memory;
   let raw: string | null;
   try {
     raw = window.localStorage.getItem(STORAGE_KEY);
   } catch {
-    return EMPTY_PROGRESS;
+    return cachedState;
   }
   if (raw === cachedRaw) return cachedState;
   cachedRaw = raw;
@@ -50,7 +54,34 @@ export function readProgress(): ProgressState {
 
 function writeProgress(state: ProgressState) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  cachedState = state;
+  cachedRaw = JSON.stringify(state);
+  try {
+    window.localStorage.setItem(STORAGE_KEY, cachedRaw);
+    memoryOnly.delete(STORAGE_KEY);
+  } catch {
+    memoryOnly.set(STORAGE_KEY, state);
+  }
+  window.dispatchEvent(new CustomEvent("arc-learn:progress-changed"));
+}
+
+/** Isolate accounts on shared classroom devices; import guest work once. */
+export function setProgressOwner(userId: string | null) {
+  const nextKey = userId ? `${ANONYMOUS_KEY}:${userId}` : ANONYMOUS_KEY;
+  if (nextKey === STORAGE_KEY) return;
+  const guest = userId && STORAGE_KEY === ANONYMOUS_KEY ? readProgress() : {};
+  STORAGE_KEY = nextKey;
+  cachedRaw = null;
+  cachedState = EMPTY_PROGRESS;
+  if (userId && Object.keys(guest).length) {
+    mergeRemoteProgress(guest);
+    memoryOnly.delete(ANONYMOUS_KEY);
+    try {
+      window.localStorage.removeItem(ANONYMOUS_KEY);
+    } catch {
+      /* Storage may be blocked. */
+    }
+  }
   window.dispatchEvent(new CustomEvent("arc-learn:progress-changed"));
 }
 
@@ -69,7 +100,15 @@ export function recordQuizResult(
   const existing: ModuleProgress = state[moduleId] ?? { read: false };
   writeProgress({
     ...state,
-    [moduleId]: { ...existing, read: true, quiz: { score, total } },
+    [moduleId]: {
+      ...existing,
+      read: true,
+      quiz:
+        existing.quiz &&
+        existing.quiz.score / existing.quiz.total > score / total
+          ? existing.quiz
+          : { score, total },
+    },
   });
 }
 
@@ -88,10 +127,17 @@ export function mergeRemoteProgress(remote: ProgressState) {
   const merged: ProgressState = { ...local };
   for (const [moduleId, remoteModule] of Object.entries(remote)) {
     const localModule = local[moduleId];
-    const remoteScore = remoteModule.quiz?.score ?? -1;
-    const localScore = localModule?.quiz?.score ?? -1;
+    const remoteScore = remoteModule.quiz
+      ? remoteModule.quiz.score / remoteModule.quiz.total
+      : -1;
+    const localScore = localModule?.quiz
+      ? localModule.quiz.score / localModule.quiz.total
+      : -1;
     if (!localModule || remoteScore > localScore) {
-      merged[moduleId] = remoteModule;
+      merged[moduleId] = {
+        ...remoteModule,
+        read: remoteModule.read || !!localModule?.read,
+      };
     }
   }
   writeProgress(merged);

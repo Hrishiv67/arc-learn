@@ -1,5 +1,4 @@
 import { createClient } from "./client";
-import { mergeLocalProgressOnSignUp } from "@/lib/progress/sync";
 
 /**
  * Email + password and magic-link auth only — no OAuth, no third-party
@@ -9,9 +8,12 @@ import { mergeLocalProgressOnSignUp } from "@/lib/progress/sync";
 
 export async function signUpWithPassword(email: string, password: string) {
   const supabase = createClient();
-  const { data, error } = await supabase.auth.signUp({ email, password });
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+  });
   if (error) throw error;
-  if (data.user) await mergeLocalProgressOnSignUp(data.user.id);
   return data;
 }
 
@@ -37,5 +39,15 @@ export async function signInWithMagicLink(email: string, redirectTo: string) {
 export async function signOut() {
   const supabase = createClient();
   const { error } = await supabase.auth.signOut();
+  if (error) throw error;
+}
+
+export async function resendConfirmation(email: string) {
+  const supabase = createClient();
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email,
+    options: { emailRedirectTo: `${window.location.origin}/auth/callback` },
+  });
   if (error) throw error;
 }

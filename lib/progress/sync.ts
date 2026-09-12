@@ -22,11 +22,12 @@ export async function mergeLocalProgressOnSignUp(userId: string) {
 
   const supabase = createClient();
 
-  const { data: existingRows } = await supabase
+  const { data: existingRows, error: readError } = await supabase
     .from("progress")
     .select("module_id, quiz_score, quiz_total, status")
     .eq("user_id", userId);
 
+  if (readError) throw readError;
   const existingByModule = new Map(
     (existingRows ?? []).map((row) => [row.module_id, row]),
   );
@@ -35,15 +36,16 @@ export async function mergeLocalProgressOnSignUp(userId: string) {
     .map(([moduleId, moduleProgress]) => {
       const existing = existingByModule.get(moduleId);
       const localComplete = isModuleComplete(moduleProgress);
-      const localScore = moduleProgress.quiz?.score ?? -1;
-      const existingScore = existing?.quiz_score ?? -1;
+      const localScore = moduleProgress.quiz
+        ? moduleProgress.quiz.score / moduleProgress.quiz.total
+        : -1;
+      const existingScore =
+        existing?.quiz_total && existing.quiz_score != null
+          ? existing.quiz_score / existing.quiz_total
+          : -1;
 
       // Server already has an equal-or-better record for this module — skip it.
-      if (
-        existing &&
-        existing.status === "complete" &&
-        existingScore >= localScore
-      ) {
+      if (existing && existingScore >= localScore) {
         return null;
       }
 
@@ -61,9 +63,10 @@ export async function mergeLocalProgressOnSignUp(userId: string) {
 
   if (upserts.length === 0) return;
 
-  await supabase
+  const { error } = await supabase
     .from("progress")
     .upsert(upserts, { onConflict: "user_id,module_id" });
+  if (error) throw error;
 }
 
 /**
@@ -76,11 +79,12 @@ export async function fetchRemoteProgress(
   userId: string,
 ): Promise<ProgressState> {
   const supabase = createClient();
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("progress")
     .select("module_id, quiz_score, quiz_total")
     .eq("user_id", userId);
 
+  if (error) throw error;
   const state: ProgressState = {};
   for (const row of data ?? []) {
     const progress: ModuleProgress = { read: true };
@@ -106,17 +110,17 @@ export async function pushProgress(
   if (!isSupabaseConfigured()) return;
   const supabase = createClient();
   const complete = isModuleComplete(moduleProgress);
-  await supabase.from("progress").upsert(
+  const { error } = await supabase.from("progress").upsert(
     {
       user_id: userId,
       module_id: moduleId,
       status: (complete ? "complete" : "in_progress") as
-        | "complete"
-        | "in_progress",
+        "complete" | "in_progress",
       quiz_score: moduleProgress.quiz?.score ?? null,
       quiz_total: moduleProgress.quiz?.total ?? null,
       completed_at: complete ? new Date().toISOString() : null,
     },
     { onConflict: "user_id,module_id" },
   );
+  if (error) throw error;
 }

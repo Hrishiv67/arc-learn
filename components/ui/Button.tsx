@@ -24,17 +24,11 @@ type ButtonAsLink = CommonProps &
   };
 
 const base =
-  "inline-flex items-center justify-center gap-[10px] rounded-none font-heading font-black uppercase tracking-[0.04em] transition-colors duration-200 ease-arc select-none disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-[10px] rounded-[8px] font-heading font-semibold transition-colors duration-200 ease-arc select-none disabled:cursor-not-allowed disabled:opacity-50";
 
-// Padding-driven, not a forced min-height — the real component (see
-// _ds_bundle.js's Button.jsx) never sets minHeight for md/lg, only for the
-// fullWidth case. A blanket min-h-11/min-h-12 here previously rendered
-// every button 110-120px tall (this project's --spacing:10px means
-// Tailwind's numbered h-* scale is 2.5x the usual 4px-per-unit assumption)
-// instead of the ~44-48px the padding alone produces.
 const sizes: Record<Size, string> = {
-  md: "min-w-[250px] px-[25px] py-[15px] text-[16px]",
-  lg: "min-w-[250px] px-[30px] py-[19px] text-[16px]",
+  md: "min-h-[44px] px-[22px] py-[12px] text-[16px]",
+  lg: "min-h-[48px] px-[24px] py-[14px] text-[16px]",
 };
 
 const variants: Record<Variant, string> = {
