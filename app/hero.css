@@ -88,9 +88,13 @@
 }
 
 /*
- * The frame brightening as the rocket climbs, until it is the same paper the
- * course is printed on. This is what removes the cut: the launch does not end
- * and hand over to a white page, it becomes it.
+ * The frame whitening from the bottom up as the rocket climbs.
+ *
+ * Washing the whole frame to paper left a full viewport of nothing to scroll
+ * past, because the pin is a screen tall and the launch has left it. Whitening
+ * only the lower half keeps the sky in the top of the frame — so there is
+ * always a photograph on screen — while the bottom edge becomes the same paper
+ * the course is printed on, and the course rises out of it with no seam.
  */
 .hero__grade {
   position: absolute;
@@ -98,11 +102,60 @@
   opacity: 0;
   pointer-events: none;
   background: linear-gradient(
-    to bottom,
+    to top,
     var(--color-arc-white) 0%,
-    var(--color-arc-white) 58%,
-    var(--color-mist-200) 100%
+    var(--color-arc-white) 42%,
+    rgba(255, 255, 255, 0.82) 66%,
+    rgba(255, 255, 255, 0.34) 100%
   );
+}
+
+/*
+ * The course heading, resolving in the lower third of the pinned frame.
+ *
+ * It sits low deliberately. The pin is a full viewport tall, so once the wash
+ * finishes an empty frame means a whole screen of nothing to scroll past before
+ * the course appears. Putting the heading near the bottom fills that frame and
+ * leaves the blow-up only a short scroll behind it.
+ */
+.hero__handoff {
+  position: absolute;
+  left: 6.5vw;
+  bottom: 11vh;
+  right: 6.5vw;
+  z-index: 5;
+  opacity: 0;
+  pointer-events: none;
+  will-change: transform, opacity;
+}
+
+.hero__handoffEyebrow {
+  margin: 0 0 1.6vh;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-sky-800);
+}
+
+.hero__handoffTitle {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(1.9rem, 4.4vw, 4rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--color-arc-navy);
+}
+
+@media (max-width: 767px) {
+  .hero__handoff {
+    bottom: 7vh;
+  }
+  .hero__handoffTitle {
+    font-size: clamp(1.5rem, 7vw, 2.2rem);
+  }
 }
 
 /* --------------------------------------------------------------------- nav */
@@ -559,11 +612,11 @@
   position: relative;
   background: var(--color-arc-white);
   /*
-   * Tight to the hero on purpose. The launch ends on white and the pin
-   * releases straight onto this heading, so any more padding here reads as the
-   * page having stopped.
+   * Tight to the hero on purpose. The heading is the last thing in the pinned
+   * frame above; anything more than a hairline of padding here puts empty page
+   * between it and the rocket.
    */
-  padding: 7vh 6.5vw 10vh;
+  padding: 2.5vh 6.5vw 10vh;
 }
 
 .track__eyebrow {
@@ -595,7 +648,7 @@
 }
 
 .track__body {
-  margin-top: 4vh;
+  margin-top: 0;
 }
 
 /* --- the blow-up: retention, not the point --------------------------- */

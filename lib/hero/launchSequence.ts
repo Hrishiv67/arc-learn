@@ -61,6 +61,8 @@ export type SceneState = {
   washout: number;
   /** 0..1 instrumentation and nav clearing as the frame goes to paper */
   uiFade: number;
+  /** 0..1 the course heading resolving in the lower third of the frame */
+  handoff: number;
   /** 0..1 opacity of the trajectory rule that carries into the next section */
   trailLine: number;
 
@@ -135,6 +137,7 @@ export function sequenceAt(pRaw: number): SceneState {
   // arrives, or it spends half its life as navy text on a dark sky
   // everything built to read on the dark plate has to be gone by then
   const uiFade = 1 - span(p, 0.44, 0.7);
+  const handoff = smooth(span(p, 0.6, 0.9));
   const trailLine = span(p, 0.36, 0.52) * (1 - span(p, 0.66, 0.88));
 
   // --- copy ---------------------------------------------------------------
@@ -158,6 +161,7 @@ export function sequenceAt(pRaw: number): SceneState {
     shake,
     washout,
     uiFade,
+    handoff,
     trailLine,
     words,
     copyShift,

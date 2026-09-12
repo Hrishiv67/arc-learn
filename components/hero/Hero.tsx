@@ -52,6 +52,7 @@ export function Hero() {
   const trailRef = useRef<HTMLDivElement>(null);
   const blurRef = useRef<SVGFEGaussianBlurElement>(null);
   const scrimRef = useRef<HTMLDivElement>(null);
+  const handoffRef = useRef<HTMLDivElement>(null);
 
   const navRef = useRef<HTMLElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
@@ -178,6 +179,12 @@ export function Hero() {
     if (scrimRef.current) {
       scrimRef.current.style.opacity = String(s.uiFade);
     }
+    if (handoffRef.current) {
+      handoffRef.current.style.opacity = String(s.handoff);
+      handoffRef.current.style.transform = `translate3d(0, ${(
+        (1 - s.handoff) * 4
+      ).toFixed(2)}vh, 0)`;
+    }
     if (trailRef.current) {
       trailRef.current.style.opacity = String(s.trailLine * 0.5);
       trailRef.current.style.transform = `translate3d(${L.padX.toFixed(1)}px, 0, 0)`;
@@ -293,6 +300,18 @@ export function Hero() {
         </div>
 
         <div className="hero__grade" ref={gradeRef} aria-hidden="true" />
+
+        {/* The course heading lives in the pinned frame, low, so the frame is
+            never empty once the smoke clears — and so the blow-up below is only
+            a short scroll behind it rather than a screen. */}
+        <div className="hero__handoff" ref={handoffRef}>
+          <p className="hero__handoffEyebrow">02 / The course</p>
+          <h2 className="hero__handoffTitle">
+            Rocketry modules for students
+            <br />
+            new to rocketry.
+          </h2>
+        </div>
 
         <HeroNav ref={navRef} />
         <HeroCopy

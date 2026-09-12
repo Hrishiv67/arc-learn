@@ -63,15 +63,6 @@ export function ModuleTrack() {
 
   return (
     <section className="track" id="course" aria-label="The course">
-      <div className="track__intro">
-        <p className="track__eyebrow">02 / The course</p>
-        <h2 className="track__title">
-          Rocketry modules for students
-          <br />
-          new to rocketry.
-        </h2>
-      </div>
-
       <div className="track__body">
         {/* A blow-up, read left to right like an engineering drawing: nose at
             the left, fin can at the right, gaps where the joints are. Sticky,
