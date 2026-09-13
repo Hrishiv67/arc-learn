@@ -47,3 +47,8 @@ next-env.d.ts
 # hero asset pipeline: sources and scratch renders stay local
 /assets/src
 /assets/work
+
+.next-e2e/
+*-desktop.png
+
+/artifacts/
