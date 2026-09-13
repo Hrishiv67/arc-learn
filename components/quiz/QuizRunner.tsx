@@ -2,8 +2,6 @@
 
 import { quizReadingHref } from "@/lib/content/quizReading";
 import { MODULES } from "@/content/modules/registry";
-import { useProgress } from "@/lib/progress/local";
-import { isModuleComplete } from "@/lib/schemas/progress";
 import { RocketBuild } from "@/components/rocket/RocketBuild";
 import { useState } from "react";
 import type { Quiz } from "@/lib/schemas/quiz";
@@ -34,10 +32,6 @@ export function QuizRunner({
   onComplete: (score: number, total: number) => void;
   onExit: () => void;
 }) {
-  const progress = useProgress();
-  const completeCount = MODULES.filter((m) =>
-    isModuleComplete(progress[m.id]),
-  ).length;
   const lesson = MODULES.find((m) => m.id === quiz.moduleId);
   const [i, setI] = useState(0);
   const [marks, setMarks] = useState<boolean[]>([]);
@@ -116,7 +110,7 @@ export function QuizRunner({
               : `${Math.round(quiz.passRate * 100)}% is the bar for this module. Review the explanations below and try again — no limit, no penalty.`}
           </Callout>
 
-          <RocketBuild completeCount={completeCount} total={MODULES.length} />
+          <RocketBuild />
           {lesson && (
             <TextButton tone="navy" href={`/modules/${lesson.slug}/lesson`}>
               Revisit the reading

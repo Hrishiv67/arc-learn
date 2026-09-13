@@ -518,3 +518,219 @@ summary {
   min-height: 48px;
   padding-block: 12px;
 }
+
+/* A quiet account entry and a tangible, course-earned rocket. */
+.account-entry {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 80px 24px 96px;
+  display: grid;
+  grid-template-columns: 1fr 440px;
+  gap: 80px;
+  align-items: center;
+}
+.account-entry__intro h1 {
+  font-size: clamp(40px, 5vw, 64px);
+  line-height: 1.05;
+  letter-spacing: -0.045em;
+  max-width: 9ch;
+  margin: 22px 0;
+}
+.account-entry__intro > p:last-child {
+  font-size: 18px;
+  line-height: 1.65;
+  max-width: 32ch;
+  color: #365e73;
+}
+.account-entry__form {
+  width: 100%;
+}
+.rocket-build {
+  --build-diameter: 38px;
+  background: #113d55;
+  color: #fff;
+  border: 1px solid #31576c;
+  padding: 24px;
+}
+.rocket-build__eyebrow {
+  color: #b9d7e7;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 10px;
+  font-weight: 700;
+}
+.rocket-build__head h2 {
+  color: #fff;
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin: 10px 0;
+}
+.rocket-build__head > p:last-child {
+  color: #c4dce8;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.rocket-build__scene {
+  position: relative;
+  height: 350px;
+  margin: 16px 0;
+  overflow: hidden;
+  border-block: 1px solid #42667a;
+}
+.rocket-build__guide {
+  position: absolute;
+  top: 20px;
+  bottom: 40px;
+  left: 50%;
+  border-left: 1px dashed #42667a;
+}
+.rocket-build__assembly {
+  position: absolute;
+  top: 46%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+.rocket-build__part {
+  position: relative;
+  display: block;
+  flex-shrink: 0;
+  transition: opacity 0.3s ease;
+}
+.rocket-build__part img {
+  display: block;
+  width: 100%;
+  max-width: none;
+}
+.rocket-build__ghost {
+  opacity: 0.38;
+  filter: grayscale(1);
+}
+.rocket-build__part[data-selected="true"] .rocket-build__ghost {
+  opacity: 0.7;
+}
+.rocket-build__earned {
+  position: absolute;
+  inset: 0;
+  transition: clip-path 0.4s ease;
+}
+.rocket-build__stage-label {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #b9d7e7;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+}
+.rocket-build__progress {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-size: 12px;
+  color: #c4dce8;
+}
+.rocket-build__progress strong {
+  color: white;
+  font-size: 24px;
+  font-weight: 500;
+}
+.rocket-build__track {
+  height: 3px;
+  background: #42667a;
+  margin: 10px 0 20px;
+}
+.rocket-build__track > span {
+  display: block;
+  height: 100%;
+  background: #b9d7e7;
+  transition: width 0.4s ease;
+}
+.rocket-build__parts {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 4px;
+}
+.rocket-build__parts button {
+  min-height: 64px;
+  border-bottom: 2px solid #42667a;
+  padding: 6px 1px;
+  font-size: 10px;
+  line-height: 1.3;
+  color: #c4dce8;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 6px;
+  transition: background 0.2s ease;
+}
+.rocket-build__parts button[aria-pressed="true"] {
+  background: #284f65;
+  border-color: #c4dce8;
+  color: #fff;
+}
+.rocket-build__parts button:hover {
+  background: #284f65;
+}
+.rocket-build__parts button:focus-visible,
+.rocket-build__next:focus-visible {
+  outline: 2px solid white;
+  outline-offset: 3px;
+}
+.rocket-build__detail {
+  min-height: 96px;
+  padding-top: 18px;
+}
+.rocket-build__detail h3 {
+  font-size: 15px;
+  color: white;
+  margin-bottom: 5px;
+}
+.rocket-build__detail p,
+.rocket-build__saved {
+  color: #c4dce8;
+  font-size: 13px;
+  line-height: 1.5;
+}
+.rocket-build__next {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid #8bacbe;
+  color: #fff;
+  padding: 10px 14px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+.rocket-build__next:hover {
+  background: #284f65;
+}
+@media (max-width: 767px) {
+  .account-entry {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 488px;
+    padding: 40px 20px 56px;
+  }
+  .account-entry__intro h1 {
+    font-size: 42px;
+    max-width: 12ch;
+    margin: 14px 0;
+  }
+  .account-entry__intro > p:last-child {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rocket-build *,
+  .rocket-build *::before {
+    transition: none !important;
+  }
+}

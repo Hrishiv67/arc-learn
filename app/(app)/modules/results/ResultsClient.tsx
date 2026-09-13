@@ -109,7 +109,7 @@ export function ResultsClient() {
         </div>
 
         <div className="min-w-0 flex flex-col gap-8">
-          <RocketBuild completeCount={completedCount} total={MODULES.length} />
+          <RocketBuild />
           {needsReview.length > 0 ? (
             <Callout tone="caution" title="Worth a second look">
               {needsReview.length === 1

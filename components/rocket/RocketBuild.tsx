@@ -1,90 +1,144 @@
 "use client";
+import { useId, useState } from "react";
+import Link from "next/link";
+import { useProgress } from "@/lib/progress/local";
+import { rocketBuild } from "@/lib/rocket/build";
 
-/**
- * Your rocket, as it stands.
- *
- * Replaces the dashed outline drawing this card used to show. The sections are
- * the same matted photograph the homepage flies and takes apart, so the rocket
- * a student is assembling is recognisably the rocket they watched launch —
- * rather than a second, cartoon rocket that exists only on this screen.
- *
- * Which module earns which part lives in lib/rocket/sections.ts, shared with
- * the homepage track so the two can never disagree.
- */
-
-import { useId } from "react";
-import {
-  SECTIONS,
-  BUILD_STEPS,
-  sectionsEarned,
-  earnedSectionSet,
-  nextSection,
-} from "@/lib/rocket/sections";
-
-export function RocketBuild({
-  completeCount,
-  total,
-}: {
-  completeCount: number;
-  total: number;
-}) {
+export function RocketBuild() {
   const titleId = useId();
-  const pct = total === 0 ? 0 : Math.round((completeCount / total) * 100);
-  const earned = sectionsEarned(completeCount, total);
-  const earnedSet = earnedSectionSet(completeCount, total);
-  const next = nextSection(completeCount, total);
-  const complete = next === null;
-
+  const progress = useProgress();
+  const build = rocketBuild(progress);
+  const [selected, setSelected] = useState<string | null>(null);
+  const part =
+    build.parts.find((p) => p.id === selected) ??
+    build.nextPart ??
+    build.parts[0];
+  const nextHref = build.next
+    ? "/modules/" +
+      build.next.slug +
+      (progress[build.next.id]?.read ? "/quiz" : "/lesson")
+    : null;
   return (
-    <section className="vbuild" aria-labelledby={titleId}>
-      <div className="vbuild__head">
-        <div>
-          <p className="eyebrow text-sky-300">Your rocket</p>
-          <h2 id={titleId} className="text-white text-xl mt-1">
-            Build it as you learn.
-          </h2>
-        </div>
-        <span className="vbuild__pct">{pct}%</span>
+    <section className="rocket-build" aria-labelledby={titleId}>
+      <div className="rocket-build__head">
+        <p className="rocket-build__eyebrow">Your rocket</p>
+        <h2 id={titleId}>
+          {build.complete
+            ? "Ready for launch."
+            : build.done
+              ? "It’s coming together."
+              : "Start small. Aim high."}
+        </h2>
+        <p>Every module brings your rocket a little closer.</p>
       </div>
-
       <div
-        className="vbuild__stage"
+        className="rocket-build__scene"
         role="img"
         aria-label={
-          complete
-            ? "Your rocket is complete"
-            : `Your rocket is ${earned} of ${SECTIONS.length} sections built`
+          "Your rocket: " +
+          build.done +
+          " of " +
+          build.total +
+          " modules complete"
         }
       >
-        <span className="vbuild__axis" aria-hidden="true" />
-        {SECTIONS.map((s, i) => (
-          <span
-            key={s.id}
-            className="vbuild__section"
-            data-earned={earnedSet.has(i) ? "true" : "false"}
-            style={{ width: `calc(var(--rb-dia) * ${s.widthD})` }}
+        <span className="rocket-build__guide" aria-hidden="true" />
+        <div className="rocket-build__assembly" aria-hidden="true">
+          {build.parts.map((p) => (
+            <span
+              key={p.id}
+              className="rocket-build__part"
+              data-selected={part.id === p.id}
+              style={{
+                width: "calc(var(--build-diameter) * " + p.widthD + ")",
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="rocket-build__ghost"
+                src={"/rocket/cad-" + p.id + ".png"}
+                alt=""
+                draggable={false}
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                className="rocket-build__earned"
+                src={"/rocket/cad-" + p.id + ".png"}
+                alt=""
+                draggable={false}
+                style={{
+                  clipPath: "inset(0 0 0 " + (1 - p.fraction) * 100 + "%)",
+                }}
+              />
+            </span>
+          ))}
+        </div>
+        <span className="rocket-build__stage-label" aria-hidden="true">
+          {build.complete ? "ASSEMBLED" : "WORK IN PROGRESS"}
+        </span>
+      </div>
+      <div className="rocket-build__progress">
+        <span>
+          <strong>{build.done}</strong> / {build.total} modules
+        </span>
+        <span>{Math.round((build.done / build.total) * 100)}% built</span>
+      </div>
+      <div
+        className="rocket-build__track"
+        role="progressbar"
+        aria-label="Rocket build"
+        aria-valuemin={0}
+        aria-valuemax={build.total}
+        aria-valuenow={build.done}
+      >
+        <span style={{ width: (build.done / build.total) * 100 + "%" }} />
+      </div>
+      <div
+        className="rocket-build__parts"
+        role="group"
+        aria-label="Explore your rocket parts"
+      >
+        {build.parts.map((p) => (
+          <button
+            key={p.id}
+            type="button"
+            aria-pressed={part.id === p.id}
+            onClick={() => setSelected(p.id)}
+            aria-label={
+              p.label +
+              ": " +
+              p.done +
+              " of " +
+              p.modules.length +
+              " modules complete"
+            }
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={`/rocket/cad-${s.id}.png`} alt="" draggable={false} />
-          </span>
+            <span>{p.short}</span>
+            <span aria-hidden="true">
+              {p.fraction === 1 ? "✓" : p.done + "/" + p.modules.length}
+            </span>
+          </button>
         ))}
       </div>
-
-      <p className="text-sm text-sky-200 mt-3">
-        {complete
-          ? "Flight-ready. You built the whole rocket."
-          : `Next section: ${next.label}`}
-      </p>
-      {!complete && (
-        <p className="text-sm text-sky-200 mt-2">
-          {BUILD_STEPS[earned].throughModule - completeCount} more modules to
-          earn this section.
+      <div className="rocket-build__detail" aria-live="polite">
+        <h3>{part.label}</h3>
+        <p>
+          {part.fraction === 1 ? "Part complete. " : ""}
+          {part.earns}.
+        </p>
+      </div>
+      {nextHref ? (
+        <Link className="rocket-build__next" href={nextHref}>
+          {build.done ? "Keep building" : "Start your first module"}
+          <span aria-hidden="true">↗</span>
+        </Link>
+      ) : (
+        <p className="rocket-build__saved">
+          {build.complete
+            ? "You built it. Look back at how far you’ve come."
+            : "You’re up to date. Keep your progress here while new modules arrive."}
         </p>
       )}
-      <p className="text-xs text-sky-300 mt-1">
-        {earned} of {SECTIONS.length} sections · {completeCount} of {total}{" "}
-        modules complete
-      </p>
     </section>
   );
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { googleAuthEnabled } from "@/lib/supabase/providers";
 import { AccountClient } from "./AccountClient";
 
 export const metadata: Metadata = { title: "Account" };
@@ -20,7 +21,7 @@ export default async function AccountPage({
           request a new confirmation email.
         </p>
       )}
-      <AccountClient next={next} />
+      <AccountClient next={next} googleEnabled={await googleAuthEnabled()} />
     </>
   );
 }

@@ -112,7 +112,9 @@ test("anonymous user can read Module 1 and complete the quiz", async ({
   // hardcoding which of the two it'll be.
   await page.goto("/modules");
   await expect(
-    page.getByText(/^\d+ of 13 modules complete$/).filter({ visible: true }),
+    page
+      .getByRole("progressbar", { name: "Rocket build" })
+      .filter({ visible: true }),
   ).toBeVisible();
 });
 

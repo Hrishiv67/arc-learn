@@ -1,10 +1,6 @@
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { MODULES } from "@/content/modules/registry";
-import { useProgress } from "@/lib/progress/local";
-import { isModuleComplete } from "@/lib/schemas/progress";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { useSupabaseUser } from "@/lib/supabase/useUser";
 import {
@@ -17,118 +13,79 @@ import {
 import { Callout } from "@/components/ui/Callout";
 import { Input } from "@/components/ui/Input";
 import { Button, TextButton } from "@/components/ui/Button";
-import { Container } from "@/components/ui/Container";
 import { Loading } from "@/components/ui/Loading";
 
-/**
- * Course account. Email + password only, nothing else. Real
- * Supabase auth once a project is connected (see lib/supabase and
- * .env.example); with no project configured this screen still explains the
- * flow honestly rather than faking a sign-in.
- */
-export function AccountClient({ next }: { next?: string }) {
+export function AccountClient({
+  googleEnabled = false,
+}: {
+  next?: string;
+  googleEnabled?: boolean;
+}) {
   const router = useRouter();
-  /**
-   * Where to go once signed in — the module that sent them here, not always the
-   * index. Only same-site paths are honoured; an absolute URL here would be an
-   * open redirect.
-   */
-  const nextPath =
-    next && next.startsWith("/") && !next.startsWith("//") ? next : "/modules";
-  const progress = useProgress();
   const { user, loading } = useSupabaseUser();
-  const configured = isSupabaseConfigured();
   const [signOutError, setSignOutError] = useState<string | null>(null);
-
-  const doneCount = MODULES.filter((m) =>
-    isModuleComplete(progress[m.id]),
-  ).length;
-
-  if (loading) return <Loading label="Finding your saved progress…" />;
-
-  if (user) {
-    return (
-      <Container className="py-6 md:py-12">
-        <p className="eyebrow">Mission control</p>
-        <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-2">
-          Your progress is cleared for launch.
+  if (loading) return <Loading label="Opening your account…" />;
+  return (
+    <section className="account-entry">
+      <div className="account-entry__intro">
+        <p className="eyebrow">ARC / LEARN</p>
+        <h1>
+          {user ? "Ready when you are." : "A little learning. A big launch."}
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_380px] gap-8 md:gap-12 mt-8 items-start">
-          <div className="flex flex-col gap-6 min-w-0">
-            <Callout tone="go" title={`Signed in as ${user.email}`}>
-              Your progress is saved on this device and syncs while connected.
-            </Callout>
-            <WhatWeStore />
-          </div>
-          <aside className="auth-card flex flex-col gap-5">
-            <h2 className="font-heading font-bold text-arc-navy text-[22px]">
-              Signed in
-            </h2>
-            <Button
-              variant="outline"
+        <p>
+          {user
+            ? "Pick up where you left off."
+            : "Create a free account to save your progress and build your rocket as you learn."}
+        </p>
+      </div>
+      <div className="auth-card account-entry__form">
+        {user ? (
+          <div className="flex flex-col gap-5">
+            <h2 className="text-2xl">You’re signed in.</h2>
+            <Button href="/modules" fullWidth>
+              Continue to the course
+            </Button>
+            <TextButton
+              tone="navy"
               onClick={async () => {
                 try {
                   await signOut();
-                  router.push("/modules");
+                  router.refresh();
                 } catch {
                   setSignOutError("Could not sign out. Please try again.");
                 }
               }}
             >
               Sign out
-            </Button>
-            {signOutError && <p role="alert">{signOutError}</p>}
-          </aside>
-        </div>
-      </Container>
-    );
-  }
-
-  return (
-    <Container className="py-6 md:py-12">
-      <p className="eyebrow">Your learning account / Free forever</p>
-      <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-3 leading-[1.08] tracking-[-0.035em] max-w-[20ch]">
-        Your next launch starts here.
-      </h1>
-      <p className="text-base md:text-lg text-sky-800 mt-3 max-w-[54ch]">
-        Create a free account to open the lessons, save your progress, and keep
-        your best quiz scores. Just an email and password.
-      </p>
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,480px)_minmax(0,1fr)] gap-8 md:gap-16 mt-8 items-start">
-        <aside className="auth-card">
-          {configured ? (
-            <AuthForm onDone={() => router.push(nextPath)} />
-          ) : (
-            <div className="flex flex-col gap-5">
-              <h2 className="font-heading font-bold text-arc-navy text-[22px]">
-                Keep learning on this device
-              </h2>
-              <Callout tone="info" title="Device progress is available">
-                Account sync is not available right now. You can still read
-                lessons, take quizzes, and save progress in this browser.
+            </TextButton>
+            {signOutError && (
+              <Callout tone="caution" title="Try again">
+                {signOutError}
               </Callout>
-              <TextButton onClick={() => router.push("/modules")}>
-                Continue without an account
-              </TextButton>
-            </div>
-          )}
-        </aside>
-        <div className="flex flex-col gap-8 min-w-0">
-          <AccountBenefits doneCount={doneCount} />
-          <WhatWeStore />
-        </div>
+            )}
+          </div>
+        ) : isSupabaseConfigured() ? (
+          <AuthForm
+            googleEnabled={googleEnabled}
+            onDone={() => {
+              router.replace("/modules");
+              router.refresh();
+            }}
+          />
+        ) : (
+          <div className="flex flex-col gap-5">
+            <h2 className="text-2xl">Start learning</h2>
+            <p className="text-base text-sky-800">
+              Account sync is unavailable here. Your progress will stay in this
+              browser.
+            </p>
+            <Button href="/modules">Open the course</Button>
+          </div>
+        )}
       </div>
-    </Container>
+    </section>
   );
 }
-
-/**
- * Only rendered when the Google provider has actually been enabled in the
- * Supabase dashboard — otherwise the button would fail on click. Email and
- * password remains the complete path on its own.
- */
-const googleEnabled = process.env.NEXT_PUBLIC_GOOGLE_AUTH === "1";
-
 function GoogleMark() {
   return (
     <svg width="17" height="17" viewBox="0 0 48 48" aria-hidden="true">
@@ -152,7 +109,13 @@ function GoogleMark() {
   );
 }
 
-function AuthForm({ onDone }: { onDone: () => void }) {
+function AuthForm({
+  onDone,
+  googleEnabled,
+}: {
+  onDone: () => void;
+  googleEnabled: boolean;
+}) {
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -171,7 +134,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         const data = await signUpWithPassword(email, password);
         if (!data.session) {
           setNotice(
-            "Check your email to confirm your account, then sign in. Your progress stays on this device.",
+            "Open the confirmation link in your email to start the course.",
           );
           return;
         }
@@ -226,12 +189,12 @@ function AuthForm({ onDone }: { onDone: () => void }) {
       </div>
       <div>
         <h2 className="font-heading font-bold text-arc-navy text-[24px]">
-          {mode === "signup" ? "Save this mission" : "Welcome back"}
+          {mode === "signup" ? "Create your free account" : "Welcome back"}
         </h2>
         <p className="text-sm text-sky-800 mt-1">
           {mode === "signup"
-            ? "Free forever. No name, school, or profile setup."
-            : "Continue from the last device you used."}
+            ? "Save your progress. Pick up anytime."
+            : "Your course and rocket are waiting."}
         </p>
       </div>
       {notice && (
@@ -249,14 +212,19 @@ function AuthForm({ onDone }: { onDone: () => void }) {
           <button
             type="button"
             className="google-button"
+            disabled={submitting}
             onClick={async () => {
               setError(null);
+              setSubmitting(true);
               try {
                 await signInWithGoogle(
                   `${window.location.origin}/auth/callback`,
                 );
               } catch {
-                setError("Could not reach Google. Try email instead.");
+                setError(
+                  "Google sign-in could not start. Try again or use email below.",
+                );
+                setSubmitting(false);
               }
             }}
           >
@@ -310,7 +278,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
             ? "Create account"
             : "Sign in"}
       </Button>
-      {mode === "signin" && email.trim() && (
+      {(mode === "signin" || notice) && email.trim() && (
         <p className="-mt-2 text-center text-sm text-sky-800">
           Still waiting for your confirmation email?{" "}
           <TextButton
@@ -340,76 +308,6 @@ function AuthForm({ onDone }: { onDone: () => void }) {
           </TextButton>
         </p>
       )}
-      <p className="text-xs text-sky-800">
-        Your email is used for your account. Read our{" "}
-        <a href="/legal" className="underline underline-offset-4">
-          site information
-        </a>
-        .
-      </p>
     </form>
-  );
-}
-
-function AccountBenefits({ doneCount }: { doneCount: number }) {
-  const benefits = [
-    ["Pick up anywhere", "Your reading and quiz progress follows you."],
-    [
-      "Keep your best score",
-      "Retakes improve your record instead of replacing it.",
-    ],
-    ["Stay private", "We only need an email. No name, school, or photo."],
-  ];
-  return (
-    <section aria-labelledby="account-benefits-title">
-      <p className="eyebrow">Current flight log</p>
-      <h2 id="account-benefits-title" className="text-2xl mt-2">
-        {doneCount} of {MODULES.length} modules complete
-      </h2>
-      <div className="account-benefits mt-5">
-        {benefits.map(([title, body], index) => (
-          <div key={title} className="account-benefit">
-            <span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span>
-            <div>
-              <h3 className="text-lg">{title}</h3>
-              <p className="text-sm text-sky-800 mt-1">{body}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function WhatWeStore() {
-  return (
-    <div>
-      <h2 className="font-heading font-bold text-arc-navy text-[22px] md:text-[28px]">
-        What we store
-      </h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-0 mt-4">
-        <div className="bg-mist-300 p-4">
-          <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-            We store
-          </span>
-          <ul className="font-body text-[16px] text-arc-ink list-disc pl-5 mt-2.5 space-y-1.5">
-            <li>Your email</li>
-            <li>Modules completed</li>
-            <li>Quiz scores</li>
-          </ul>
-        </div>
-        <div className="sm:border-l sm:border-mist-600 sm:pl-5">
-          <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-            We never ask for
-          </span>
-          <ul className="font-body text-[16px] text-arc-ink list-disc pl-5 mt-2.5 space-y-1.5">
-            <li>Your name</li>
-            <li>Your date of birth</li>
-            <li>Your school</li>
-            <li>A photo</li>
-          </ul>
-        </div>
-      </div>
-    </div>
   );
 }

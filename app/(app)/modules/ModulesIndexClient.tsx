@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import { SECTIONS, sectionIndexForModule } from "@/lib/rocket/sections";
-import { UNITS, MODULES } from "@/content/modules/registry";
-import { useProgress, getCoursePct } from "@/lib/progress/local";
+import { UNITS } from "@/content/modules/registry";
+import { useProgress } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { isModuleComplete } from "@/lib/schemas/progress";
-import { ProgressRing } from "@/components/ui/StepProgress";
 import { Button, TextButton } from "@/components/ui/Button";
 import { Badge } from "@/components/ui/Badge";
 import { Icon } from "@/components/ui/Icon";
@@ -16,10 +15,7 @@ import { RocketBuild } from "@/components/rocket/RocketBuild";
 
 export function ModulesIndexClient() {
   const progress = useProgress();
-  const completeCount = MODULES.filter((m) =>
-    isModuleComplete(progress[m.id]),
-  ).length;
-  const coursePct = getCoursePct(progress);
+  const firstComplete = isModuleComplete(progress["this-years-challenge"]);
 
   return (
     <Container className="py-8 md:py-12">
@@ -46,21 +42,20 @@ export function ModulesIndexClient() {
             </div>
             <Button
               href={
-                progress["this-years-challenge"]?.read
+                !firstComplete && progress["this-years-challenge"]?.read
                   ? "/modules/this-years-challenge/quiz"
                   : "/modules/this-years-challenge/lesson"
               }
             >
-              {progress["this-years-challenge"]?.read
-                ? "Continue to quiz"
-                : "Start learning"}
+              {firstComplete
+                ? "Revisit the lesson"
+                : progress["this-years-challenge"]?.read
+                  ? "Continue to quiz"
+                  : "Start learning"}
             </Button>
           </div>
           <div className="mt-8 flex flex-col gap-6 md:hidden">
-            <ProgressSummary
-              coursePct={coursePct}
-              completeCount={completeCount}
-            />
+            <ProgressSummary />
           </div>
 
           <div className="mt-10">
@@ -186,59 +181,23 @@ export function ModulesIndexClient() {
         </div>
 
         <aside className="hidden md:block sticky top-[92px]">
-          <ProgressSummary
-            coursePct={coursePct}
-            completeCount={completeCount}
-          />
+          <ProgressSummary />
         </aside>
       </div>
     </Container>
   );
 }
 
-function ProgressSummary({
-  coursePct,
-  completeCount,
-}: {
-  coursePct: number;
-  completeCount: number;
-}) {
+function ProgressSummary() {
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-          Your progress
-        </span>
-        <div className="flex items-center gap-3.5 mt-3">
-          <ProgressRing pct={coursePct} size={56} />
-          <span className="font-body text-[14px] text-arc-ink">
-            {completeCount} of {MODULES.length} modules complete
-          </span>
-        </div>
-        <div className="h-[8px] bg-mist-600 mt-[14px]">
-          <div
-            className="h-[8px] bg-go transition-[width] duration-300 ease-arc"
-            style={{ width: `${coursePct}%` }}
-          />
-        </div>
-        {completeCount > 0 && (
-          <div className="mt-3">
-            <TextButton tone="navy" href="/modules/results">
-              See your results
-            </TextButton>
-          </div>
-        )}
-      </div>
-      <div className="border-t border-mist-600 pt-5">
-        <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-          What is live
-        </span>
-        <p className="font-body text-[16px] text-arc-ink mt-2.5">
-          Module 1 is available now. The remaining twelve are being written and
-          will open through the season.
-        </p>
-      </div>
-      <RocketBuild completeCount={completeCount} total={MODULES.length} />
+    <div className="flex flex-col gap-5">
+      <RocketBuild />
+      <TextButton tone="navy" href="/modules/results">
+        Your results
+      </TextButton>
+      <p className="text-sm text-sky-800">
+        One module is ready to explore. More are on the way.
+      </p>
     </div>
   );
 }
