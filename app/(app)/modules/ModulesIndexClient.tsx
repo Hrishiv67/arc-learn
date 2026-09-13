@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SECTIONS, sectionIndexForModule } from "@/lib/rocket/sections";
 import { UNITS, MODULES } from "@/content/modules/registry";
 import { useProgress, getCoursePct } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
@@ -112,21 +113,9 @@ export function ModulesIndexClient() {
                           clickable && "group hover:bg-mist-300",
                         )}
                       >
-                        {live && unlocked ? (
-                          <ProgressRing
-                            pct={complete ? 100 : progress[m.id]?.read ? 40 : 0}
-                            done={complete}
-                            size={44}
-                          />
-                        ) : (
-                          <span className="flex justify-center">
-                            <Icon
-                              name="lock"
-                              size={18}
-                              className="text-sky-800"
-                            />
-                          </span>
-                        )}
+                        <span className="font-mono text-sm text-sky-800">
+                          {String(m.order).padStart(2, "0")}
+                        </span>
                         <div className="min-w-0">
                           <div className="flex gap-2 items-baseline flex-wrap">
                             <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">
@@ -145,6 +134,10 @@ export function ModulesIndexClient() {
                             {live
                               ? `${m.estimatedMinutes} min · read, then quiz`
                               : `${m.estimatedMinutes} min`}
+                          </span>
+                          <span className="block font-mono text-[11px] text-sky-800 mt-1">
+                            Build:{" "}
+                            {SECTIONS[sectionIndexForModule(m.order)].short}
                           </span>
                         </div>
                         <div className="hidden md:flex justify-end">
@@ -177,7 +170,7 @@ export function ModulesIndexClient() {
                     return clickable ? (
                       <Link
                         key={m.id}
-                        href={`/modules/${m.slug}`}
+                        href={`/modules/${m.slug}/lesson`}
                         className="block"
                       >
                         {row}
@@ -224,7 +217,7 @@ function ProgressSummary({
         </div>
         <div className="h-[8px] bg-mist-600 mt-[14px]">
           <div
-            className="h-[8px] bg-go transition-[width] duration-500 ease-arc"
+            className="h-[8px] bg-go transition-[width] duration-300 ease-arc"
             style={{ width: `${coursePct}%` }}
           />
         </div>

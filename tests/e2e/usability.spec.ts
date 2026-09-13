@@ -8,7 +8,7 @@ test("quiz can be completed using selects at a normal phone height", async ({
   await page.goto("/modules/this-years-challenge/quiz");
   for (const question of quiz.questions) {
     if (question.type === "choice") {
-      await page.getByRole("button", { name: /^A\s/ }).click();
+      await page.getByRole("radio").first().check();
       await page
         .getByRole("button", { name: "Check my answer", exact: true })
         .click();
@@ -51,10 +51,10 @@ test("quiz can be completed using selects at a normal phone height", async ({
   ).toBe(11);
 });
 
-test("home has no horizontal overflow and starts the lesson directly", async ({
+test("course has no horizontal overflow and starts the lesson directly", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/modules");
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
@@ -85,16 +85,16 @@ test("technical terms reveal plain-language definitions", async ({ page }) => {
   );
 });
 
-test("the rocket workshop lets learners choose a paint color", async ({
+test("rocket build shows honest progress before sections are earned", async ({
   page,
 }) => {
   await page.goto("/modules");
-  const skyBlue = page.getByRole("button", { name: "Sky blue" });
-  await skyBlue.click();
-  await expect(skyBlue).toHaveAttribute("aria-pressed", "true");
-  await page.reload();
-  await expect(page.getByRole("button", { name: "Sky blue" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
+  await expect(
+    page
+      .getByRole("heading", { name: "Build it as you learn." })
+      .filter({ visible: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Next section: Fin can and motor").filter({ visible: true }),
+  ).toBeVisible();
 });

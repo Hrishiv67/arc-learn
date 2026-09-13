@@ -27,7 +27,13 @@ export default defineConfig({
   webServer: {
     command: "npm run dev -- -p 3100",
     url: "http://127.0.0.1:3100",
-    reuseExistingServer: true,
+    reuseExistingServer: false,
+    env: {
+      ARC_E2E: "1",
+      NEXT_PUBLIC_SUPABASE_URL: "",
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "",
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: "",
+    },
     timeout: 60_000,
   },
 });

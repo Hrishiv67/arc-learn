@@ -21,7 +21,7 @@ import { Container } from "@/components/ui/Container";
 import { Loading } from "@/components/ui/Loading";
 
 /**
- * Tier 2 — optional account. Email + password only, nothing else. Real
+ * Course account. Email + password only, nothing else. Real
  * Supabase auth once a project is connected (see lib/supabase and
  * .env.example); with no project configured this screen still explains the
  * flow honestly rather than faking a sign-in.
@@ -48,7 +48,7 @@ export function AccountClient({ next }: { next?: string }) {
 
   if (user) {
     return (
-      <Container className="py-10 md:py-16">
+      <Container className="py-6 md:py-12">
         <p className="eyebrow">Mission control</p>
         <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-2">
           Your progress is cleared for launch.
@@ -85,21 +85,16 @@ export function AccountClient({ next }: { next?: string }) {
   }
 
   return (
-    <Container className="py-10 md:py-16">
-      <p className="eyebrow">Optional account</p>
-      <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-2 max-w-[17ch]">
-        Take your progress with you.
+    <Container className="py-6 md:py-12">
+      <p className="eyebrow">Your learning account / Free forever</p>
+      <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] mt-3 leading-[1.08] tracking-[-0.035em] max-w-[20ch]">
+        Your next launch starts here.
       </h1>
-      <p className="text-lg text-sky-800 mt-3 max-w-[54ch]">
-        Start here, finish on another device, and keep your best quiz scores.
-        Creating an account takes only an email and password.
+      <p className="text-base md:text-lg text-sky-800 mt-3 max-w-[54ch]">
+        Create a free account to open the lessons, save your progress, and keep
+        your best quiz scores. Just an email and password.
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,1fr)_420px] gap-8 md:gap-14 mt-10 items-start">
-        <div className="flex flex-col gap-6 min-w-0">
-          <AccountBenefits doneCount={doneCount} />
-          <WhatWeStore />
-        </div>
-
+      <div className="grid grid-cols-1 md:grid-cols-[minmax(0,480px)_minmax(0,1fr)] gap-8 md:gap-16 mt-8 items-start">
         <aside className="auth-card">
           {configured ? (
             <AuthForm onDone={() => router.push(nextPath)} />
@@ -118,6 +113,10 @@ export function AccountClient({ next }: { next?: string }) {
             </div>
           )}
         </aside>
+        <div className="flex flex-col gap-8 min-w-0">
+          <AccountBenefits doneCount={doneCount} />
+          <WhatWeStore />
+        </div>
       </div>
     </Container>
   );
@@ -154,10 +153,10 @@ function GoogleMark() {
 }
 
 function AuthForm({ onDone }: { onDone: () => void }) {
-  const router = useRouter();
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
@@ -165,6 +164,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setNotice(null);
     setSubmitting(true);
     try {
       if (mode === "signup") {
@@ -187,16 +187,20 @@ function AuthForm({ onDone }: { onDone: () => void }) {
   }
 
   return (
-    <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
+    <form
+      className="flex flex-col gap-4"
+      aria-busy={submitting}
+      onSubmit={handleSubmit}
+    >
       <div
         className="auth-mode-switch"
-        role="tablist"
+        role="group"
         aria-label="Account action"
       >
         <button
           type="button"
-          role="tab"
-          aria-selected={mode === "signup"}
+          aria-pressed={mode === "signup"}
+          disabled={submitting}
           className={mode === "signup" ? "is-active" : undefined}
           onClick={() => {
             setMode("signup");
@@ -208,8 +212,8 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         </button>
         <button
           type="button"
-          role="tab"
-          aria-selected={mode === "signin"}
+          aria-pressed={mode === "signin"}
+          disabled={submitting}
           className={mode === "signin" ? "is-active" : undefined}
           onClick={() => {
             setMode("signin");
@@ -226,7 +230,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         </h2>
         <p className="text-sm text-sky-800 mt-1">
           {mode === "signup"
-            ? "No profile setup, username, or personal details."
+            ? "Free forever. No name, school, or profile setup."
             : "Continue from the last device you used."}
         </p>
       </div>
@@ -273,15 +277,27 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="you@example.com"
       />
-      <Input
-        label="Password"
-        type="password"
-        autoComplete={mode === "signup" ? "new-password" : "current-password"}
-        required
-        minLength={6}
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+      <div className="relative">
+        <Input
+          className="pr-20"
+          label="Password"
+          type={showPassword ? "text" : "password"}
+          autoComplete={mode === "signup" ? "new-password" : "current-password"}
+          required
+          minLength={6}
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <button
+          type="button"
+          className="absolute right-2 bottom-1 min-h-11 px-3 text-sm font-semibold text-arc-navy"
+          aria-label={showPassword ? "Hide password" : "Show password"}
+          aria-pressed={showPassword}
+          onClick={() => setShowPassword(!showPassword)}
+        >
+          {showPassword ? "Hide" : "Show"}
+        </button>
+      </div>
       {mode === "signup" && (
         <p className="-mt-3 text-xs text-sky-800">
           Use at least 6 characters. Ask a parent or teacher before signing up.
@@ -298,6 +314,7 @@ function AuthForm({ onDone }: { onDone: () => void }) {
         <p className="-mt-2 text-center text-sm text-sky-800">
           Still waiting for your confirmation email?{" "}
           <TextButton
+            tone="navy"
             type="button"
             disabled={submitting}
             onClick={async () => {
@@ -323,16 +340,13 @@ function AuthForm({ onDone }: { onDone: () => void }) {
           </TextButton>
         </p>
       )}
-      <div className="auth-divider">
-        <span>or</span>
-      </div>
-      <button
-        type="button"
-        className="text-sm font-semibold text-arc-navy underline underline-offset-4"
-        onClick={() => router.push("/modules")}
-      >
-        Keep learning without an account
-      </button>
+      <p className="text-xs text-sky-800">
+        Your email is used for your account. Read our{" "}
+        <a href="/legal" className="underline underline-offset-4">
+          site information
+        </a>
+        .
+      </p>
     </form>
   );
 }
@@ -385,7 +399,7 @@ function WhatWeStore() {
           </ul>
         </div>
         <div className="sm:border-l sm:border-mist-600 sm:pl-5">
-          <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-700">
+          <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
             We never ask for
           </span>
           <ul className="font-body text-[16px] text-arc-ink list-disc pl-5 mt-2.5 space-y-1.5">

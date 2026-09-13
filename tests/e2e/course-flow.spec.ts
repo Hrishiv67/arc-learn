@@ -43,7 +43,7 @@ async function completeQuiz(page: Page) {
   await page.setViewportSize({ width, height: 2600 });
 
   for (let i = 0; i < 9; i++) {
-    await page.getByRole("button", { name: /^A\s/ }).click();
+    await page.getByRole("radio").first().check();
     await page.getByRole("button", { name: "Check my answer" }).click();
     await page.getByRole("button", { name: "Next question" }).click();
   }
@@ -112,7 +112,7 @@ test("anonymous user can read Module 1 and complete the quiz", async ({
   // hardcoding which of the two it'll be.
   await page.goto("/modules");
   await expect(
-    page.getByText(/of 13 modules complete/).filter({ visible: true }),
+    page.getByText(/^\d+ of 13 modules complete$/).filter({ visible: true }),
   ).toBeVisible();
 });
 

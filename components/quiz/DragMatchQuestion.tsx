@@ -84,9 +84,11 @@ export function DragMatchQuestion({
   question,
   flagDraft,
   onAnswered,
+  readingHref,
 }: {
   question: DragMatchQuestionType;
   flagDraft: boolean;
+  readingHref?: string;
   onAnswered: (correct: boolean) => void;
 }) {
   const [placements, setPlacements] = useState<Record<string, string>>({});
@@ -165,7 +167,7 @@ export function DragMatchQuestion({
           </div>
         )}
       </DndContext>
-      <details className="border border-mist-500 rounded-lg p-4">
+      <details className="border border-mist-500 rounded-none p-4">
         <summary className="text-sm font-bold text-arc-navy">
           Prefer tapping? Choose answers from a list
         </summary>
@@ -175,7 +177,7 @@ export function DragMatchQuestion({
               {def.definition}
               <select
                 aria-label={def.definition}
-                className="block w-full border border-navy-300 rounded-lg p-3 mt-2 bg-white"
+                className="block w-full border border-navy-300 rounded-none p-3 mt-2 bg-white"
                 value={placements[def.id] ?? ""}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -207,12 +209,20 @@ export function DragMatchQuestion({
           checked ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
         )}
       >
-        <div className="overflow-hidden">
+        <div className="overflow-hidden" hidden={!checked}>
           <Callout
             tone={allCorrect ? "go" : "caution"}
             title={`${correctCount} of ${question.pairs.length} correct`}
           >
             {question.why}
+            {readingHref && (
+              <a
+                href={readingHref}
+                className="block mt-3 text-sm font-bold underline underline-offset-4"
+              >
+                Review this in the reading
+              </a>
+            )}
           </Callout>
         </div>
       </div>

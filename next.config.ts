@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import createMDX from "@next/mdx";
 
 const nextConfig: NextConfig = {
+  distDir: process.env.ARC_E2E === "1" ? ".next-e2e" : ".next",
   // .mdx files under content/ are imported as modules by lib/content/loadModule,
   // not routed directly, so pageExtensions stays untouched.
 
