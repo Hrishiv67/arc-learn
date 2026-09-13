@@ -46,7 +46,9 @@ export function LessonClient({ slug }: { slug: string }) {
             aria-label="Lesson actions"
             className="flex flex-wrap gap-4 text-sm"
           >
-            <TextButton href="/modules">All modules</TextButton>
+            <TextButton tone="navy" href="/modules">
+              All modules
+            </TextButton>
             <TextButton href={`/modules/${mod.slug}/quiz`}>
               Open quiz
             </TextButton>
@@ -58,10 +60,7 @@ export function LessonClient({ slug }: { slug: string }) {
             </button>
           </nav>
 
-          <div
-            ref={contentRef}
-            className="prose-lesson flex flex-col gap-4 max-w-[64ch]"
-          >
+          <div ref={contentRef} className="prose-lesson flex flex-col gap-4">
             {/* getModuleLesson resolves to a fixed, statically-imported MDX
                 component per slug (never a fresh function per call), so this
                 doesn't hit the "component created during render" concern
@@ -70,16 +69,28 @@ export function LessonClient({ slug }: { slug: string }) {
             <Lesson />
           </div>
 
-          <div className="flex gap-4 items-center flex-wrap pt-2">
-            <Button
-              href={`/modules/${mod.slug}/quiz`}
-              variant="primary"
-              onClick={() => markRead(mod.id)}
-            >
-              Next: Take the quiz
-            </Button>
-            <TextButton href="/modules">Back to the course</TextButton>
-          </div>
+          <section className="border-t border-navy-200 bg-mist-200 p-6 mt-6">
+            <p className="eyebrow">Reading complete / Knowledge check</p>
+            <h2 className="text-2xl leading-tight mt-2">
+              Put the lesson to work.
+            </h2>
+            <p className="text-base text-sky-800 mt-2 mb-5">
+              Check your understanding, get an explanation for every answer, and
+              retry whenever you need.
+            </p>
+            <div className="flex gap-4 items-center flex-wrap">
+              <Button
+                href={`/modules/${mod.slug}/quiz`}
+                variant="primary"
+                onClick={() => markRead(mod.id)}
+              >
+                Next: Take the quiz
+              </Button>
+              <TextButton tone="navy" href="/modules">
+                Back to the course
+              </TextButton>
+            </div>
+          </section>
         </div>
 
         <aside className="hidden md:block">

@@ -73,7 +73,7 @@ function TargetSlot({
         // No min-h here: under this project's 10px spacing base, a
         // min-h-N class is N*10px, far taller than the 32px foreignObject
         // this sits in — h-full alone fills it correctly.
-        "flex items-center justify-center h-full border-2 border-dashed transition-colors duration-150",
+        "flex items-center justify-center h-full border-2 border-dashed transition-colors duration-200",
         isOver
           ? "border-arc-sky bg-sky-100"
           : "border-navy-300 bg-arc-white/70",
@@ -94,9 +94,11 @@ export function DragLabelDiagram({
   question,
   flagDraft,
   onAnswered,
+  readingHref,
 }: {
   question: DragLabelQuestion;
   flagDraft: boolean;
+  readingHref?: string;
   onAnswered: (correct: boolean) => void;
 }) {
   const [placements, setPlacements] = useState<Record<string, string>>({});
@@ -207,7 +209,7 @@ export function DragLabelDiagram({
           </div>
         )}
       </DndContext>
-      <details className="border border-mist-500 rounded-lg p-4">
+      <details className="border border-mist-500 rounded-none p-4">
         <summary className="text-sm font-bold text-arc-navy">
           Prefer tapping? Choose answers from a list
         </summary>
@@ -216,7 +218,7 @@ export function DragLabelDiagram({
             <label key={target.id} className="text-sm">
               Diagram position {index + 1}
               <select
-                className="block w-full border border-navy-300 rounded-lg p-3 mt-2 bg-white"
+                className="block w-full border border-navy-300 rounded-none p-3 mt-2 bg-white"
                 value={placements[target.id] ?? ""}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -248,12 +250,20 @@ export function DragLabelDiagram({
           checked ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
         )}
       >
-        <div className="overflow-hidden">
+        <div className="overflow-hidden" hidden={!checked}>
           <Callout
             tone={allCorrect ? "go" : "caution"}
             title={`${correctCount} of ${question.targets.length} correct`}
           >
             {question.why}
+            {readingHref && (
+              <a
+                href={readingHref}
+                className="block mt-3 text-sm font-bold underline underline-offset-4"
+              >
+                Review this in the reading
+              </a>
+            )}
           </Callout>
         </div>
       </div>

@@ -44,7 +44,7 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
           href="/"
           className="font-heading font-bold text-[18px] text-white"
         >
-          ARC Learn
+          ARC / LEARN
         </Link>
         <Link
           href="/account"
@@ -59,7 +59,7 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
       <Container className="hidden md:flex items-center gap-[28px] h-[68px]">
         <Link href="/" className="flex flex-col leading-none">
           <span className="font-heading font-bold text-[22px] text-arc-navy">
-            ARC Learn
+            ARC / LEARN
           </span>
           <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.04em] text-sky-800 mt-1">
             Unofficial course
@@ -79,7 +79,7 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
                 className={clsx(
                   "flex items-center h-full font-heading font-semibold text-[13px] uppercase tracking-[0.04em] border-b-[3px] transition-colors duration-200 ease-arc hover:text-sky-700",
                   active
-                    ? "text-arc-navy border-arc-red"
+                    ? "text-arc-navy border-arc-navy"
                     : "text-arc-navy border-transparent",
                 )}
               >
@@ -92,7 +92,7 @@ export function SiteHeader({ links }: { links: NavLink[] }) {
           <span className="flex items-center gap-[10px]">
             <span className="w-[90px] h-[6px] bg-mist-600">
               <span
-                className="block h-full bg-go transition-[width] duration-500 ease-arc"
+                className="block h-full bg-go transition-[width] duration-300 ease-arc"
                 style={{ width: `${pct}%` }}
               />
             </span>

@@ -6,10 +6,11 @@ export const metadata: Metadata = { title: "Legal" };
 export default function LegalPage() {
   return (
     <Container className="py-12 flex flex-col gap-6">
-      <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[36px]">
+      <p className="eyebrow">ARC / LEARN · Site information</p>
+      <h1 className="font-heading font-bold text-arc-navy text-[34px] md:text-[48px] leading-tight">
         Legal
       </h1>
-      <div className="flex flex-col gap-4 font-body text-[17px] text-arc-ink max-w-[70ch]">
+      <div className="flex flex-col gap-6 font-body text-[17px] text-arc-ink max-w-[70ch]">
         <p>
           ARC Learn is educational content only. Model rocketry requires adult
           supervision at every stage — building, motor handling, and launch.

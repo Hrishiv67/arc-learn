@@ -83,7 +83,7 @@ export function LessonRail({
     if (!el) return;
     window.scrollTo({
       top: el.getBoundingClientRect().top + window.scrollY - 84,
-      behavior: "smooth",
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
     });
   }
 
@@ -101,7 +101,7 @@ export function LessonRail({
         className="relative w-[4px] shrink-0 self-stretch bg-mist-600"
       >
         <div
-          className="absolute bottom-0 left-0 w-full bg-go transition-[height] duration-700 ease-arc"
+          className="absolute bottom-0 left-0 w-full bg-go transition-[height] duration-300 ease-arc"
           style={{ height: `${coursePct}%` }}
         />
       </div>

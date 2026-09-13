@@ -43,7 +43,7 @@ export function TabBar({ items }: { items: TabItem[] }) {
             href={item.href}
             className={clsx(
               "flex-1 flex flex-col items-center justify-center gap-[4px] min-h-[44px] pt-[10px] px-[4px] pb-[12px] border-t-[3px]",
-              active ? "border-arc-red" : "border-transparent",
+              active ? "border-arc-navy" : "border-transparent",
             )}
             aria-current={active ? "page" : undefined}
           >

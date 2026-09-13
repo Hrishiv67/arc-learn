@@ -1,5 +1,10 @@
 "use client";
 
+import { quizReadingHref } from "@/lib/content/quizReading";
+import { MODULES } from "@/content/modules/registry";
+import { useProgress } from "@/lib/progress/local";
+import { isModuleComplete } from "@/lib/schemas/progress";
+import { RocketBuild } from "@/components/rocket/RocketBuild";
 import { useState } from "react";
 import type { Quiz } from "@/lib/schemas/quiz";
 import { Callout } from "@/components/ui/Callout";
@@ -29,6 +34,11 @@ export function QuizRunner({
   onComplete: (score: number, total: number) => void;
   onExit: () => void;
 }) {
+  const progress = useProgress();
+  const completeCount = MODULES.filter((m) =>
+    isModuleComplete(progress[m.id]),
+  ).length;
+  const lesson = MODULES.find((m) => m.id === quiz.moduleId);
   const [i, setI] = useState(0);
   const [marks, setMarks] = useState<boolean[]>([]);
 
@@ -70,7 +80,14 @@ export function QuizRunner({
         </p>
       )}
 
-      <div className="flex gap-1.5 items-center">
+      <div
+        className="flex gap-1.5 items-center"
+        role="progressbar"
+        aria-label="Quiz questions completed"
+        aria-valuemin={0}
+        aria-valuemax={total}
+        aria-valuenow={marks.length}
+      >
         {quiz.questions.map((_, k) => (
           <span
             key={k}
@@ -99,6 +116,12 @@ export function QuizRunner({
               : `${Math.round(quiz.passRate * 100)}% is the bar for this module. Review the explanations below and try again — no limit, no penalty.`}
           </Callout>
 
+          <RocketBuild completeCount={completeCount} total={MODULES.length} />
+          {lesson && (
+            <TextButton tone="navy" href={`/modules/${lesson.slug}/lesson`}>
+              Revisit the reading
+            </TextButton>
+          )}
           <div className="flex flex-col border-t border-mist-600">
             {quiz.questions.map((q, k) => (
               <div
@@ -120,6 +143,14 @@ export function QuizRunner({
                   <p className="font-body text-[13px] text-sky-800 mt-1">
                     {q.why}
                   </p>
+                  {lesson && (
+                    <a
+                      href={quizReadingHref(quiz.moduleId, lesson.slug, q.id)}
+                      className="inline-block mt-2 text-sm font-bold underline underline-offset-4"
+                    >
+                      Review this in the reading
+                    </a>
+                  )}
                 </div>
               </div>
             ))}
@@ -129,7 +160,9 @@ export function QuizRunner({
             <Button variant="primary" onClick={onExit}>
               Back to the course
             </Button>
-            <TextButton onClick={retry}>Try again</TextButton>
+            <TextButton tone="navy" onClick={retry}>
+              Try again
+            </TextButton>
             <TextButton tone="navy" href="/modules/results">
               See your results
             </TextButton>
@@ -160,6 +193,15 @@ export function QuizRunner({
       ) : (
         <QuestionSwitch
           key={quiz.questions[i].id}
+          readingHref={
+            lesson
+              ? quizReadingHref(
+                  quiz.moduleId,
+                  lesson.slug,
+                  quiz.questions[i].id,
+                )
+              : undefined
+          }
           question={quiz.questions[i]}
           flagDraft={flagDraft}
           onAnswered={handleAnswered}
@@ -170,10 +212,12 @@ export function QuizRunner({
 }
 
 function QuestionSwitch({
+  readingHref,
   question,
   flagDraft,
   onAnswered,
 }: {
+  readingHref?: string;
   question: Quiz["questions"][number];
   flagDraft: boolean;
   onAnswered: (correct: boolean) => void;
@@ -182,6 +226,7 @@ function QuestionSwitch({
     case "choice":
       return (
         <ChoiceQuestion
+          readingHref={readingHref}
           question={question}
           flagDraft={flagDraft}
           onAnswered={onAnswered}
@@ -190,6 +235,7 @@ function QuestionSwitch({
     case "drag-label":
       return (
         <DragLabelDiagram
+          readingHref={readingHref}
           question={question}
           flagDraft={flagDraft}
           onAnswered={onAnswered}
@@ -198,6 +244,7 @@ function QuestionSwitch({
     case "drag-match":
       return (
         <DragMatchQuestion
+          readingHref={readingHref}
           question={question}
           flagDraft={flagDraft}
           onAnswered={onAnswered}

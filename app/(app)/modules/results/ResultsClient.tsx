@@ -1,5 +1,6 @@
 "use client";
 
+import { RocketBuild } from "@/components/rocket/RocketBuild";
 import { MODULES } from "@/content/modules/registry";
 import { useProgress, getCoursePct } from "@/lib/progress/local";
 import { isModuleComplete } from "@/lib/schemas/progress";
@@ -65,8 +66,8 @@ export function ResultsClient() {
         </h1>
         <p className="font-body text-[17px] text-arc-ink mt-3 max-w-[58ch]">
           Take a module&rsquo;s quiz and this screen will fill in with your
-          score, your overall accuracy, and which subjects are worth a
-          second look.
+          score, your overall accuracy, and which subjects are worth a second
+          look.
         </p>
         <div className="mt-6">
           <Button href="/modules">Go to the course</Button>
@@ -108,13 +109,16 @@ export function ResultsClient() {
         </div>
 
         <div className="min-w-0 flex flex-col gap-8">
+          <RocketBuild completeCount={completedCount} total={MODULES.length} />
           {needsReview.length > 0 ? (
             <Callout tone="caution" title="Worth a second look">
               {needsReview.length === 1
                 ? `${needsReview[0].module.title} came in under ${Math.round(SOLID_BAR * 100)}%. A quick reread before it locks in would help.`
                 : `These came in under ${Math.round(SOLID_BAR * 100)}%: ${needsReview
                     .map((a) => a.module.title)
-                    .join(", ")}. A quick reread before they lock in would help.`}
+                    .join(
+                      ", ",
+                    )}. A quick reread before they lock in would help.`}
             </Callout>
           ) : (
             <Callout tone="go" title="Solid across the board">
