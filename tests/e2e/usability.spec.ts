@@ -91,10 +91,12 @@ test("rocket build shows honest progress before sections are earned", async ({
   await page.goto("/modules");
   await expect(
     page
-      .getByRole("heading", { name: "Build it as you learn." })
+      .getByRole("heading", { name: "Start small. Aim high." })
       .filter({ visible: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("Next section: Fin can and motor").filter({ visible: true }),
+    page
+      .getByRole("heading", { name: "Fin can and motor" })
+      .filter({ visible: true }),
   ).toBeVisible();
 });
