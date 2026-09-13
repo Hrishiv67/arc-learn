@@ -82,6 +82,13 @@ export function AccountClient({
             <Button href="/modules">Open the course</Button>
           </div>
         )}
+        {!user && (
+          <div className="mt-5 border-t border-mist-600 pt-5 text-center">
+            <TextButton tone="navy" href="/modules">
+              Continue without an account
+            </TextButton>
+          </div>
+        )}
       </div>
     </section>
   );
