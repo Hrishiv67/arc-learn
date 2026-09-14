@@ -4,11 +4,12 @@
  * Pure and total: every value the hero renders is derived here from a single
  * number in [0,1]. Nothing accumulates, so scrubbing backwards is exact.
  *
- * Telemetry follows the real flight model. Screen motion does not: a rocket 4 m
- * from the lens physically leaves frame in under three metres of altitude, which
- * would put it gone by 32% scroll. So the rocket’s on-screen travel runs on a
- * tuned acceleration curve while the numbers stay honest — the brief's
- * "believable progression", not a literal simulation.
+ * The flight model still sets the timing of ignition and liftoff. Screen motion
+ * does not follow it literally: a rocket 4 m from the lens physically leaves
+ * frame in under three metres of altitude, which would put it gone by 32%
+ * scroll, so on-screen travel runs on a tuned acceleration curve instead - and
+ * the flame holds until the rocket is out of shot, rather than burning out
+ * while it is still a few metres off the rail.
  */
 
 import { flightAt, type FlightState } from "./flightModel";
@@ -59,7 +60,7 @@ export type SceneState = {
    * carries the page from the launch into the paper theme the course is set in.
    */
   washout: number;
-  /** 0..1 instrumentation and nav clearing as the frame goes to paper */
+  /** 0..1 anything built to read on the dark plate clearing as it goes to paper */
   uiFade: number;
   /** 0..1 the course heading resolving in the lower third of the frame */
   handoff: number;
@@ -73,6 +74,8 @@ export type SceneState = {
   /** 0..1 */
   copyFade: number;
   navFade: number;
+  /** 0..1 the scroll hint, which leaves as soon as the rocket ignites */
+  hint: number;
 };
 
 const clamp01 = (v: number) => (v < 0 ? 0 : v > 1 ? 1 : v);
@@ -124,9 +127,10 @@ export function sequenceAt(pRaw: number): SceneState {
     span(p, 0.13, 0.185) * (1 - 0.55 * span(p, 0.3, 0.44)) * (1 - span(p, 0.44, 0.66));
 
   // Physical vibration from a nearby motor: ramps in at ignition, decays as the
-  // rocket climbs away. Sub-pixel to ~2px, never a game-style screen shake.
+  // rocket climbs away. A hard kick at ignition itself, then settling — never a
+  // game-style screen shake.
   const shake =
-    2.6 * smooth(span(p, 0.13, 0.2)) * (1 - 0.75 * span(p, 0.23, 0.42));
+    3.4 * smooth(span(p, 0.13, 0.165)) * (1 - 0.8 * span(p, 0.19, 0.42));
 
   // --- frame travelling up into thinner, darker air -----------------------
   // The launch used to end on an empty sky and then cut to a white page. It now
@@ -146,6 +150,7 @@ export function sequenceAt(pRaw: number): SceneState {
   const copyShift = -1.2 * span(p, 0, 0.21) - 16 * Math.pow(span(p, 0.3, 0.6), 1.8);
   const copyFade = 1 - span(p, 0.32, 0.46);
   const navFade = (1 - 0.75 * span(p, 0.13, 0.21)) * (1 - span(p, 0.44, 0.68));
+  const hint = 1 - span(p, 0.11, 0.19);
 
   return {
     p,
@@ -167,15 +172,6 @@ export function sequenceAt(pRaw: number): SceneState {
     copyShift,
     copyFade,
     navFade,
+    hint,
   };
-}
-
-/** The status word shown beside the rocket. */
-export function statusLabel(s: SceneState): string {
-  if (s.p < 0.07) return "READY";
-  if (s.p < 0.13) return "ARMED";
-  if (s.p < 0.23) return "IGNITION";
-  if (s.flight.t < 1.05) return "LIFTOFF";
-  if (s.p < 0.58) return "BURNOUT";
-  return "ASCENT NOMINAL";
 }

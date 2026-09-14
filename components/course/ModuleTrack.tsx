@@ -6,6 +6,7 @@ import { UNITS } from "@/content/modules/registry";
 import {
   SECTIONS,
   sectionIndexForModule,
+  moduleRangeForSection,
 } from "@/lib/rocket/sections";
 
 /**
@@ -15,10 +16,11 @@ import {
  * so it gets the same care — the real thirteen modules, in the real four units,
  * with what each one actually teaches.
  *
- * The exploded rocket on the left is deliberately secondary. It is there so a
+ * The blow-up pinned above the list is deliberately secondary. It is there so a
  * fourteen-year-old has a reason to come back for module four: every module
- * finishes a piece of it. Scrolling a module into view lights up the part it
- * builds, which is the only job that panel has.
+ * finishes a piece of it. The module being read lights the part it builds, the
+ * parts already built by the modules above it stay solid, and the rest wait as
+ * ghosts — so scrolling down the list visibly assembles the rocket left to right.
  */
 
 const ASSEMBLY: Record<number, string> = {
@@ -28,52 +30,78 @@ const ASSEMBLY: Record<number, string> = {
   4: "Qualify",
 };
 
+const pad2 = (n: number) => String(n).padStart(2, "0");
+
 export function ModuleTrack() {
-  const [active, setActive] = useState(() => sectionIndexForModule(1));
+  const [activeOrder, setActiveOrder] = useState(1);
   const rowRefs = useRef<Array<HTMLLIElement | null>>([]);
+  const stripRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const rows = rowRefs.current.filter(Boolean) as HTMLLIElement[];
+    const rows = rowRefs.current.filter((r): r is HTMLLIElement => Boolean(r));
     if (!rows.length) return;
 
-    // Light the part belonging to whichever module is nearest the middle of the
-    // screen. The observer is only the trigger — the decision is made by
-    // measuring every row, because an entry list contains just the rows whose
-    // visibility *changed*, and picking from those alone lights up a row that
-    // has only left the screen.
-    const pick = () => {
-      const mid = window.innerHeight / 2;
-      let best: { order: number; dist: number } | null = null;
+    // Scrollspy, evaluated synchronously on every scroll event.
+    //
+    // The rocket strip is pinned to the top of the screen, so the module a
+    // student is actually reading sits just underneath it - not at the middle
+    // of the viewport. The active module is the last one whose top has crossed
+    // a reading line a third of the way down the space below the strip.
+    //
+    // Two earlier versions lagged a module behind the reader. An
+    // IntersectionObserver only re-evaluated when a row crossed a visibility
+    // threshold, and a row gliding through mid-screen crosses nothing. A
+    // requestAnimationFrame-scheduled update was no better: a throttled or
+    // backgrounded tab holds that frame back, and every scroll event that
+    // arrives while it waits is dropped. Measuring thirteen rows per scroll
+    // event costs nothing, so it is simply done every time.
+    const update = () => {
+      const stripBottom = stripRef.current?.getBoundingClientRect().bottom ?? 0;
+      const line = stripBottom + (window.innerHeight - stripBottom) * 0.33;
+      // At the very end of the page the last modules can run out of scroll
+      // before they reach the reading line, so any row on screen counts there.
+      const atBottom =
+        window.scrollY + window.innerHeight >=
+        document.documentElement.scrollHeight - 2;
+      let order = Number(rows[0].dataset.order);
       for (const row of rows) {
-        const r = row.getBoundingClientRect();
-        const dist = Math.abs(r.top + r.height / 2 - mid);
-        const order = Number(row.dataset.order);
-        if (!best || dist < best.dist) best = { order, dist };
+        const top = row.getBoundingClientRect().top;
+        if (top <= line || (atBottom && top < window.innerHeight)) {
+          order = Number(row.dataset.order);
+        } else {
+          break;
+        }
       }
-      if (best) setActive(sectionIndexForModule(best.order));
+      setActiveOrder((prev) => (prev === order ? prev : order));
     };
 
-    const io = new IntersectionObserver(pick, {
-      rootMargin: "0px",
-      threshold: [0, 0.5, 1],
-    });
-    for (const row of rows) io.observe(row);
-    return () => io.disconnect();
+    update();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
   }, []);
+
+  const activeIndex = sectionIndexForModule(activeOrder);
+  const active = SECTIONS[activeIndex];
+  const range = moduleRangeForSection(activeIndex);
 
   return (
     <section className="track" id="course" aria-label="The course">
       <div className="track__body">
-        {/* A blow-up, read left to right like an engineering drawing: nose at
-            the left, fin can at the right, gaps where the joints are. Sticky,
-            so the part a module builds lights up while that module is read. */}
-        <aside className="track__rocket" aria-hidden="true">
+        {/* Drawn tail to nose, left to right, in the order the parts are
+            earned — so the highlight only ever moves one way down the list. */}
+        <aside className="track__rocket" ref={stripRef} aria-hidden="true">
           <div className="track__exploded">
             {SECTIONS.map((s, i) => (
               <span
                 key={s.id}
                 className="track__part"
-                data-active={i === active ? "true" : "false"}
+                data-state={
+                  i < activeIndex ? "built" : i === activeIndex ? "active" : "ghost"
+                }
                 style={{ width: `calc(var(--rocket-dia) * ${s.widthD})` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -82,9 +110,14 @@ export function ModuleTrack() {
             ))}
           </div>
           <div className="track__caption">
-            <p className="track__rocketLabel">Your rocket</p>
-            <p className="track__partName">{SECTIONS[active].label}</p>
-            <p className="track__partEarns">{SECTIONS[active].earns}</p>
+            <p className="track__rocketLabel">
+              Your rocket · Module {pad2(activeOrder)}
+            </p>
+            <p className="track__partName">{active.label}</p>
+            <p className="track__partRange">
+              Modules {pad2(range.from)}–{pad2(range.to)} build this part
+            </p>
+            <p className="track__partEarns">{active.earns}</p>
           </div>
         </aside>
 
@@ -92,9 +125,7 @@ export function ModuleTrack() {
           {UNITS.map(({ unit, title, modules }) => (
             <section key={unit} className="track__unit">
               <header className="track__unitHead">
-                <span className="track__unitIndex">
-                  Unit {String(unit).padStart(2, "0")}
-                </span>
+                <span className="track__unitIndex">Unit {pad2(unit)}</span>
                 <h3 className="track__unitTitle">{title}</h3>
                 <span className="track__unitGoal">{ASSEMBLY[unit]}</span>
               </header>
@@ -108,6 +139,7 @@ export function ModuleTrack() {
                       key={m.id}
                       className="track__row"
                       data-order={m.order}
+                      data-active={m.order === activeOrder ? "true" : "false"}
                       ref={(el) => {
                         rowRefs.current[m.order - 1] = el;
                       }}
@@ -117,9 +149,7 @@ export function ModuleTrack() {
                         href={`/modules/${m.slug}`}
                         aria-label={`Module ${m.order}: ${m.title}`}
                       >
-                        <span className="track__num">
-                          {String(m.order).padStart(2, "0")}
-                        </span>
+                        <span className="track__num">{pad2(m.order)}</span>
                         <span className="track__main">
                           <span className="track__moduleTitle">{m.title}</span>
                           <span className="track__summary">{m.summary}</span>

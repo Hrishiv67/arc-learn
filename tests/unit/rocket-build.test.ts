@@ -2,6 +2,9 @@ import { describe, it, expect } from "vitest";
 import { rocketBuild } from "@/lib/rocket/build";
 import { MODULES } from "@/content/modules/registry";
 const passed = { read: true, quiz: { score: 8, total: 10 } };
+// by id: part order is a layout decision, not something tests should pin
+const part = (b: ReturnType<typeof rocketBuild>, id: string) =>
+  b.parts.find((p) => p.id === id)!;
 describe("course-earned rocket", () => {
   it("starts with fins and a playable lesson", () => {
     const b = rocketBuild({});
@@ -11,14 +14,14 @@ describe("course-earned rocket", () => {
   });
   it("shows the very first passed module without granting a whole part", () => {
     const b = rocketBuild({ [MODULES[0].id]: passed });
-    expect(b.parts[4].fraction).toBeCloseTo(1 / 3);
+    expect(part(b, "fincan").fraction).toBeCloseTo(1 / 3);
     expect(b.done).toBe(1);
     expect(b.complete).toBe(false);
   });
   it("earns the actual part for an out-of-order completion", () => {
     const b = rocketBuild({ [MODULES[12].id]: passed });
-    expect(b.parts[0].fraction).toBe(1);
-    expect(b.parts[4].fraction).toBe(0);
+    expect(part(b, "nose").fraction).toBe(1);
+    expect(part(b, "fincan").fraction).toBe(0);
     expect(b.nextPart?.id).toBe("fincan");
   });
   it("moves from fins to body and completes only with all modules", () => {

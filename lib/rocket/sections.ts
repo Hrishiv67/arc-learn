@@ -2,18 +2,23 @@
  * The rocket, and which module earns which part of it.
  *
  * The course is the point; the rocket is the reason to come back for the next
- * module. Both the homepage module track and the build card on the course index
- * read this file, so they can never disagree about what a student has earned.
+ * module. The homepage module track, the course-index build card and
+ * lib/rocket/build.ts all read this file, so they can never disagree about what
+ * a student has earned.
  *
- * Parts are listed nose to tail, which is how they are drawn. They are *earned*
- * in course order, which starts at the fin can — the first thing you physically
- * build — and finishes with the nose cone going on at qualification.
+ * Parts are listed in the order they are earned, and that is also the order
+ * they are drawn: tail on the left, nose on the right. One ordering for both is
+ * what keeps the rocket in step with the module list — module 1 lights the
+ * leftmost part, module 13 the rightmost, and scrolling down the list only ever
+ * moves the highlight one way. It used to be drawn nose-first but earned
+ * tail-first, so the highlight jumped back and forth across the rocket.
+ *
+ * The physical order is a real layout for an egg-lofting competition rocket:
+ * fin can and motor, body tube, parachute bay, payload bay, nose cone.
  */
 
 export type RocketSection = {
   id: string;
-  /** share of the assembled rocket's length, nose to tail */
-  height: number;
   /**
    * The part's width measured in body diameters. Not width/height — the fin
    * can's image is taller than a diameter because the fins stick out past the
@@ -25,82 +30,77 @@ export type RocketSection = {
   short: string;
   /** what finishing this part means you can now do */
   earns: string;
+  /** the last module that builds this part */
+  throughModule: number;
 };
 
+/**
+ * Mapped by unit, not by dividing thirteen modules evenly, because an even
+ * split cuts across unit boundaries and produces nonsense — a module on
+ * stability claiming to build the parachute bay.
+ *
+ * Unit 1 (modules 1–3) — safety and the mission: the motor mount and fins, the
+ * first thing you physically build. Unit 2 (4–7) — how rockets work: the body
+ * tube. Unit 3 (8–10) — design and build: recovery. Unit 4 (11–13) — the eggs go
+ * in, and the nose cone goes on when you qualify.
+ */
 export const SECTIONS: RocketSection[] = [
   {
-    id: "nose",
-    height: 0.2244,
-    widthD: 1.7467,
-    label: "Nose cone",
-    short: "Nose cone",
-    earns: "Trim drag and hit the altitude window",
-  },
-  {
-    id: "payload",
-    height: 0.1731,
-    widthD: 1.3467,
-    label: "Payload bay",
-    short: "Payload bay",
-    earns: "Carry two eggs and get them back intact",
-  },
-  {
-    id: "body",
-    height: 0.2179,
-    widthD: 1.7,
-    label: "Body tube",
-    short: "Body tube",
-    earns: "Lay out an airframe that holds together",
-  },
-  {
-    id: "recovery",
-    height: 0.1731,
-    widthD: 1.3467,
-    label: "Recovery bay",
-    short: "Recovery bay",
-    earns: "Size a parachute and pack it properly",
-  },
-  {
     id: "fincan",
-    height: 0.2115,
     widthD: 1.6533,
     label: "Fin can and motor",
     short: "Fin can",
     earns: "Fly straight on the right motor",
+    throughModule: 3,
+  },
+  {
+    id: "body",
+    widthD: 1.7,
+    label: "Body tube",
+    short: "Body tube",
+    earns: "Lay out an airframe that holds together",
+    throughModule: 7,
+  },
+  {
+    id: "recovery",
+    widthD: 1.3467,
+    label: "Recovery bay",
+    short: "Recovery bay",
+    earns: "Size a parachute and pack it properly",
+    throughModule: 10,
+  },
+  {
+    id: "payload",
+    widthD: 1.3467,
+    label: "Payload bay",
+    short: "Payload bay",
+    earns: "Carry two eggs and get them back intact",
+    throughModule: 12,
+  },
+  {
+    id: "nose",
+    widthD: 1.7467,
+    label: "Nose cone",
+    short: "Nose cone",
+    earns: "Trim drag and hit the altitude window",
+    throughModule: 13,
   },
 ];
 
-/**
- * Which part each unit of the course builds, and the module that finishes it.
- *
- * Mapped by unit rather than by counting modules evenly, because an even split
- * cuts across unit boundaries and produces nonsense — a module on stability
- * claiming to build the parachute bay. Following the syllabus instead means the
- * part a student earns is the part they just learned about.
- *
- * Unit 1 (through module 3) — safety and the mission: the motor mount and fins,
- * the first thing you physically build. Unit 2 (through 7) — how rockets work:
- * the airframe. Unit 3 (through 10) — design and build: recovery. Unit 4
- * (through 12, then 13) — the egg goes in, and the nose cone goes on when you
- * qualify.
- */
-export const BUILD_STEPS: Array<{ section: number; throughModule: number }> = [
-  { section: 4, throughModule: 3 }, // fin can and motor
-  { section: 2, throughModule: 7 }, // body tube
-  { section: 3, throughModule: 10 }, // recovery bay
-  { section: 1, throughModule: 12 }, // payload bay
-  { section: 0, throughModule: 13 }, // nose cone
-];
-
-/** Indices into SECTIONS, in the order a student earns them. */
-export const BUILD_ORDER = BUILD_STEPS.map((s) => s.section);
+/** Indices into SECTIONS, in the order a student earns them — which is SECTIONS order. */
+export const BUILD_ORDER = SECTIONS.map((_, i) => i);
 
 /** Which part a module contributes to. */
 export function sectionIndexForModule(order: number): number {
-  for (const step of BUILD_STEPS) {
-    if (order <= step.throughModule) return step.section;
-  }
-  return BUILD_STEPS[BUILD_STEPS.length - 1].section;
+  const i = SECTIONS.findIndex((s) => order <= s.throughModule);
+  return i === -1 ? SECTIONS.length - 1 : i;
+}
+
+/** The first and last module that build a part, e.g. { from: 4, to: 7 }. */
+export function moduleRangeForSection(index: number): { from: number; to: number } {
+  const to = SECTIONS[index].throughModule;
+  const from = index === 0 ? 1 : SECTIONS[index - 1].throughModule + 1;
+  return { from, to };
 }
 
 /**
@@ -110,7 +110,7 @@ export function sectionIndexForModule(order: number): number {
  */
 export function sectionsEarned(completeCount: number, total: number): number {
   if (total <= 0) return 0;
-  return BUILD_STEPS.filter((s) => completeCount >= s.throughModule).length;
+  return SECTIONS.filter((s) => completeCount >= s.throughModule).length;
 }
 
 /** The set of section indices a student has finished. */
@@ -127,6 +127,6 @@ export function nextSection(
   total: number,
 ): RocketSection | null {
   const earned = sectionsEarned(completeCount, total);
-  if (earned >= BUILD_ORDER.length) return null;
-  return SECTIONS[BUILD_ORDER[earned]];
+  if (earned >= SECTIONS.length) return null;
+  return SECTIONS[earned];
 }

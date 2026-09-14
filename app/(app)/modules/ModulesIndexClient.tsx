@@ -108,7 +108,7 @@ export function ModulesIndexClient() {
                           clickable && "group hover:bg-mist-300",
                         )}
                       >
-                        <span className="font-mono text-sm text-sky-800">
+                        <span className="font-body font-extrabold text-sm text-sky-800">
                           {String(m.order).padStart(2, "0")}
                         </span>
                         <div className="min-w-0">
@@ -130,7 +130,7 @@ export function ModulesIndexClient() {
                               ? `${m.estimatedMinutes} min · read, then quiz`
                               : `${m.estimatedMinutes} min`}
                           </span>
-                          <span className="block font-mono text-[11px] text-sky-800 mt-1">
+                          <span className="block font-body font-extrabold uppercase tracking-[0.06em] text-[11px] text-sky-800 mt-1">
                             Build:{" "}
                             {SECTIONS[sectionIndexForModule(m.order)].short}
                           </span>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 
 export const metadata: Metadata = { title: "Legal" };
@@ -42,6 +43,13 @@ export default function LegalPage() {
           No ARC logo, wordmark, or official mark appears anywhere on this site.
           Sponsor and partner marks are third-party property and are out of
           scope for this project.
+        </p>
+        <p>
+          Using ARC Learn, and creating an account, is covered by the{" "}
+          <Link href="/terms" className="underline hover:text-sky-700">
+            Terms of Use
+          </Link>
+          .
         </p>
       </div>
     </Container>

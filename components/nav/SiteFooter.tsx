@@ -23,6 +23,10 @@ export function SiteFooter() {
           </a>
           . ARC Learn is unofficial and not affiliated with or endorsed by AIA
           or NAR.{" "}
+          <Link href="/terms" className="underline hover:text-sky-700">
+            Terms of Use
+          </Link>
+          {" · "}
           <Link href="/legal" className="underline hover:text-sky-700">
             Legal
           </Link>

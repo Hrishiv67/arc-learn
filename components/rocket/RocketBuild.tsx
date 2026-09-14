@@ -67,7 +67,8 @@ export function RocketBuild() {
                 alt=""
                 draggable={false}
                 style={{
-                  clipPath: "inset(0 0 0 " + (1 - p.fraction) * 100 + "%)",
+                  // parts point nose-right, so the earned fill grows from the tail
+                  clipPath: "inset(0 " + (1 - p.fraction) * 100 + "% 0 0)",
                 }}
               />
             </span>

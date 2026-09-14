@@ -131,10 +131,10 @@
 
 .hero__handoffEyebrow {
   margin: 0 0 1.6vh;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
 }
@@ -144,8 +144,8 @@
   font-family: var(--font-heading);
   font-size: clamp(1.9rem, 4.4vw, 4rem);
   font-weight: 700;
-  line-height: 1.02;
-  letter-spacing: -0.025em;
+  line-height: 1.12;
+  letter-spacing: normal;
   color: var(--color-arc-navy);
 }
 
@@ -193,10 +193,10 @@
 }
 
 .hero__links a {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 400;
+  letter-spacing: normal;
   color: var(--color-shell-dim);
   transition: color 0.28s var(--ease-arc);
 }
@@ -206,6 +206,7 @@
 }
 
 .hero__start {
+  font-weight: 800;
   color: var(--color-shell-ink) !important;
   border-bottom: 1px solid rgba(242, 244, 245, 0.35);
   padding-bottom: 3px;
@@ -223,10 +224,10 @@
 
 .hero__eyebrow {
   margin: 0 0 2.6vh;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: rgba(242, 244, 245, 0.66);
   text-shadow: 0 0 16px rgba(4, 14, 20, 0.85);
@@ -234,10 +235,10 @@
 
 .hero__title {
   margin: 0;
-  font-weight: 800;
+  font-weight: 700;
   font-size: clamp(3.6rem, 12.4vw, 15rem);
-  line-height: 0.82;
-  letter-spacing: -0.022em;
+  line-height: 0.9;
+  letter-spacing: normal;
   text-transform: uppercase;
   color: var(--color-shell-ink);
 }
@@ -252,11 +253,12 @@
 }
 
 .hero__lede {
+  font-weight: 300;
   margin: 0;
   max-width: 34ch;
   font-size: clamp(0.95rem, 1.15vw, 1.15rem);
   line-height: 1.5;
-  color: rgba(242, 244, 245, 0.76);
+  color: rgba(242, 244, 245, 0.9);
 }
 
 /* aerospace interface, not a marketing pill: a rule, and nothing else */
@@ -265,10 +267,10 @@
   margin-top: 3.4vh;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(242, 244, 245, 0.45);
-  font-family: var(--font-heading);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.14em;
+  font-family: var(--font-label);
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   color: var(--color-shell-ink);
   transition: border-color 0.3s var(--ease-arc);
 }
@@ -287,76 +289,9 @@
   transform: translateX(5px);
 }
 
-/* --------------------------------------------------------------- telemetry */
-.hero__telemetry {
-  position: absolute;
-  left: calc(var(--pad-x, 66%) + 76px);
-  top: 41vh;
-  z-index: 3;
-  font-family: var(--font-mono);
-  text-shadow:
-    0 0 18px rgba(4, 14, 20, 0.95),
-    0 0 6px rgba(4, 14, 20, 0.8),
-    0 1px 2px rgba(4, 14, 20, 0.9);
-}
-
-.hero__leader {
-  display: flex;
-  align-items: center;
-  margin-bottom: 2.4vh;
-  margin-left: -46px;
-}
-
-.hero__leaderLine {
-  width: 38px;
-  height: 1px;
-  background: rgba(242, 244, 245, 0.34);
-}
-
-.hero__leaderText {
-  margin-left: 10px;
-  font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: var(--micro-track);
-  color: rgba(242, 244, 245, 0.55);
-}
-
-.hero__readout {
-  margin: 0;
-  display: grid;
-  gap: 1.15vh;
-}
-
-.hero__readout > div {
-  display: grid;
-  grid-template-columns: 120px auto;
-  column-gap: 14px;
-  align-items: baseline;
-}
-
-.hero__readout dt {
-  font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: var(--micro-track);
-  color: rgba(242, 244, 245, 0.5);
-  white-space: nowrap;
-}
-
-.hero__readout dd {
-  margin: 0;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  font-variant-numeric: tabular-nums;
-  color: rgba(242, 244, 245, 0.92);
-}
-
-/* the one use of ARC red in the whole hero */
-.hero__telemetry[data-armed="true"] .hero__status {
-  color: #e2565b;
-}
-
-/* --------------------------------------------------------------- indicator */
+/* ------------------------------------------------------------- scroll hint */
+/* One instruction and a hairline that fills during the hold. It leaves at
+   ignition: once the rocket is moving, nobody needs telling to scroll. */
 .hero__indicator {
   position: absolute;
   left: 6.5vw;
@@ -364,30 +299,27 @@
   z-index: 3;
   display: flex;
   align-items: center;
-  gap: 16px;
-  font-family: var(--font-mono);
-  font-size: var(--micro-size);
-  font-weight: 600;
+  gap: 14px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
-  color: rgba(242, 244, 245, 0.55);
+  text-transform: uppercase;
+  color: rgba(242, 244, 245, 0.86);
   text-shadow: 0 0 16px rgba(4, 14, 20, 0.9);
-}
-
-.hero__indicatorIndex {
-  color: rgba(242, 244, 245, 0.72);
 }
 
 .hero__indicatorTrack {
   position: relative;
-  width: 118px;
+  width: 96px;
   height: 1px;
-  background: rgba(242, 244, 245, 0.2);
+  background: rgba(242, 244, 245, 0.25);
 }
 
 .hero__indicatorBar {
   position: absolute;
   inset: 0;
-  background: rgba(242, 244, 245, 0.8);
+  background: rgba(242, 244, 245, 0.9);
   transform: scaleX(0);
   transform-origin: 0 50%;
 }
@@ -419,29 +351,6 @@
   .hero__lede {
     font-size: 0.95rem;
     max-width: 26ch;
-  }
-
-  /* instrumentation moves to the bottom rail rather than shrinking in place */
-  .hero__telemetry {
-    left: 6vw;
-    top: 11vh;
-  }
-
-  .hero__leader {
-    display: none;
-  }
-
-  .hero__readout {
-    grid-template-columns: repeat(2, auto);
-    gap: 0.5vh 2rem;
-  }
-
-  .hero__readout > div {
-    grid-template-columns: 54px auto;
-  }
-
-  .hero__readout > div:nth-child(n + 4) {
-    display: none;
   }
 
   .hero__indicator {
@@ -503,10 +412,10 @@
 
 .gate__eyebrow {
   margin: 0 0 2vh;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
 }
@@ -516,11 +425,12 @@
   font-family: var(--font-heading);
   font-size: clamp(1.8rem, 3.2vw, 3rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: normal;
   color: var(--color-arc-navy);
 }
 
 .gate__lede {
+  font-weight: 300;
   margin: 2.2vh 0 0;
   max-width: 46ch;
   font-size: 1rem;
@@ -544,10 +454,10 @@
   padding: 17px 26px;
   background: var(--color-arc-red);
   color: var(--color-arc-white);
-  font-family: var(--font-heading);
+  font-family: var(--font-label);
   font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.09em;
+  font-weight: 900;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   transition: background-color 0.24s var(--ease-arc);
 }
@@ -581,9 +491,9 @@
 }
 
 .gate__signin {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
@@ -621,10 +531,10 @@
 
 .track__eyebrow {
   margin: 0 0 1.8vh;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.22em;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
 }
@@ -634,8 +544,8 @@
   font-family: var(--font-heading);
   font-size: clamp(2rem, 4.2vw, 4.1rem);
   font-weight: 700;
-  line-height: 1.0;
-  letter-spacing: -0.025em;
+  line-height: 1.1;
+  letter-spacing: normal;
   color: var(--color-arc-navy);
 }
 
@@ -684,17 +594,36 @@
   align-items: center;
   justify-content: center;
   transition:
-    opacity 0.4s var(--ease-arc),
-    filter 0.4s var(--ease-arc);
-  /* on paper an inactive part has to go grey and slightly darker — lightening
-     it, as you would on a dark ground, makes it vanish into the page */
-  opacity: 0.5;
-  filter: grayscale(1) brightness(0.94);
+    opacity 0.35s var(--ease-arc),
+    filter 0.35s var(--ease-arc);
 }
 
-.track__part[data-active="true"] {
+/* built by the modules above the one being read */
+.track__part[data-state="built"] {
   opacity: 1;
   filter: none;
+}
+
+/* the part the module being read is building */
+.track__part[data-state="active"] {
+  opacity: 1;
+  filter: none;
+}
+
+.track__part[data-state="active"]::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -14px;
+  height: 2px;
+  background: var(--color-arc-navy);
+}
+
+/* still to come: a ghost, so the whole rocket is legible from module one */
+.track__part[data-state="ghost"] {
+  opacity: 0.32;
+  filter: grayscale(1);
 }
 
 .track__part img {
@@ -710,9 +639,9 @@
 
 .track__rocketLabel {
   margin: 0;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
@@ -724,6 +653,16 @@
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--color-arc-navy);
+}
+
+.track__partRange {
+  margin: 3px 0 0;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
+  text-transform: uppercase;
+  color: var(--color-sky-700);
 }
 
 .track__partEarns {
@@ -747,9 +686,9 @@
 }
 
 .track__unitIndex {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
@@ -761,15 +700,15 @@
   font-family: var(--font-heading);
   font-size: 1.35rem;
   font-weight: 700;
-  letter-spacing: -0.01em;
+  letter-spacing: normal;
   color: var(--color-arc-navy);
   flex: 1;
 }
 
 .track__unitGoal {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-700);
@@ -795,11 +734,29 @@
   background: var(--color-mist-300);
 }
 
+.track__row {
+  position: relative;
+}
+
+.track__row[data-active="true"]::before {
+  content: "";
+  position: absolute;
+  left: -14px;
+  top: 18px;
+  bottom: 18px;
+  width: 3px;
+  background: var(--color-arc-navy);
+}
+
+.track__row[data-active="true"] .track__num {
+  color: var(--color-arc-navy);
+}
+
 .track__num {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
   color: var(--color-navy-400);
 }
 
@@ -822,10 +779,10 @@
 
 .track__meta {
   display: block;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
-  letter-spacing: 0.12em;
+  font-weight: var(--micro-weight);
+  letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-navy-400);
 }
@@ -841,9 +798,9 @@
 }
 
 .track__status {
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   text-align: right;
@@ -892,4 +849,26 @@
     flex-wrap: wrap;
     gap: 6px 14px;
   }
+}
+
+/* The homepage runs outside the app chrome, so it carries its own safety and
+   non-affiliation line - the same one every other page has in its footer. */
+.gate__legal {
+  max-width: 1000px;
+  margin: 8vh 0 0;
+  padding-top: 3vh;
+  border-top: 1px solid var(--color-mist-500);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--color-read-dim);
+}
+
+.gate__legal a {
+  color: var(--color-arc-navy);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.gate__legal a:hover {
+  color: var(--color-sky-700);
 }

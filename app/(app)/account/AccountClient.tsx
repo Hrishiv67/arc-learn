@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -276,6 +277,15 @@ function AuthForm({
       {mode === "signup" && (
         <p className="-mt-3 text-xs text-sky-800">
           Use at least 6 characters. Ask a parent or teacher before signing up.
+        </p>
+      )}
+      {mode === "signup" && (
+        <p className="-mt-2 text-xs text-sky-800">
+          By creating an account you agree to the{" "}
+          <Link href="/terms" className="underline text-arc-navy">
+            Terms of Use
+          </Link>
+          .
         </p>
       )}
       <Button type="submit" variant="primary" fullWidth disabled={submitting}>

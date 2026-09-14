@@ -143,12 +143,10 @@ def ogive(x):
     return np.clip(x, 0, 1) ** 0.62
 
 
+# Tail to nose — the order the course earns them in, and the order they are
+# laid out left to right on the page.
 PARTS = [
-    ("nose", 1.75, lambda: cylinder(1.75, ogive, bands=((0.88, 1.0, RED),), shininess=26)),
-    ("payload", 1.35, lambda: cylinder(
-        1.35, lambda x: np.ones_like(x),
-        bands=((0.0, 0.07, GRAPHITE), (0.07, 0.93, NAVY), (0.93, 1.0, GRAPHITE)),
-    )),
+    ("fincan", 1.65, lambda: fin_can(1.65)),
     ("body", 1.7, lambda: cylinder(
         1.7, lambda x: np.ones_like(x), bands=((0.44, 0.5, RED),),
     )),
@@ -156,7 +154,11 @@ PARTS = [
         1.35, lambda x: np.ones_like(x),
         bands=((0.0, 0.06, SKY), (0.88, 1.0, GRAPHITE)),
     )),
-    ("fincan", 1.65, lambda: fin_can(1.65)),
+    ("payload", 1.35, lambda: cylinder(
+        1.35, lambda x: np.ones_like(x),
+        bands=((0.0, 0.07, GRAPHITE), (0.07, 0.93, NAVY), (0.93, 1.0, GRAPHITE)),
+    )),
+    ("nose", 1.75, lambda: cylinder(1.75, ogive, bands=((0.88, 1.0, RED),), shininess=26)),
 ]
 
 
@@ -167,6 +169,9 @@ def main():
         img = render()
         w, h = img.size
         img = img.resize((w // SS, h // SS), Image.LANCZOS)
+        # Parts are modelled nose-left; mirrored, the assembled rocket points
+        # right, so reading left to right runs tail to nose in build order.
+        img = img.transpose(Image.FLIP_LEFT_RIGHT)
         img.save(OUT / f"cad-{name}.png")
         manifest.append(
             {

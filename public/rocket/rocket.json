@@ -1,21 +1,12 @@
 [
   {
-    "id": "nose",
-    "lengthUnits": 1.75,
-    "share": 0.2244,
-    "width": 262,
-    "height": 150,
-    "widthDiameters": 1.7467,
-    "heightDiameters": 1.0
-  },
-  {
-    "id": "payload",
-    "lengthUnits": 1.35,
-    "share": 0.1731,
-    "width": 202,
-    "height": 150,
-    "widthDiameters": 1.3467,
-    "heightDiameters": 1.0
+    "id": "fincan",
+    "lengthUnits": 1.65,
+    "share": 0.2115,
+    "width": 248,
+    "height": 228,
+    "widthDiameters": 1.6533,
+    "heightDiameters": 1.52
   },
   {
     "id": "body",
@@ -36,12 +27,21 @@
     "heightDiameters": 1.0
   },
   {
-    "id": "fincan",
-    "lengthUnits": 1.65,
-    "share": 0.2115,
-    "width": 248,
-    "height": 228,
-    "widthDiameters": 1.6533,
-    "heightDiameters": 1.52
+    "id": "payload",
+    "lengthUnits": 1.35,
+    "share": 0.1731,
+    "width": 202,
+    "height": 150,
+    "widthDiameters": 1.3467,
+    "heightDiameters": 1.0
+  },
+  {
+    "id": "nose",
+    "lengthUnits": 1.75,
+    "share": 0.2244,
+    "width": 262,
+    "height": 150,
+    "widthDiameters": 1.7467,
+    "heightDiameters": 1.0
   }
 ]

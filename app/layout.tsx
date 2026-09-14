@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Jost, Nunito_Sans, IBM_Plex_Mono } from "next/font/google";
+import { Jost, Nunito_Sans } from "next/font/google";
 import "./globals.css";
 // Imported here rather than @import-ed from globals.css so the dev server
 // watches it directly and hot-reloads edits.
@@ -12,7 +12,11 @@ import { AccountSync } from "@/components/account/AccountSync";
  * Jost is an open Futura revival. Nunito Sans is the closest open face to Museo
  * Sans — same geometric-humanist build and low stroke contrast — and replaces
  * Hanken Grotesk, which ran colder and narrower than the real thing.
- * Plex Mono is instrumentation only; the brand has no mono.
+ *
+ * Settings follow rocketrychallenge.org as measured, not just its faces:
+ * headings Futura PT Bold at normal tracking; body Museo Sans Light (300);
+ * buttons Museo Sans Black (900), uppercase. No monospace anywhere on their
+ * site, so none here.
  */
 const jost = Jost({
   subsets: ["latin"],
@@ -23,17 +27,11 @@ const jost = Jost({
 
 const nunitoSans = Nunito_Sans({
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  weight: ["300", "400", "600", "700", "800", "900"],
   variable: "--font-museo",
   display: "swap",
 });
 
-const plexMono = IBM_Plex_Mono({
-  subsets: ["latin"],
-  weight: ["500", "600"],
-  variable: "--font-plex-mono",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -63,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`h-full ${jost.variable} ${nunitoSans.variable} ${plexMono.variable}`}
+      className={`h-full ${jost.variable} ${nunitoSans.variable}`}
     >
       <body className="min-h-full flex flex-col">
         <PwaRegister />

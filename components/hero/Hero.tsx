@@ -1,13 +1,11 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { sequenceAt, statusLabel } from "@/lib/hero/launchSequence";
-import { clock } from "@/lib/hero/flightModel";
+import { sequenceAt } from "@/lib/hero/launchSequence";
 import { useScrollProgress } from "@/lib/hero/useScrollProgress";
 import { createSmokeRenderer, type SmokeRenderer } from "@/lib/hero/smokeRenderer";
 import { HeroNav } from "./HeroNav";
 import { HeroCopy } from "./HeroCopy";
-import { Telemetry } from "./Telemetry";
 import { ScrollIndicator } from "./ScrollIndicator";
 
 /** Source plate geometry, measured in scripts/mat_assets.py. */
@@ -15,11 +13,20 @@ const PLATE_W = 3041;
 const PLATE_H = 1710;
 const PLATE_HORIZON = 0.711; // fraction of plate height
 const PAD_X = 0.66; // fraction of plate width
-const PAD_Y = 0.782; // fraction of plate height — where the airframe meets ground
+const PAD_Y = 0.782; // fraction of plate height - where the airframe meets ground
 
 /** Rocket height as a fraction of viewport height, at rest. */
 const ROCKET_VH = 0.58;
 const ROCKET_VH_MOBILE = 0.46;
+
+/**
+ * How much wider than the photograph the airframe is drawn. The source rocket is
+ * a slender high-power build, about 1:13, which at hero scale read as a pencil.
+ * Widening the sprite keeps the photographic surface while giving it the build
+ * of a stockier egg-lofter. The exhaust is sized off the drawn width, so the
+ * flame still fills the nozzle instead of leaving from a point inside it.
+ */
+const THICKNESS = 1.45;
 
 const SMOKE_SPRITES = [
   "/hero/smoke-01.png",
@@ -58,7 +65,6 @@ export function Hero() {
   const copyRef = useRef<HTMLDivElement>(null);
   const wordRefs = useRef<Array<HTMLSpanElement | null>>([]);
   const subRef = useRef<HTMLDivElement>(null);
-  const telemetryRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
 
   const layout = useRef<Layout>({
@@ -76,7 +82,7 @@ export function Hero() {
   /**
    * Place the plate by its horizon rather than letting object-fit centre-crop it.
    * The rocket has to stand on the ground at every aspect ratio, so the ground
-   * has to be where we say it is — a centred cover crop slides the horizon
+   * has to be where we say it is - a centred cover crop slides the horizon
    * around and the rocket ends up floating or buried.
    */
   const measure = () => {
@@ -110,8 +116,8 @@ export function Hero() {
       mobile,
     };
 
-    // publish the launch point so CSS-positioned instrumentation tracks it at
-    // every aspect ratio instead of guessing a percentage
+    // publish the launch point so CSS-positioned elements track it at every
+    // aspect ratio instead of guessing a percentage
     const root = sectionRef.current;
     if (root) {
       root.style.setProperty("--pad-x", `${layout.current.padX.toFixed(1)}px`);
@@ -134,7 +140,7 @@ export function Hero() {
     const s = sequenceAt(p);
     const L = layout.current;
 
-    // --- camera vibration: the plate, the rocket and the exhaust only ------
+    // --- camera vibration: the plate, the rocket and the exhaust only --------
     const scene = sceneRef.current;
     if (scene) {
       const a = s.shake;
@@ -143,19 +149,22 @@ export function Hero() {
       scene.style.transform = `translate3d(${sx.toFixed(2)}px, ${sy.toFixed(2)}px, 0)`;
     }
 
-    // --- rocket ------------------------------------------------------------
+    // --- rocket --------------------------------------------------------------
+    const h = L.rocketH * s.rocketScale;
+    let rocketW = h * 0.136 * THICKNESS;
     const rocket = rocketRef.current;
     if (rocket) {
-      const h = L.rocketH * s.rocketScale;
-      const y = L.padY - travelPx(s.travel) - h;
-      // Width from the asset itself: the sprite is centred on the rocket’s
-      // axis, so half its width is the offset that puts that axis on the pad.
+      // Width from the asset itself, widened. The sprite is centred on the
+      // rocket's axis, so half the drawn width puts that axis on the pad.
       const aspect =
         rocket.naturalWidth && rocket.naturalHeight
           ? rocket.naturalWidth / rocket.naturalHeight
           : 0.136;
-      rocket.style.height = `${h}px`;
-      rocket.style.transform = `translate3d(${(L.padX - (h * aspect) / 2).toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
+      rocketW = h * aspect * THICKNESS;
+      const y = L.padY - travelPx(s.travel) - h;
+      rocket.style.height = `${h.toFixed(1)}px`;
+      rocket.style.width = `${rocketW.toFixed(1)}px`;
+      rocket.style.transform = `translate3d(${(L.padX - rocketW / 2).toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
       rocket.style.opacity = String(s.rocketFade);
       // Y-only blur; the filter is only mounted while it is actually doing work
       rocket.style.filter = s.rocketBlur > 0.5 ? "url(#arc-vblur)" : "none";
@@ -167,10 +176,14 @@ export function Hero() {
       railRef.current.style.opacity = String(0.55 * (1 - s.washout));
     }
 
-    // --- exhaust ------------------------------------------------------------
-    smoke.current?.draw(s, (pb) => sequenceAt(pb).travel, { x: L.padX, y: L.padY });
+    // --- exhaust -------------------------------------------------------------
+    smoke.current?.draw(s, (pb) => sequenceAt(pb).travel, {
+      x: L.padX,
+      y: L.padY,
+      rocketW,
+    });
 
-    // --- brightening into the course ----------------------------------------
+    // --- brightening into the course -----------------------------------------
     if (gradeRef.current) {
       gradeRef.current.style.opacity = String(s.washout);
     }
@@ -190,7 +203,7 @@ export function Hero() {
       trailRef.current.style.transform = `translate3d(${L.padX.toFixed(1)}px, 0, 0)`;
     }
 
-    // --- copy ---------------------------------------------------------------
+    // --- copy ----------------------------------------------------------------
     if (copyRef.current) {
       copyRef.current.style.transform = `translate3d(0, ${s.copyShift.toFixed(2)}vh, 0)`;
     }
@@ -204,22 +217,6 @@ export function Hero() {
     if (subRef.current) subRef.current.style.opacity = String(s.copyFade);
     if (navRef.current) navRef.current.style.setProperty("--nav-fade", String(s.navFade));
 
-    // --- instrumentation ----------------------------------------------------
-    const tel = telemetryRef.current;
-    if (tel) {
-      const set = (k: string, v: string) => {
-        const el = tel.querySelector<HTMLElement>(`[data-f="${k}"]`);
-        if (el && el.textContent !== v) el.textContent = v;
-      };
-      set("clock", clock(s.flight.t));
-      set("alt", `${Math.round(s.flight.alt)} M`);
-      set("vel", `${Math.round(s.flight.vel)} M/S`);
-      set("status", statusLabel(s));
-      tel.style.opacity = String((0.55 + 0.45 * Math.min(1, s.p * 6)) * s.uiFade);
-      const armed = s.p >= 0.07 && s.p < 0.23;
-      tel.dataset.armed = armed ? "true" : "false";
-    }
-
     // First paint only happens once the layout is known; before that the plate
     // would render at its natural 2560px and the airframe at 1295px tall, both
     // pinned to the top-left corner, for a frame. That was the flash on load.
@@ -227,14 +224,14 @@ export function Hero() {
       sectionRef.current.dataset.ready = "true";
     }
 
+    // --- scroll hint ---------------------------------------------------------
     const ind = indicatorRef.current;
     if (ind) {
       const bar = ind.querySelector<HTMLElement>("[data-bar]");
-      if (bar) bar.style.transform = `scaleX(${s.p.toFixed(4)})`;
-      const label = ind.querySelector<HTMLElement>("[data-label]");
-      const next = s.p < 0.13 ? "SCROLL TO IGNITE" : statusLabel(s);
-      if (label && label.textContent !== next) label.textContent = next;
-      ind.style.opacity = String(s.uiFade);
+      // fills while the rocket holds on the rail, so the first bit of scroll
+      // visibly does something before ignition; then the hint leaves
+      if (bar) bar.style.transform = `scaleX(${Math.min(1, s.p / 0.13).toFixed(4)})`;
+      ind.style.opacity = String(s.hint);
     }
   };
 
@@ -244,7 +241,8 @@ export function Hero() {
 
     const mobile = window.innerWidth < 768;
     const r = createSmokeRenderer(canvas, {
-      count: mobile ? 190 : 420,
+      count: mobile ? 240 : 520,
+      sparkCount: mobile ? 40 : 80,
       spriteUrls: SMOKE_SPRITES,
       flameUrl: "/hero/flame.png",
       maxDpr: mobile ? 1.5 : 2,
@@ -302,7 +300,7 @@ export function Hero() {
         <div className="hero__grade" ref={gradeRef} aria-hidden="true" />
 
         {/* The course heading lives in the pinned frame, low, so the frame is
-            never empty once the smoke clears — and so the blow-up below is only
+            never empty once the smoke clears - and so the blow-up below is only
             a short scroll behind it rather than a screen. */}
         <div className="hero__handoff" ref={handoffRef}>
           <p className="hero__handoffEyebrow">02 / The course</p>
@@ -321,7 +319,6 @@ export function Hero() {
             wordRefs.current[i] = el;
           }}
         />
-        <Telemetry ref={telemetryRef} />
         <ScrollIndicator ref={indicatorRef} />
       </div>
 

@@ -3,11 +3,11 @@
 import type { Ref } from "react";
 import Link from "next/link";
 
-/* Real routes only — a nav that links to pages that don't exist reads as a
-   mockup, which is the opposite of the point. */
+/* Real routes only - a nav that links to pages that don't exist reads as a
+   mockup. Title case, like the navigation on rocketrychallenge.org. */
 const LINKS = [
-  { label: "COURSE", href: "/modules" },
-  { label: "ACCOUNT", href: "/account" },
+  { label: "Course", href: "/modules" },
+  { label: "Account", href: "/account" },
 ];
 
 export function HeroNav({ ref }: { ref?: Ref<HTMLElement> }) {
@@ -23,7 +23,7 @@ export function HeroNav({ ref }: { ref?: Ref<HTMLElement> }) {
           </Link>
         ))}
         <Link className="hero__start" href="/account?next=/modules">
-          START <span aria-hidden="true">→</span>
+          Start <span aria-hidden="true">→</span>
         </Link>
       </nav>
     </header>

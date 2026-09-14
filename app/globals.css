@@ -61,10 +61,21 @@
   --color-danger-tint: #f8e9e9;
 
   /*
+   * Reading copy. rocketrychallenge.org sets body text in near black and keeps
+   * navy for headings, chrome and links. Prose here had drifted to a blue grey,
+   * which reads softer than the real brand. (This token was lost in a later
+   * rewrite of this file; the homepage and Terms page both depend on it.)
+   */
+  --color-read: #14181b;
+  --color-read-dim: #4a5560;
+
+  /*
    * Typography. The American Rocketry Challenge's own site sets headings in
    * Futura PT Bold and body in Museo Sans (Adobe Typekit) — "Segoe UI" here was
-   * a placeholder, not the brand. Jost is an open Futura revival and Hanken
-   * Grotesk carries Museo Sans' warmth; both are self-hosted via next/font.
+   * a placeholder, not the brand. Jost is an open Futura revival and Nunito
+   * Sans the closest open face to Museo Sans; both are self-hosted via next/font.
+   * Match ARC's settings as well as its faces: headings at normal tracking, body
+   * copy light, buttons black and uppercase.
    * To switch to the real faces, point these two at a Typekit kit and change
    * nothing else.
    *
@@ -73,8 +84,12 @@
    */
   --font-heading: var(--font-jost), "Futura PT", Futura, Arial, sans-serif;
   --font-body: var(--font-museo), "Museo Sans", "Segoe UI", Arial, sans-serif;
-  /* Instrumentation only. The brand has no mono; telemetry needs one. */
-  --font-mono: var(--font-plex-mono), ui-monospace, Menlo, monospace;
+  /*
+   * Labels, eyebrows and buttons. rocketrychallenge.org sets these in Museo Sans
+   * at weight 900, uppercase — never a monospace. The launch telemetry that once
+   * needed a mono is gone, so every label uses the body face.
+   */
+  --font-label: var(--font-body);
 
   /*
    * Dark shell. Home, the roadmap and the workshop run on the launch field;
@@ -88,9 +103,10 @@
   --color-shell-dim: rgba(242, 244, 245, 0.58);
   --color-shell-faint: rgba(242, 244, 245, 0.34);
 
-  /* micro-caps: 10px / 600 / wide — measured off real instrumentation type */
-  --micro-size: 10px;
-  --micro-track: 0.2em;
+  /* labels: small, heavy, uppercase, barely tracked — ARC's button register */
+  --micro-size: 11px;
+  --micro-track: 0.06em;
+  --micro-weight: 800;
 
   /* Standard Tailwind spacing keeps component sizes consistent. */
   --spacing: 4px;
@@ -128,7 +144,9 @@
   h4 {
     font-family: var(--font-heading);
     font-weight: 700;
-    letter-spacing: -0.01em;
+    /* Futura is drawn to be set at normal tracking; tightening it is what made
+       headings here look unlike ARC's own */
+    letter-spacing: normal;
     color: var(--color-arc-navy);
     text-wrap: pretty;
   }
@@ -378,9 +396,9 @@ summary {
   border-radius: 999px; /* circular controls are the one radius exception */
   border: 1px solid var(--color-navy-400);
   color: var(--color-arc-white);
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: 0.04em;
   flex: none;
 }
@@ -445,9 +463,9 @@ summary {
 }
 .loading__label {
   margin-top: 14px;
-  font-family: var(--font-mono);
+  font-family: var(--font-label);
   font-size: var(--micro-size);
-  font-weight: 600;
+  font-weight: var(--micro-weight);
   letter-spacing: var(--micro-track);
   text-transform: uppercase;
   color: var(--color-sky-800);
@@ -555,15 +573,15 @@ summary {
 .rocket-build__eyebrow {
   color: #b9d7e7;
   text-transform: uppercase;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--micro-track);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: var(--micro-weight);
 }
 .rocket-build__head h2 {
   color: #fff;
   font-size: 26px;
   line-height: 1.1;
-  letter-spacing: -0.025em;
+  letter-spacing: normal;
   margin: 10px 0;
 }
 .rocket-build__head > p:last-child {
@@ -592,7 +610,9 @@ summary {
   display: flex;
   align-items: center;
   width: max-content;
-  transform: translate(-50%, -50%) rotate(90deg);
+  /* the parts are drawn nose-right, so a quarter turn anticlockwise stands the
+     rocket up with its nose on top */
+  transform: translate(-50%, -50%) rotate(-90deg);
 }
 .rocket-build__part {
   position: relative;
