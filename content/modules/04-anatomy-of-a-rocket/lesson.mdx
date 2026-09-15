@@ -1,150 +1,141 @@
 import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
 import { TermList } from "@/components/lesson/TermList";
 import { Callout } from "@/components/ui/Callout";
-import { InnerOuterSplit } from "@/components/diagrams/InnerOuterSplit";
+import { LessonPhoto } from "@/components/lesson/LessonPhoto";
 import { MotorPhases } from "@/components/diagrams/MotorPhases";
-import { AltimeterBay } from "@/components/diagrams/AltimeterBay";
-import { ParachuteFold } from "@/components/diagrams/ParachuteFold";
 import { NomexShield } from "@/components/diagrams/NomexShield";
-import { EggCase } from "@/components/diagrams/EggCase";
-import { OuterAirframe } from "@/components/diagrams/OuterAirframe";
-import { OpenRocketLoop } from "@/components/diagrams/OpenRocketLoop";
+import { ParachuteFold } from "@/components/diagrams/ParachuteFold";
 
-A competition rocket is two systems sharing one tube. The **outer** parts give it shape and keep it flying straight. The **inner** parts make it climb, measure the flight, come down safely, and protect the egg. Learn them separately so you can talk about a design without mixing up a fin problem with a motor problem.
+Your job in this module is simple: **name the parts, know what each one does, and know the ARC rules that constrain them.** When a flight goes wrong later, you should be able to point to a system — motor, altimeter, recovery, egg case, or airframe — instead of guessing.
 
-<InnerOuterSplit className="w-full my-6" />
+Start with a real parts layout. Outer parts shape the rocket. Inner parts make it climb, measure, recover, and protect the egg.
 
-## Inner components
+<LessonPhoto
+  src="/images/parts/parts-catalog-clean.jpg"
+  alt="Photo catalog of competition rocket parts: nose cone, body tubes, fin can, egg case, altimeter case, motor hardware, parachute, shock cord, and Nomex"
+  caption="Real team parts board — general assembly, payload, propulsion, and recovery. Learn the names on this board; the rest of the module explains what they do."
+/>
 
-These ride inside the airframe. You may not see them from ten feet away, but they decide altitude, flight time, and whether the egg survives.
+## Inner systems (what flies the mission)
 
-### Motors
+### 1. Motors — climb, coast, then pop
 
-A model rocket <GlossaryTerm id="motor">motor</GlossaryTerm> is a solid-propellant charge in a cardboard-and-clay casing. It burns in three phases:
+A model rocket <GlossaryTerm id="motor">motor</GlossaryTerm> burns in three phases:
 
-1. **Thrust** — Propellant ignites and burns from the core outward. Hot gas exits the nozzle and pushes the rocket up. In a code like **F42** or **C6**, the letter is the total-impulse class (how much energy the motor delivers). The number after it is average thrust in Newtons.
-2. **Delay** — After the propellant is spent, a slow-burning delay charge takes over. It makes smoke, not thrust, and gives the rocket time to coast toward <GlossaryTerm id="apogee">apogee</GlossaryTerm>. In **C6-6**, that final **6** is seconds of delay. A delay drill can lengthen the wait before ejection; longer delay can mean a higher coast before the parachute pops — use it carefully.
-3. **Ejection** — At the end of the delay, an ejection charge sends a pulse of hot gas forward into the body tube. That pressure pops the recovery bay open so the parachute can deploy.
+1. **Thrust** — hot gas out the nozzle pushes the rocket up  
+2. **Delay** — smoke only; the rocket coasts toward <GlossaryTerm id="apogee">apogee</GlossaryTerm>  
+3. **Ejection** — a gas pulse opens the recovery bay
+
+Motor codes: letter = total impulse class · middle number = average thrust (N) · last number = delay seconds. Example: **F42-6**.
 
 <MotorPhases className="w-full my-6" />
 
-For ARC, teams may only fly **class F** motors. Each motor on the approved list has its own thrust curve — check the seller and the approved-motors list before you commit a design to a motor code.
+**ARC rule:** only **class F** motors from the approved list. Different F motors still climb differently — compare thrust curves before you pick one.
+
+<LessonPhoto
+  src="/images/parts/motor-thrust-curves-clean.jpg"
+  alt="Thrust curve graphs comparing F-35 and F-51 motors over time"
+  caption="Same letter class, different curves. Read the seller curve and the approved-motors list before you lock a motor for a design."
+/>
 
 <TermList ids={["motor", "thrust-phase", "delay-phase", "ejection-charge"]} />
 
-<Callout tone="info" title="Read the curve">
-  Two motors in the same letter class can climb very differently. The letter is
-  total energy; the thrust number and the curve shape decide how hard and how
-  long that energy is applied.
+<Callout tone="info" title="Team check">
+  Before buy day: write the exact motor code you plan to fly and confirm it is
+  on this season’s approved list.
 </Callout>
 
-### Altimeter
+### 2. Altimeter — how altitude is scored
 
-The <GlossaryTerm id="altimeter">altimeter</GlossaryTerm> measures altitude from changing air pressure. Many units also log useful extras such as apogee height, speed, and related flight data. For ARC, only four altimeters are permitted:
+The <GlossaryTerm id="altimeter">altimeter</GlossaryTerm> reads air pressure to get altitude (and often more flight data). **ARC allows only these four:**
 
-- PerfectFlite Pnut
-- PerfectFlite FireFly
-- Jolly Logic Altimeter One
-- Jolly Logic Altimeter Two
+- PerfectFlite Pnut  
+- PerfectFlite FireFly  
+- Jolly Logic Altimeter One  
+- Jolly Logic Altimeter Two  
 
-Build or buy a hard case so the unit stays secure. Mount it where **vent holes** let outside air reach the sensor — without airflow, pressure readings (and your score) go wrong.
+Protect it in a hard case. Give it **vent holes** to outside air — a sealed bay gives bad numbers.
 
-<AltimeterBay className="w-full my-6" />
+<LessonPhoto
+  src="/images/parts/payload-bay-clean.jpg"
+  alt="Payload bay cross-section showing egg cradle, ballast module, and altimeter housing in the upper body tube"
+  caption="Upper-tube layout: egg cradle, ballast, and altimeter housing. The altimeter bay must breathe outside air through vents."
+/>
 
-<Callout tone="go" title="Vent tip">
-  Small, clean vent holes beat a sealed bay every time. The altimeter needs the
-  same air the rocket is flying through.
-</Callout>
+### 3. Parachute + Nomex — come down without burning up
 
-### Parachutes
+After ejection, the <GlossaryTerm id="parachute">parachute</GlossaryTerm> slows the rocket. **ARC requires cotton canopies.** Bigger chute = slower fall = longer flight time. A spill hole can shorten time if you are overshooting the window — it is a risk trade, not a free fix.
 
-After ejection, the <GlossaryTerm id="parachute">parachute</GlossaryTerm> slows descent. For ARC, parachutes must be **cotton**. Larger diameters catch more air and stretch flight time; if you are overshooting the duration window, some teams carefully cut a spill hole in the canopy to come down faster — that is a risk trade, not a free fix.
+<LessonPhoto
+  src="/images/parts/parachute-flight-clean.jpg"
+  alt="Competition rocket descending under an orange parachute after a successful flight"
+  caption="Recovery in the field. Size and packing decide whether you land inside the duration window with an intact egg."
+/>
 
-Folding matters as much as size. One reliable pattern:
+Fold cleanly, then protect the pack from ejection heat with <GlossaryTerm id="nomex">Nomex</GlossaryTerm> (real fire-resistant fabric — not tissue or regular cloth).
 
 <ParachuteFold className="w-full my-6" />
 
-### Nomex (fire blanket)
-
-<GlossaryTerm id="nomex">Nomex</GlossaryTerm> is fire-resistant fabric that shields the parachute, shock cord, and nearby wiring from ejection heat and embers. ARC does not mandate one brand or size — it does require genuine fire-resistant fabric, not tissue paper or ordinary cloth.
-
-Place Nomex **between** the ejection charge and the recovery gear. It blocks contact with hot gas; it does not have to form an airtight seal. Pack it loosely enough that the chute can still unfurl the instant the bay opens.
-
 <NomexShield className="w-full my-6" />
 
-### Egg protection case
-
-The egg case cradles the raw egg payload through launch loads, deployment shock, and landing. Soft cushioning must surround the egg on **all sides**, not just hold it in a hard cup. Officials inspect the egg before and after qualifying flights, so the case must open for insertion and removal. Keeping the egg mass in a fixed place also keeps your <GlossaryTerm id="center-of-gravity">center of gravity</GlossaryTerm> predictable.
-
-<EggCase className="w-full my-6" />
-
-<Callout tone="caution" title="Practice landings">
-  Soft landings in one test do not guarantee launch day. Drop practice eggs
-  harder than you expect, then improve the padding before you trust it.
+<Callout tone="go" title="Pack tip">
+  Nomex goes between the ejection charge and the chute/shock cord. Keep the wrap
+  loose enough that the parachute can still open instantly.
 </Callout>
 
-## Outer components
+### 4. Egg protection case — survive the landing
 
-These are the parts you see on the pad: tube, nose, fins. They set drag, strength, and stability.
+The egg must stay uncracked. Pad it on **all sides**, keep mass in a fixed place for a predictable <GlossaryTerm id="center-of-gravity">CG</GlossaryTerm>, and build a case you can open for pre- and post-flight inspection.
 
-### Body tube
+<LessonPhoto
+  src="/images/parts/season-build-photos-clean.jpg"
+  alt="Season build photos including parachute packing, fin work, motors, and electronics"
+  caption="Build season reality: packing, fins, motors, electronics. Practice hard landings with spare eggs before you trust the case."
+/>
 
-The <GlossaryTerm id="body-tube">body tube</GlossaryTerm> is the main structural cylinder. It houses the motor mount, recovery system, altimeter, and payload bay, and it is the mounting surface for fins and rail buttons.
+## Outer airframe (what you see on the pad)
 
-For ARC:
+### Body tube, nose cone, fins
 
-- Diameter must be the **same from nose to tail**
-- That diameter must be at least **47 mm (1.85 in)**
-- Overall rocket length must be at least **650 mm**
+| Part | Job | ARC / safety notes |
+| --- | --- | --- |
+| <GlossaryTerm id="body-tube">Body tube</GlossaryTerm> | Structure + houses everything | Same diameter nose→tail · ≥ **47 mm (1.85 in)** · overall length ≥ **650 mm** · lightweight non-metal |
+| <GlossaryTerm id="nose-cone">Nose cone</GlossaryTerm> | Cuts drag; often holds shock cord | Lightweight non-metal · must separate cleanly at ejection · do pull tests on the bench |
+| <GlossaryTerm id="fins">Fins</GlossaryTerm> | Keep <GlossaryTerm id="center-of-pressure">CP</GlossaryTerm> behind CG | Lightweight non-metal · straight + strong · ~1.5–2 caliber stability margin is a common target |
 
-Use lightweight, **non-metal** materials (cardboard, phenolic, fiberglass, and similar) per the NAR Safety Code. Reinforce motor-mount and coupler areas — those spots take the hardest ejection and landing loads.
+<LessonPhoto
+  src="/images/parts/design-evolution-clean.jpg"
+  alt="Four rocket design iterations from early BT-70 and BT-80 versions to a final competition rocket"
+  caption="Design changes on purpose: tube size, fins, and layout evolve. Change one variable at a time when you iterate."
+/>
 
-### Nose cone
-
-The <GlossaryTerm id="nose-cone">nose cone</GlossaryTerm> cuts drag and often anchors the shock cord. It can also carry nose weight for stability or a tracker. Shape and material are flexible under ARC rules, but it must be lightweight and non-metal. It needs to separate cleanly at ejection (unless your design intentionally keeps it fixed).
-
-Do **pull tests** on the bench: attach the shock cord and yank the nose off at the angle and force ejection would apply. Repeat. A sticky shoulder on the bench becomes a failed deployment on the pad.
-
-### Fins
-
-<GlossaryTerm id="fins">Fins</GlossaryTerm> keep the <GlossaryTerm id="center-of-pressure">center of pressure</GlossaryTerm> behind the center of gravity so the rocket flies straight. Count and planform are team choices; material must stay lightweight and non-metal. Aim for a solid stability margin (teams often target roughly **1.5–2 calibers**). Mount fins straight and strong — a cocked or loose fin can end the flight.
-
-You can **3D print** fins: model them in Fusion 360, Tinkercad, or export from OpenRocket for your exact tube diameter, then print in something like PLA at low infill (often 15–20%) to save mass. Print a test fin first and flex it. Orient layers along the fin length, not across the root, so landing shock is less likely to snap it.
-
-<OuterAirframe className="w-full my-6" />
+<LessonPhoto
+  src="/images/parts/fin-can-clean.jpg"
+  alt="CAD exploded view of a modular 3D-printed fin can and body tube assembly"
+  caption="Fins can be cut or 3D-printed. If you print, test-flex a sample and align layers along the fin length so the root does not snap on landing."
+/>
 
 <TermList ids={["body-tube", "nose-cone", "fins", "center-of-gravity", "center-of-pressure"]} />
 
-## OpenRocket — design before you cut
+## Before you cut: simulate, then prove it
 
-<GlossaryTerm id="openrocket">OpenRocket</GlossaryTerm> is free software for building a full virtual rocket — diameters, lengths, nose shape, fins, motor mount, recovery, and payload mass — then simulating the flight before you glue anything.
+Use <GlossaryTerm id="openrocket">OpenRocket</GlossaryTerm> (free) to model tube, nose, fins, motor, chute, and egg mass. Check predicted altitude, flight time, stability margin, and descent rate **before** you glue.
 
-What it gives an ARC team:
+Then fly. Compare the altimeter to the sim and adjust the model (often drag) so the next prediction matches reality.
 
-- **Altitude and time predictions** before you burn motors — try motors, weights, and drag changes in an afternoon instead of a weekend of rebuilds
-- **Stability checks** — it places CG and CP and reports margin in calibers so unstable designs fail on screen, not on the pad
-- **A real motor database** — thrust curves for commercial motors, including ARC-approved options
-- **Descent tuning** — match parachute size to landing weight so you protect the egg and stay inside the duration window
-- **Cheap iteration** — change nose weight, fin span, or delay in a text field instead of a full rebuild
-
-One hard limit: it is a **simulation**. Real drag, wind, glue joints, finish, and exact mass will move your flight away from the plot. Smart teams fly, compare the altimeter to OpenRocket, then adjust the model’s drag coefficient so later predictions match reality.
-
-<OpenRocketLoop className="w-full my-6" />
-
-<Callout tone="info" title="Use the loop">
-  Narrow the design in software to two or three strong options. Use real test
-  flights to fine-tune — not to explore blindly.
+<Callout tone="caution" title="Sim ≠ score">
+  OpenRocket narrows options fast. Practice flights decide what is true on your
+  build, in your wind, with your finish and mass.
 </Callout>
 
-## Put it together
+## Quick fault map (use after every flight)
 
-When something goes wrong on a flight, name the system first:
+| If you see… | Check first |
+| --- | --- |
+| Wrong height / weird timing of chute | Motor delay · ejection · packing |
+| Nonsense altitude number | Altimeter vents · case · battery |
+| Burned chute / failed deploy | Nomex placement · packing tightness |
+| Cracked egg | Egg padding · descent rate · landing attitude |
+| Crooked flight / broken fin | Fins · CG/CP · nose fit / separation |
 
-- **Motor / delay** problems show up as wrong apogee timing or early/late deployment
-- **Altimeter / vents** problems show up as nonsense altitude numbers
-- **Recovery / Nomex** problems show up as burned chutes, failed deployment, or long/short duration
-- **Egg case** problems show up as cracked shells despite a soft-looking landing
-- **Airframe / fins / nose** problems show up as crooked flight, broken tubes, or stuck separation
-- **OpenRocket mismatch** means your model’s drag or mass is lying — calibrate it from data
-
-You do not need to memorize every brand name on day one. You do need the map: outer shape for flight path, inner systems for climb, measure, recover, and protect.
+You do not need every brand memorized. You need this map — and the photos above — so you can build, talk, and debug like a team that knows its rocket.

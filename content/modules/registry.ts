@@ -69,8 +69,8 @@ const raw: ModuleMeta[] = [
     title: "Anatomy of a Rocket",
     summary:
       "Inner systems (motor, altimeter, chute, Nomex, egg case), outer airframe, and OpenRocket.",
-    estimatedMinutes: 24,
-    readMinutes: 12,
+    estimatedMinutes: 18,
+    readMinutes: 8,
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-ETS1-2", "MS-PS2-1", "MS-PS2-2"],

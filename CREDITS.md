@@ -28,6 +28,14 @@ https://commons.wikimedia.org/wiki/File:Defense.gov_photo_essay_070519-D-7203T-0
 Modifications: sky band extracted, rescaled so its horizon registers with the
 plate's treeline, and regraded to match.
 
+## Lesson part photos (Module 4)
+
+Team presentation photographs and diagrams used with permission from the
+project owner's Canva deck ("ARC Presentation Rocket" / 4-H Wake County rocketry
+team materials), design
+`https://www.canva.com/design/DAHEiZTWYxA/xqnt8KQdObU8cjVKk25ICA/`.
+Stored under `public/images/parts/` for the Anatomy of a Rocket lesson.
+
 ---
 
 ARC Learn is an unofficial study companion. It is not affiliated with or endorsed
