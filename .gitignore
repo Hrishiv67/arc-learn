@@ -52,3 +52,4 @@ next-env.d.ts
 *-desktop.png
 
 /artifacts/
+supabase/.temp/
