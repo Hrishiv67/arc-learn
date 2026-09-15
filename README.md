@@ -10,11 +10,11 @@ official mark appears anywhere in the app — see `/legal`.
 
 ## Status
 
-Only **Module 1** ("This Year's Challenge") has real content — full MDX
-lesson, five custom SVG diagrams, hover/tap glossary terms, and an
-11-question quiz (9 multiple choice + drag-label + drag-match). Modules 2–13
-have routing, gating, and metadata wired up but render as "coming soon" —
-see `content/modules/registry.ts`.
+**Module 1** ("This Year's Challenge") and **Module 4** ("Anatomy of a Rocket")
+have full lesson + quiz content. Module 4 is the demo deep-dive: inner systems
+(motors, altimeter, parachute & Nomex, egg case), outer airframe, and OpenRocket,
+with custom diagrams and an 11-question quiz. Modules 2–3 and 5–13 still render
+as "coming soon" — see `content/modules/registry.ts`.
 
 The app is fully functional with **zero backend configured** (anonymous,
 localStorage-only progress). Supabase is optional and adds an account +
