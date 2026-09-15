@@ -1,6 +1,14 @@
 import { getSupabaseConfig } from "./config";
-/** Read public provider availability; no secret or management key is needed. */
+
+/**
+ * True when Google OAuth should be offered on the account screen.
+ *
+ * Prefer the live Supabase auth settings (`external.google`). Also honor
+ * NEXT_PUBLIC_GOOGLE_AUTH=1 so a freshly enabled provider can be forced on
+ * while edge caches catch up.
+ */
 export async function googleAuthEnabled(): Promise<boolean> {
+  if (process.env.NEXT_PUBLIC_GOOGLE_AUTH?.trim() === "1") return true;
   const config = getSupabaseConfig();
   if (!config) return false;
   try {

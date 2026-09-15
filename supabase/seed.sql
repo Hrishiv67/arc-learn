@@ -39,7 +39,7 @@ insert into public.modules (id, slug, "order", unit, unit_title, title, summary,
   ('safety-first', 'safety-first', 3, 1, 'Before you build', 'Safety First',
    'The NAR Model Rocket Safety Code, supervision, and launch sites.', 14, true, '{}', '{}', 'soon', true),
   ('anatomy-of-a-rocket', 'anatomy-of-a-rocket', 4, 2, 'How rockets work', 'Anatomy of a Rocket',
-   'Every part and what it does.', 12, true, '{}', '{}', 'soon', true),
+   'Inner systems (motor, altimeter, chute, Nomex, egg case), outer airframe, and OpenRocket.', 24, true, '{}', '{MS-ETS1-2,MS-PS2-1,MS-PS2-2}', 'live', false),
   ('why-rockets-fly-straight', 'why-rockets-fly-straight', 5, 2, 'How rockets work', 'Why Rockets Fly Straight',
    'Center of pressure, center of gravity, and stability margin.', 16, true, '{}', '{MS-PS2-1,MS-PS2-2}', 'soon', true),
   ('thrust-impulse-and-motors', 'thrust-impulse-and-motors', 6, 2, 'How rockets work', 'Thrust, Impulse, and Motors',
@@ -60,7 +60,8 @@ insert into public.modules (id, slug, "order", unit, unit_title, title, summary,
    'Observer rules, forms, and submission.', 12, true, '{}', '{}', 'soon', true);
 
 insert into public.lessons (module_id, mdx_path, needs_review) values
-  ('this-years-challenge', 'content/modules/01-this-years-challenge/lesson.mdx', true);
+  ('this-years-challenge', 'content/modules/01-this-years-challenge/lesson.mdx', true),
+  ('anatomy-of-a-rocket', 'content/modules/04-anatomy-of-a-rocket/lesson.mdx', false);
 
 insert into public.resources (module_id, type, file_path, title, pages) values
   ('this-years-challenge', 'handout', 'content/modules/01-this-years-challenge/handout.pdf', 'Module 1 student handout', 4),

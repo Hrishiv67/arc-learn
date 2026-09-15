@@ -25,6 +25,7 @@ describe("Google provider availability", () => {
   });
   it("hides an unconfigured provider", async () => {
     configure();
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_AUTH", "");
     vi.stubGlobal(
       "fetch",
       vi
@@ -36,8 +37,17 @@ describe("Google provider availability", () => {
     );
     expect(await googleAuthEnabled()).toBe(false);
   });
+  it("can force Google on with NEXT_PUBLIC_GOOGLE_AUTH=1", async () => {
+    configure();
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_AUTH", "1");
+    const fetcher = vi.fn();
+    vi.stubGlobal("fetch", fetcher);
+    expect(await googleAuthEnabled()).toBe(true);
+    expect(fetcher).not.toHaveBeenCalled();
+  });
   it("keeps email available when provider lookup fails", async () => {
     configure();
+    vi.stubEnv("NEXT_PUBLIC_GOOGLE_AUTH", "");
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("offline")));
     expect(await googleAuthEnabled()).toBe(false);
   });

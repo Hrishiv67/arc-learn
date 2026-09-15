@@ -16,7 +16,14 @@ import { Input } from "@/components/ui/Input";
 import { Button, TextButton } from "@/components/ui/Button";
 import { Loading } from "@/components/ui/Loading";
 
+function safeNext(path?: string) {
+  if (!path) return "/modules";
+  if (!path.startsWith("/") || path.startsWith("//")) return "/modules";
+  return path;
+}
+
 export function AccountClient({
+  next,
   googleEnabled = false,
 }: {
   next?: string;
@@ -25,6 +32,7 @@ export function AccountClient({
   const router = useRouter();
   const { user, loading } = useSupabaseUser();
   const [signOutError, setSignOutError] = useState<string | null>(null);
+  const continueHref = safeNext(next);
   if (loading) return <Loading label="Opening your account…" />;
   return (
     <section className="account-entry">
@@ -43,7 +51,7 @@ export function AccountClient({
         {user ? (
           <div className="flex flex-col gap-5">
             <h2 className="text-2xl">You’re signed in.</h2>
-            <Button href="/modules" fullWidth>
+            <Button href={continueHref} fullWidth>
               Continue to the course
             </Button>
             <TextButton
@@ -68,8 +76,9 @@ export function AccountClient({
         ) : isSupabaseConfigured() ? (
           <AuthForm
             googleEnabled={googleEnabled}
+            nextPath={continueHref}
             onDone={() => {
-              router.replace("/modules");
+              router.replace(continueHref);
               router.refresh();
             }}
           />
@@ -80,12 +89,12 @@ export function AccountClient({
               Account sync is unavailable here. Your progress will stay in this
               browser.
             </p>
-            <Button href="/modules">Open the course</Button>
+            <Button href={continueHref}>Open the course</Button>
           </div>
         )}
         {!user && (
           <div className="mt-5 border-t border-mist-600 pt-5 text-center">
-            <TextButton tone="navy" href="/modules">
+            <TextButton tone="navy" href={continueHref}>
               Continue without an account
             </TextButton>
           </div>
@@ -120,9 +129,11 @@ function GoogleMark() {
 function AuthForm({
   onDone,
   googleEnabled,
+  nextPath,
 }: {
   onDone: () => void;
   googleEnabled: boolean;
+  nextPath: string;
 }) {
   const [mode, setMode] = useState<"signup" | "signin">("signup");
   const [email, setEmail] = useState("");
@@ -131,6 +142,7 @@ function AuthForm({
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const callbackUrl = `${typeof window !== "undefined" ? window.location.origin : ""}/auth/callback?next=${encodeURIComponent(nextPath)}`;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -139,7 +151,7 @@ function AuthForm({
     setSubmitting(true);
     try {
       if (mode === "signup") {
-        const data = await signUpWithPassword(email, password);
+        const data = await signUpWithPassword(email, password, callbackUrl);
         if (!data.session) {
           setNotice(
             "Open the confirmation link in your email to start the course.",
@@ -225,9 +237,7 @@ function AuthForm({
               setError(null);
               setSubmitting(true);
               try {
-                await signInWithGoogle(
-                  `${window.location.origin}/auth/callback`,
-                );
+                await signInWithGoogle(callbackUrl);
               } catch {
                 setError(
                   "Google sign-in could not start. Try again or use email below.",
@@ -243,6 +253,12 @@ function AuthForm({
             <span>or use an email address</span>
           </p>
         </>
+      )}
+      {!googleEnabled && (
+        <Callout tone="info" title="Google sign-in">
+          Email works now. Google appears here automatically once the Google
+          provider is enabled on the project.
+        </Callout>
       )}
       <Input
         label="Email"

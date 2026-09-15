@@ -2,8 +2,8 @@ import { moduleMetaSchema, type ModuleMeta } from "@/lib/schemas/module";
 
 /**
  * All 13 modules' architecture (routing, gating, unit grouping) exists here.
- * Only module 1 has real lesson/quiz content (see ./01-this-years-challenge);
- * modules 2-13 render as "coming soon" — see the plan's scope decision.
+ * Live content today: module 1 (./01-this-years-challenge) and module 4
+ * (./04-anatomy-of-a-rocket). Other modules render as "coming soon".
  * 1-indexed throughout, matching the live prototype and all user-facing copy.
  */
 const raw: ModuleMeta[] = [
@@ -67,13 +67,22 @@ const raw: ModuleMeta[] = [
     unit: 2,
     unitTitle: "How rockets work",
     title: "Anatomy of a Rocket",
-    summary: "Every part and what it does.",
-    estimatedMinutes: 12,
+    summary:
+      "Inner systems (motor, altimeter, chute, Nomex, egg case), outer airframe, and OpenRocket.",
+    estimatedMinutes: 24,
+    readMinutes: 12,
     isTimeless: true,
     prerequisiteIds: [],
-    ngssCodes: [],
-    status: "soon",
-    needsReview: true,
+    ngssCodes: ["MS-ETS1-2", "MS-PS2-1", "MS-PS2-2"],
+    status: "live",
+    needsReview: false,
+    gradeBand: "6th–12th grade",
+    objectives: [
+      "Separate inner flight systems from outer airframe parts and explain what each does.",
+      "Read a motor code (impulse class, thrust, delay) and name the three burn phases.",
+      "State ARC constraints for motors, altimeters, cotton parachutes, and tube size.",
+      "Explain how OpenRocket helps before build — and why practice flights still matter.",
+    ],
   },
   {
     id: "why-rockets-fly-straight",

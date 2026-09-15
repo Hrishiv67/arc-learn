@@ -104,6 +104,55 @@ const raw: GlossaryTerm[] = [
     definition:
       "The distance between CG and CP. CG ahead of CP means a gust makes the rocket straighten out; CP ahead of CG means a gust makes it tumble.",
   },
+  {
+    id: "motor",
+    plain: "The solid-propellant engine in the tail",
+    term: "Motor",
+    definition:
+      "A cardboard-and-clay casing with propellant, a delay charge, and an ejection charge. For ARC, only class F motors on the approved list are allowed.",
+  },
+  {
+    id: "thrust-phase",
+    plain: "The powered climb",
+    term: "Thrust phase",
+    definition:
+      "Propellant burns from the core outward and hot gas exits the nozzle, producing the push that lifts the rocket.",
+  },
+  {
+    id: "delay-phase",
+    plain: "The coast after burnout",
+    term: "Delay phase",
+    definition:
+      "A slow-burning charge that makes smoke but no thrust, giving the rocket time to coast toward apogee before ejection.",
+  },
+  {
+    id: "ejection-charge",
+    plain: "The pop that opens the chute bay",
+    term: "Ejection charge",
+    definition:
+      "A final gas pulse fired forward into the body tube so the recovery system can deploy.",
+  },
+  {
+    id: "parachute",
+    plain: "The canopy that slows descent",
+    term: "Parachute",
+    definition:
+      "For ARC it must be cotton. Larger canopies stretch flight time; packing and spill holes change how fast you come down.",
+  },
+  {
+    id: "nomex",
+    plain: "The fire blanket for recovery gear",
+    term: "Nomex",
+    definition:
+      "Fire-resistant fabric placed between the ejection charge and the parachute or shock cord so hot gas and embers do not burn the recovery system.",
+  },
+  {
+    id: "openrocket",
+    plain: "Free rocket design and flight simulation software",
+    term: "OpenRocket",
+    definition:
+      "Lets you model the airframe, motor, recovery, and payload, then predict altitude, duration, stability, and descent before you cut parts.",
+  },
 ];
 
 export const GLOSSARY: GlossaryTerm[] = glossarySchema.parse(raw);
