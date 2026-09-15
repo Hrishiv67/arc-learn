@@ -18,9 +18,9 @@ as "coming soon" — see `content/modules/registry.ts`.
 
 The app is fully functional with **zero backend configured** (anonymous,
 localStorage-only progress). Supabase is optional and adds an account +
-cross-device sync; no Supabase project has been created for this build, so
-that code is written and typed against the real SDK but has never run
-against a live database.
+cross-device sync. The live project `awxevxswxofwstrvtwsp` is wired for email
+auth; Google appears on `/account` once the Google provider is enabled in
+Supabase (see `SETUP.md`).
 
 ## Local setup
 
