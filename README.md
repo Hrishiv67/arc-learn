@@ -29,8 +29,9 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). No environment
-variables are required to run the full app.
+Open [http://localhost:3200](http://localhost:3200). No environment
+variables are required to run the full app (anonymous progress). For account
+sign-in, copy `.env.example` → `.env.local` and set the Supabase URL + key.
 
 Other scripts:
 
