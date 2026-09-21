@@ -1,5 +1,7 @@
 "use client";
+import { ModuleDetailClient } from "../ModuleDetailClient";
 
+import { isModuleComplete } from "@/lib/schemas/progress";
 import { useRouter } from "next/navigation";
 import { notFound } from "next/navigation";
 import { getModule, getModuleQuiz } from "@/lib/content/loadModule";
@@ -18,14 +20,15 @@ export function QuizClient({ slug }: { slug: string }) {
   const progress = useProgress();
 
   if (!mod || !quiz) notFound();
-  if (!isModuleUnlocked(mod, progress)) notFound();
+  if (!isModuleUnlocked(mod, progress))
+    return <ModuleDetailClient slug={slug} />;
 
   const next = getNextModule(mod.order);
   const read = !!progress[mod.id]?.read;
   const quizDone = !!progress[mod.id]?.quiz;
-  const isFrontier = !MODULES.some(
-    (m) => m.status === "live" && m.order > mod.order,
-  );
+  const isFrontier = MODULES.filter(
+    (m) => m.status === "live" && m.id !== mod.id,
+  ).every((m) => isModuleComplete(progress[m.id]));
 
   return (
     <Container className="py-7 md:py-9 pb-20 md:pb-20">

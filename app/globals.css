@@ -504,6 +504,10 @@ summary {
 .prose-lesson {
   max-width: 70ch;
 }
+.prose-lesson a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
 .prose-lesson h2 {
   font-size: clamp(24px, 3vw, 30px);
   line-height: 1.2;

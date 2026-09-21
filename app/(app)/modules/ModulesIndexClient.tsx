@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { SECTIONS, sectionIndexForModule } from "@/lib/rocket/sections";
-import { UNITS } from "@/content/modules/registry";
+import { UNITS, MODULES } from "@/content/modules/registry";
 import { useProgress } from "@/lib/progress/local";
 import { isModuleUnlocked } from "@/lib/progress/gating";
 import { isModuleComplete } from "@/lib/schemas/progress";
@@ -15,7 +15,14 @@ import { RocketBuild } from "@/components/rocket/RocketBuild";
 
 export function ModulesIndexClient() {
   const progress = useProgress();
-  const firstComplete = isModuleComplete(progress["this-years-challenge"]);
+  const next =
+    MODULES.find(
+      (m) =>
+        m.status === "live" &&
+        isModuleUnlocked(m, progress) &&
+        !isModuleComplete(progress[m.id]),
+    ) ?? MODULES[0];
+  const nextComplete = isModuleComplete(progress[next.id]);
 
   return (
     <Container className="py-8 md:py-12">
@@ -33,8 +40,11 @@ export function ModulesIndexClient() {
           </p>
           <div className="learning-card mt-6">
             <div>
-              <span className="eyebrow">Available now · 9-minute reading</span>
-              <h2 className="text-2xl mt-2">This Year&apos;s Challenge</h2>
+              <span className="eyebrow">
+                {next.readMinutes}-minute reading ·{" "}
+                {nextComplete ? "Review" : "Up next"}
+              </span>
+              <h2 className="text-2xl mt-2">{next.title}</h2>
               <p className="text-sm text-sky-800 mt-2">
                 Read the lesson, explore the diagrams, and check your
                 understanding.
@@ -42,14 +52,14 @@ export function ModulesIndexClient() {
             </div>
             <Button
               href={
-                !firstComplete && progress["this-years-challenge"]?.read
-                  ? "/modules/this-years-challenge/quiz"
-                  : "/modules/this-years-challenge/lesson"
+                !nextComplete && progress[next.id]?.read
+                  ? `/modules/${next.slug}/quiz`
+                  : `/modules/${next.slug}/lesson`
               }
             >
-              {firstComplete
+              {nextComplete
                 ? "Revisit the lesson"
-                : progress["this-years-challenge"]?.read
+                : progress[next.id]?.read
                   ? "Continue to quiz"
                   : "Start learning"}
             </Button>
@@ -195,8 +205,11 @@ function ProgressSummary() {
       <TextButton tone="navy" href="/modules/results">
         Your results
       </TextButton>
+      <TextButton tone="navy" href="/resources">
+        Guides, videos, and flight forms
+      </TextButton>
       <p className="text-sm text-sky-800">
-        One module is ready to explore. More are on the way.
+        13 short lessons. Pass each quiz to build the next part of your rocket.
       </p>
     </div>
   );

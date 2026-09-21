@@ -24,6 +24,8 @@ function seasonParameterNumbers(): string[] {
   collect(p.durationWindow.value);
   collect(p.payload.count);
   collect(p.payload.eachMass);
+  collect(p.liftoffMass.value);
+  Object.values(SEASON.constraints).forEach(collect);
   return [...nums].filter((n) => n.length >= 2); // skip single digits: too noisy
 }
 

@@ -1,4 +1,5 @@
 "use client";
+import { ModuleDetailClient } from "../ModuleDetailClient";
 
 import { useMemo, useRef } from "react";
 import { notFound } from "next/navigation";
@@ -10,7 +11,13 @@ import { ReviewFlag } from "@/components/lesson/ReviewFlag";
 import { LessonRail } from "@/components/lesson/LessonRail";
 import { Container } from "@/components/ui/Container";
 
-export const RESOURCES: { title: string; pages: number; href: string }[] = [];
+export const RESOURCES = [
+  {
+    title: "2027 official rules",
+    pages: 8,
+    href: "https://www.rocketrychallenge.org/wp-content/uploads/2027_AmericanRocketryChallenge_Rules.pdf",
+  },
+];
 
 export function LessonClient({ slug }: { slug: string }) {
   const mod = getModule(slug);
@@ -19,7 +26,8 @@ export function LessonClient({ slug }: { slug: string }) {
   const contentRef = useRef<HTMLDivElement>(null);
 
   if (!mod || !Lesson) notFound();
-  if (!isModuleUnlocked(mod, progress)) notFound();
+  if (!isModuleUnlocked(mod, progress))
+    return <ModuleDetailClient slug={slug} />;
 
   const read = !!progress[mod.id]?.read;
   const quizDone = !!progress[mod.id]?.quiz;
@@ -30,7 +38,7 @@ export function LessonClient({ slug }: { slug: string }) {
         <div className="min-w-0 flex flex-col gap-6">
           <div>
             <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">
-              Module {mod.order} · Reading
+              Module {mod.order} · {mod.readMinutes}-minute reading
             </span>
             <h1 className="font-heading font-bold text-arc-navy text-[28px] md:text-[40px] mt-2">
               {mod.title}

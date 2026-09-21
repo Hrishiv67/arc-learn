@@ -25,8 +25,20 @@ export const seasonSchema = z.object({
     targetAltitude: seasonParameterSchema,
     durationWindow: seasonParameterSchema,
     payload: payloadParameterSchema,
-    // No mass limit key: the 2027 rules do not state one. Do not add a
-    // literal here without a citation from the team handbook first.
+    liftoffMass: seasonParameterSchema,
+  }),
+  constraints: z.object({
+    minimumLengthMm: z.number().positive(),
+    mainTubeDiameterMm: z.number().positive(),
+    mainTubeLength: z.string(),
+    diameterDifferenceMm: z.number().positive(),
+    maximumMotorClass: z.string(),
+    combinedImpulseNs: z.number().positive(),
+  }),
+  scoring: z.object({
+    durationMin: z.number().positive(),
+    durationMax: z.number().positive(),
+    pointsPerSecond: z.number().positive(),
   }),
 });
 

@@ -129,12 +129,6 @@ test("quiz retry works with no limit", async ({ page }) => {
 test("safety-gate prerequisite logic is enforced (unit-level, see tests/unit/gating.test.ts)", async ({
   page,
 }) => {
-  // Only Module 1 is live in this build (see the plan's scope decision), so
-  // there is currently no *live* module with an unmet prerequisite to reach
-  // through the browser — "Building It" and "Launch Day" both show as
-  // "coming soon" rather than "locked" until a second module goes live.
-  // The gating logic itself (isModuleUnlocked / lockedReason) is covered
-  // directly in tests/unit/gating.test.ts, including the locked case.
   await page.goto("/modules/building-it");
-  await expect(page.getByText("Coming soon").first()).toBeVisible();
+  await expect(page.getByText("Locked", { exact: true })).toBeVisible();
 });

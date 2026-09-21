@@ -1,0 +1,47 @@
+import { FlightGraph } from "@/components/diagrams/FlightGraph";
+import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
+import { Callout } from "@/components/ui/Callout";
+import { SourceFigure } from "@/components/lesson/SourceFigure";
+import { LessonSources } from "@/components/lesson/LessonSources";
+
+## Read the shape, not just the peak
+
+On an altitude-versus-time graph:
+
+- **Rising line:** climbing. A steeper rise means faster upward motion.
+- **Top of the curve:** <GlossaryTerm id="apogee">apogee</GlossaryTerm>.
+- **Descending line:** coming down. A steeper drop means faster descent.
+
+<FlightGraph className="w-full border border-mist-600 bg-white p-3" />
+
+_Illustrative shape, not measured flight data. Read height on the vertical axis and time along the bottom._
+
+Some approved altimeters report only peak altitude; a full graph needs a data-logging device. Do not mistake a software prediction for a measured trace.
+
+## Diagnose before changing
+
+| What you observe              | Check first                                 |
+| ----------------------------- | ------------------------------------------- |
+| Lower altitude than predicted | Real mass, wind, motor, surface condition   |
+| Chute opens while moving fast | Motor delay and recovery sequence           |
+| Unexpectedly long descent     | Canopy, wind, rising air                    |
+| Cracked egg                   | Padding, hard contact points, landing speed |
+
+## Run a fair test
+
+Write one hypothesis: **“If we change **_, we expect _** because \_\_\_.”** Keep other settings the same and record weather. Save the old setup so you can compare. Repeat tests; one lucky flight is not a reliable design.
+
+Use this notebook row: **date · motor/delay · mass · weather · predicted/measured altitude · duration · egg condition · next change**.
+
+<Callout title="Try a diagnosis" tone="info">
+  Two flights used different motors and different chutes. Can you tell which
+  change caused the longer time? No—test one change at a time.
+</Callout>
+
+<LessonSources
+  ids={[
+    "flight-testing-in-rocket-contest",
+    "estes-education-american-rocketry-challenge-trainings-2025",
+    "mission-debriefing-rules",
+  ]}
+/>

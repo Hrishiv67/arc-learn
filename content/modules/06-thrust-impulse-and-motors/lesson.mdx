@@ -1,0 +1,39 @@
+import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
+import { Callout } from "@/components/ui/Callout";
+import { SourceFigure } from "@/components/lesson/SourceFigure";
+import { LessonSources } from "@/components/lesson/LessonSources";
+
+## Push strength and total push
+
+**Thrust** is the force pushing the rocket, measured in newtons (N). **Total impulse** adds up that thrust over the burn, measured in newton-seconds (N·s).
+
+Think of pushing a skateboard: a strong quick push and a gentler long push can give similar total pushes. They do not accelerate it the same way.
+
+## Read a motor code
+
+Example: **C6-5**.
+
+- **C:** total-impulse class, not an exact altitude.
+- **6:** nominal average thrust in newtons, not burn time.
+- **5:** delay in seconds between burnout and ejection.
+
+This example teaches the code. It is not a motor recommendation for your rocket. A **thrust curve** plots push against time; the area underneath is total impulse. Two motors in the same letter class can have different thrust curves.
+
+## Burn, coast, recover
+
+1. **Burn:** exhaust goes backward; thrust pushes the rocket forward.
+2. **Coast:** after burnout, the rocket still climbs while slowing down.
+3. **Eject:** the motor's ejection charge releases the recovery system near <GlossaryTerm id="apogee">apogee</GlossaryTerm>.
+
+<SourceFigure name="flight" />
+
+## Choose using evidence
+
+Check the exact motor on this season's approved list, its fit, launch speed, and available delay in your simulation. A motor being listed in software does **not** make it ARC-approved. Your mentor reviews the choice; follow the manufacturer's instructions.
+
+<Callout title="Quick check" tone="info">
+  In C6-5, point to the thrust number and the delay number. Which one tells you
+  when recovery begins after burnout?
+</Callout>
+
+<LessonSources ids={["nasa-motors", "approved-motors-list"]} />

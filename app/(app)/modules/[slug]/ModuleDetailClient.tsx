@@ -81,11 +81,9 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
 
       <VideoPlaceholder
         minutes={mod.estimatedMinutes}
-        covers={[
-          "This season's flight goal, figure by figure",
-          "The parts of a competition rocket",
-          "How a score is calculated from altitude and duration",
-        ]}
+        covers={
+          mod.objectives ?? [mod.summary, "Apply the idea in a short quiz"]
+        }
         lessonHref={`/modules/${mod.slug}/lesson`}
       />
 

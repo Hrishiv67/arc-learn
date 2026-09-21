@@ -12,9 +12,9 @@ const raw: Quiz = {
     {
       id: "q1",
       type: "choice",
-      verified: false,
+      verified: true,
       prompt:
-        "This season's altitude figure is a target, not a minimum. If one flight lands 150 feet above target and another lands 150 feet below, how do the two penalties compare?",
+        "This season's altitude figure is a target, not a minimum. If one flight reaches 150 feet above target and another reaches 150 feet below, how do the two penalties compare?",
       options: [
         "The overshoot costs more",
         "The undershoot costs more",
@@ -22,7 +22,7 @@ const raw: Quiz = {
         "Neither is penalized",
       ],
       answerIndex: 2,
-      why: "The target is a height to hit, not a floor to clear. A miss above and an equal miss below cost the same — draft pending confirmation against the scoring formula in the team handbook.",
+      why: "The target is a height to hit, not a floor to clear. A miss above and an equal miss below cost the same.",
     },
     {
       id: "q2",
@@ -37,12 +37,12 @@ const raw: Quiz = {
         "It is calculated afterward from the motor's total impulse",
       ],
       answerIndex: 1,
-      why: "The altimeter rides inside the rocket and logs the flight. Nobody measures altitude by watching from the pad.",
+      why: "The approved onboard altimeter measures peak height. Some units also log a flight trace; the official altitude does not come from a ground estimate.",
     },
     {
       id: "q3",
       type: "choice",
-      verified: false,
+      verified: true,
       prompt:
         "A simulation shows the center of pressure sitting ahead of the center of gravity. What does that predict about the flight?",
       options: [
@@ -52,12 +52,12 @@ const raw: Quiz = {
         "The parachute deploys early",
       ],
       answerIndex: 2,
-      why: "CG ahead of CP lets a rocket straighten itself out after a gust. Reversed, small disturbances get worse instead of correcting — a physics claim, still pending subject-matter review.",
+      why: "CG ahead of CP lets a rocket straighten itself out after a gust. Reversed, small disturbances get worse instead of correcting.",
     },
     {
       id: "q4",
       type: "choice",
-      verified: false,
+      verified: true,
       prompt:
         "Stability margin is the distance between which two points on the airframe?",
       options: [
@@ -67,14 +67,14 @@ const raw: Quiz = {
         "Apogee and the pad",
       ],
       answerIndex: 1,
-      why: "Stability margin measures the gap between CG and CP — the bigger that gap, the more the rocket resists tumbling. Draft pending review.",
+      why: "Stability margin measures the gap between CG and CP. CG must be nearer the nose than CP; a bigger margin is not automatically better.",
     },
     {
       id: "q5",
       type: "choice",
-      verified: false,
+      verified: true,
       prompt:
-        "A flight lands exactly on the altitude target but 3 seconds outside the duration window. How does it score compared to a flight that lands in the middle of both windows?",
+        "A flight reaches the exact altitude target but 3 seconds outside the duration window. How does it score compared to a flight that reaches the target altitude and stays inside the duration window?",
       options: [
         "Better, since the altitude was perfect",
         "Worse — duration penalty points are added even though altitude was exact",
@@ -82,12 +82,12 @@ const raw: Quiz = {
         "No score can be calculated",
       ],
       answerIndex: 1,
-      why: "Both halves of the flight goal are scored and penalties add together, so a perfect altitude does not cancel out a duration miss. Draft pending confirmation against the published scoring formula.",
+      why: "Both halves of the flight goal are scored and penalties add together, so a perfect altitude does not cancel out a duration miss.",
     },
     {
       id: "q6",
       type: "choice",
-      verified: false,
+      verified: true,
       prompt:
         "Your team fits a larger parachute to protect the eggs on landing. If your original flight was already inside the duration window, what is the most likely effect on your score?",
       options: [
@@ -97,22 +97,22 @@ const raw: Quiz = {
         "It guarantees a better score",
       ],
       answerIndex: 1,
-      why: "A bigger parachute slows descent, which extends flight time — helpful for protecting the payload, but it can carry duration outside the window. Draft pending review.",
+      why: "A bigger parachute slows descent, which extends flight time — helpful for protecting the payload, but it can carry duration outside the window.",
     },
     {
       id: "q7",
       type: "choice",
       verified: true,
       prompt:
-        "A flight lands at the exact target altitude and exactly on the target duration, but one egg has a hairline crack. What does this flight score?",
+        "A flight reaches the exact target altitude and exactly on the target duration, but one egg has a hairline crack. What does this flight score?",
       options: [
         "A perfect score, since altitude and duration were exact",
-        "Full penalty points regardless of how accurate the altitude and duration were",
+        "The flight is disqualified, regardless of its height and duration",
         "A partial score based on the size of the crack",
         "It depends on which of the two eggs cracked",
       ],
       answerIndex: 1,
-      why: "The rules require the payload to survive uncracked. A broken payload is a failed flight even when the altitude and duration are exact — quoted directly in the payload rule.",
+      why: "The rules require the payload to survive uncracked. A crack disqualifies the flight even when altitude and duration are exact (2027 rules, section 4.4).",
     },
     {
       id: "q8",
