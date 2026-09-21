@@ -18,7 +18,7 @@ const raw: GlossaryTerm[] = [
     plain: "How long the flight lasts",
     term: "Duration",
     definition:
-      "Timing starts the instant the rocket leaves the pad and stops the instant it touches ground. One number for the whole flight, ascent and descent together.",
+      "Time from first motion to first contact with ground or a tree, or loss of sight. It includes the climb and descent.",
   },
   {
     id: "payload",
@@ -39,7 +39,7 @@ const raw: GlossaryTerm[] = [
     plain: "The pointed front",
     term: "Nose cone",
     definition:
-      "Its shape determines how cleanly air moves around it. A blunter nose displaces more air and costs you speed.",
+      "The front cover of a rocket. Its shape affects how air flows around the body and contributes to drag.",
   },
   {
     id: "body-tube",
@@ -81,7 +81,7 @@ const raw: GlossaryTerm[] = [
     plain: "The onboard flight recorder",
     term: "Altimeter",
     definition:
-      "Rides inside the rocket and logs altitude through the flight. It's how your altitude is measured — not by anyone watching from the ground.",
+      "An onboard instrument that measures height. Approved competition units use air pressure. Some report only peak height; others record a full flight trace.",
   },
   {
     id: "center-of-gravity",
@@ -102,21 +102,21 @@ const raw: GlossaryTerm[] = [
     plain: "The gap that decides if a rocket self-corrects",
     term: "Stability margin",
     definition:
-      "The distance between CG and CP. CG ahead of CP means a gust makes the rocket straighten out; CP ahead of CG means a gust makes it tumble.",
+      "The distance from CG to CP, often expressed in body diameters (calibers). CG nearer the nose than CP gives a restoring tendency; launch speed and wind also matter.",
   },
   {
     id: "motor",
     plain: "The solid-propellant engine in the tail",
     term: "Motor",
     definition:
-      "A cardboard-and-clay casing with propellant, a delay charge, and an ejection charge. For ARC, only class F motors on the approved list are allowed.",
+      "A commercially made device that produces thrust from hot exhaust. Motor construction varies. Select the exact approved type and follow its manufacturer instructions.",
   },
   {
     id: "thrust-phase",
     plain: "The powered climb",
     term: "Thrust phase",
     definition:
-      "Propellant burns from the core outward and hot gas exits the nozzle, producing the push that lifts the rocket.",
+      "Propellant burns and hot gas exits the nozzle, producing thrust. The way the propellant burns depends on the motor design.",
   },
   {
     id: "delay-phase",
@@ -137,7 +137,7 @@ const raw: GlossaryTerm[] = [
     plain: "The canopy that slows descent",
     term: "Parachute",
     definition:
-      "For ARC it must be cotton. Larger canopies stretch flight time; packing and spill holes change how fast you come down.",
+      "A canopy that increases air resistance to slow descent. A larger working canopy usually gives a slower landing and a longer flight. Correct packing matters.",
   },
   {
     id: "nomex",

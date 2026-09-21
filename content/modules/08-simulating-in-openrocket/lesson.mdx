@@ -1,0 +1,38 @@
+import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
+import { Callout } from "@/components/ui/Callout";
+import { SourceFigure } from "@/components/lesson/SourceFigure";
+import { LessonSources } from "@/components/lesson/LessonSources";
+
+## Make a digital copy
+
+**<GlossaryTerm id="openrocket">OpenRocket</GlossaryTerm>** predicts a flight before you spend time building. Start with an example model to learn the controls, then create your team's own design.
+
+## Your first simulation
+
+1. **Rocket design:** add the nose, tubes, fins, motor mount, payload, and recovery gear. Enter measured sizes and masses.
+2. **Motors & Configuration:** choose the motor mount, exact motor, and available ejection delay. Check the ARC-approved list separately.
+3. **Flight simulations:** enter the launch guide and weather conditions. Run the simulation.
+4. **Read the result:** inspect peak altitude, speed off the guide, deployment speed, landing speed, and warnings—not just height.
+
+The [official illustrated walkthrough](https://openrocket.readthedocs.io/en/latest/user_guide/basic_flight_simulation.html) shows the actual controls.
+
+## Fix warnings first
+
+Too little speed leaving the guide can mean an unstable launch. Early or late recovery can open the chute at damaging speed. A predicted target altitude does not cancel those problems.
+
+## Make it match reality
+
+After building, compare the actual mass and balance point with your model. Include glue and paint. Keep a saved baseline and change one setting at a time. Practice flights test the prediction.
+
+<Callout title="Before the quiz" tone="info">
+  Find the altitude, launch-guide speed, and deployment warning in the official
+  walkthrough. Which would you check before choosing a motor?
+</Callout>
+
+<LessonSources
+  ids={[
+    "openrocket",
+    "the-process-of-designing-a-model-rocket",
+    "estes-education-american-rocketry-challenge-trainings-2025",
+  ]}
+/>

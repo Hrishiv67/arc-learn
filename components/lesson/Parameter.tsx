@@ -51,7 +51,7 @@ export function SeasonFigures() {
       />
       <p className="font-body text-[13px] text-sky-800 mt-2.5">
         Grade A Large, {p.payload.eachMass}, carried in any orientation. Season{" "}
-        {SEASON.year}, quoted from the published rules — check them again before
+        {SEASON.year}, from the published rules — check them again before
         your qualification flight.
       </p>
     </div>

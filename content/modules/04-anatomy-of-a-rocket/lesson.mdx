@@ -1,168 +1,72 @@
 import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
-import { TermList } from "@/components/lesson/TermList";
+import { SourceFigure } from "@/components/lesson/SourceFigure";
+import { PartGallery } from "@/components/lesson/PartGallery";
 import { Callout } from "@/components/ui/Callout";
-import { LessonPhoto } from "@/components/lesson/LessonPhoto";
-import { PartGallery, PartPair } from "@/components/lesson/PartGallery";
+import { LessonSources } from "@/components/lesson/LessonSources";
 
-Your job: **name each part, know what it does, and remember the ARC rule that matters.** When a flight fails later, point to a system — not “something weird happened.”
+## Outside: shape and structure
 
-## The parts you will handle
+**<GlossaryTerm id="nose-cone">Nose cone</GlossaryTerm>:** front cover that guides air around the rocket. **<GlossaryTerm id="body-tube">Body tube</GlossaryTerm>:** holds the parts together. **<GlossaryTerm id="fins">Fins</GlossaryTerm>:** help the rocket stay pointed along its flight path.
 
-These are real competition parts. Outer pieces shape the rocket. Inner pieces climb, measure, recover, and protect the egg.
+A **coupler** joins matching tubes; a **transition** joins different diameters. **Rail guides** slide along the launcher while the rocket builds speed.
 
-<PartGallery
-  parts={[
-    { src: "/images/parts/nose-cone.jpg", label: "Nose cone", alt: "3D-printed nose cone" },
-    { src: "/images/parts/body-tubes.jpg", label: "Body tube", alt: "Cardboard body tube" },
-    { src: "/images/parts/fin-can.jpg", label: "Fin can", alt: "3D-printed fin can" },
-    { src: "/images/parts/egg-case.jpg", label: "Egg case", alt: "Foam egg protection case" },
-    { src: "/images/parts/altimeter-case.jpg", label: "Altimeter case", alt: "Blue 3D-printed altimeter housing" },
-    { src: "/images/parts/motor-casing.jpg", label: "Motor casing", alt: "AeroTech reloadable motor casing" },
-    { src: "/images/parts/parachute.jpg", label: "Parachute", alt: "Recovery parachute canopy" },
-    { src: "/images/parts/nomex.jpg", label: "Nomex", alt: "Orange Nomex fire-protection blanket" },
-  ]}
-/>
+<SourceFigure name="parts" />
 
----
+## Inside: push, measure, protect
 
-## Inner systems
+| Part                          | What it does                                               |
+| ----------------------------- | ---------------------------------------------------------- |
+| Motor                         | Makes thrust; a suitable ejection charge releases recovery |
+| Motor mount + centering rings | Hold the motor straight inside the larger tube             |
+| Motor retainer                | Stops the motor falling or ejecting out                    |
+| Egg bay                       | Cushions the payload and opens for inspection              |
+| Altimeter                     | Measures height using changing air pressure                |
 
-### Motors — thrust, delay, ejection
-
-A model rocket <GlossaryTerm id="motor">motor</GlossaryTerm> burns in three steps:
-
-1. **Thrust** — hot gas out the nozzle lifts the rocket  
-2. **Delay** — smoke only; coast toward <GlossaryTerm id="apogee">apogee</GlossaryTerm>  
-3. **Ejection** — gas pulse opens the recovery bay  
-
-Code reminder: letter = impulse class · middle number = average thrust (N) · last number = delay seconds (example **F42-6**).
-
-**ARC:** class **F** motors only, from the approved list.
+The <GlossaryTerm id="altimeter">altimeter</GlossaryTerm> needs outside air through correctly sized vents. Secure it so it cannot hit an egg. Follow its mounting instructions and check the current approved list in the rules.
 
 <PartGallery
   parts={[
-    { src: "/images/parts/motor-casing.jpg", label: "Motor casing", alt: "Black AeroTech motor casing" },
-    { src: "/images/parts/motor-mount.jpg", label: "Motor mount", alt: "Motor mount tube" },
-    { src: "/images/parts/centering-ring.jpg", label: "Centering ring", alt: "Red centering ring" },
-    { src: "/images/parts/motor-retainer.jpg", label: "Retainer", alt: "Black motor retainer ring" },
+    {
+      src: "/images/parts/egg-case.jpg",
+      label: "Egg protection",
+      alt: "Foam egg protection case",
+    },
+    {
+      src: "/images/parts/altimeter-case.jpg",
+      label: "Altimeter housing",
+      alt: "Altimeter in a protective housing",
+    },
+    {
+      src: "/images/parts/motor-mount.jpg",
+      label: "Motor mount",
+      alt: "Inner tube that supports the motor",
+    },
+    {
+      src: "/images/parts/motor-retainer.jpg",
+      label: "Motor retainer",
+      alt: "Ring used to retain a motor",
+    },
   ]}
 />
 
-<TermList ids={["motor", "thrust-phase", "delay-phase", "ejection-charge"]} />
+## Recovery: bring every part back
 
-<Callout tone="info" title="Before you buy">
-  Write the exact motor code and confirm it is on this season’s approved list.
+The **<GlossaryTerm id="parachute">parachute</GlossaryTerm>** slows descent. The **shock cord** connects sections after they separate. Flame-resistant wadding or a suitable **<GlossaryTerm id="nomex">Nomex</GlossaryTerm> blanket** protects recovery gear from hot ejection gases. Pack it according to its instructions so the chute can open freely.
+
+**Memory trick:** body holds, motor pushes, fins steady, chute slows, padding protects.
+
+<Callout title="Find the failure" tone="info">
+  A rocket returns with a scorched parachute. Check heat protection and packing
+  first. A sealed altimeter bay is a different problem: it affects the height
+  reading.
 </Callout>
 
-### Altimeter — how altitude is scored
+Annual dimensions and motor limits live in [This Year's Challenge](/modules/this-years-challenge/lesson). Use that checklist before buying parts.
 
-The <GlossaryTerm id="altimeter">altimeter</GlossaryTerm> reads air pressure. **Only these four are allowed:** PerfectFlite Pnut, PerfectFlite FireFly, Jolly Logic Altimeter One, Jolly Logic Altimeter Two.
-
-Put it in a hard case. Add **vent holes** so outside air reaches the sensor.
-
-<PartPair
-  left={{
-    src: "/images/parts/altimeter-case.jpg",
-    alt: "Blue altimeter case with electronics",
-    caption: "Protect the unit in a rigid case.",
-  }}
-  right={{
-    src: "/images/parts/payload-diagram.jpg",
-    alt: "Upper body tube showing egg cradle and altimeter bay",
-    caption: "Altimeter bay needs vents to outside air.",
-  }}
-/>
-
-### Parachute, shock cord, Nomex
-
-After ejection, the <GlossaryTerm id="parachute">parachute</GlossaryTerm> slows the rocket. **ARC requires cotton canopies.** Bigger chute → longer flight time. A spill hole can shorten time if you overshoot — risky, not free.
-
-Place <GlossaryTerm id="nomex">Nomex</GlossaryTerm> (real fire fabric) **between** the ejection charge and the chute/shock cord. Pack it loose enough to open.
-
-<PartGallery
-  parts={[
-    { src: "/images/parts/parachute.jpg", label: "Parachute", alt: "Parachute canopy" },
-    { src: "/images/parts/shock-cord.jpg", label: "Shock cord", alt: "Kevlar shock cord coil" },
-    { src: "/images/parts/nomex.jpg", label: "Nomex", alt: "Nomex heat shield fabric" },
+<LessonSources
+  ids={[
+    "parts-of-a-model-rocket",
+    "nasa-parts",
+    "2027-american-rocketry-challenge-rules",
   ]}
 />
-
-<LessonPhoto
-  src="/images/parts/parachute-flight.jpg"
-  alt="Rocket descending under parachute after flight"
-  caption="Recovery in the field — packing and size decide duration and egg survival."
-/>
-
-### Egg protection case
-
-Pad the egg on **all sides**. Case must open for inspection. Fixed egg mass keeps <GlossaryTerm id="center-of-gravity">CG</GlossaryTerm> predictable.
-
-<PartPair
-  left={{
-    src: "/images/parts/egg-case.jpg",
-    alt: "White foam egg protection case",
-    caption: "Foam case — cushion every side.",
-  }}
-  right={{
-    src: "/images/parts/abm-photo.jpg",
-    alt: "Adjustable ballast mass with washers",
-    caption: "Ballast helps tune mass/CG — keep it locked for flight.",
-  }}
-/>
-
----
-
-## Outer airframe
-
-| Part | Job | Rule to remember |
-| --- | --- | --- |
-| <GlossaryTerm id="body-tube">Body tube</GlossaryTerm> | Structure + holds everything | Same diameter nose→tail · ≥ 47 mm · length ≥ 650 mm · non-metal |
-| <GlossaryTerm id="nose-cone">Nose cone</GlossaryTerm> | Cuts drag; often holds shock cord | Non-metal · separates cleanly · pull-test on the bench |
-| <GlossaryTerm id="fins">Fins</GlossaryTerm> | Keep CP behind CG | Non-metal · straight + strong · ~1.5–2 caliber margin |
-
-<PartGallery
-  parts={[
-    { src: "/images/parts/nose-cone.jpg", label: "Nose cone", alt: "Printed nose cone" },
-    { src: "/images/parts/body-tubes.jpg", label: "Body tube", alt: "Body tube section" },
-    { src: "/images/parts/coupler.jpg", label: "Coupler", alt: "Cardboard coupler" },
-    { src: "/images/parts/rail-guides.jpg", label: "Rail guides", alt: "Rail guide buttons" },
-    { src: "/images/parts/fin-can.jpg", label: "Fin can", alt: "Printed fin can" },
-  ]}
-/>
-
-<PartPair
-  left={{
-    src: "/images/parts/fin-can-exploded.jpg",
-    alt: "Exploded fin can assembly diagram",
-    caption: "Know how the fin can joins the tube before you glue.",
-  }}
-  right={{
-    src: "/images/parts/fin-can-assembled.jpg",
-    alt: "Assembled fin can on body tube",
-    caption: "If you 3D-print fins, test-flex one first.",
-  }}
-/>
-
-<TermList ids={["body-tube", "nose-cone", "fins", "center-of-gravity", "center-of-pressure"]} />
-
----
-
-## Simulate, then prove it
-
-Use <GlossaryTerm id="openrocket">OpenRocket</GlossaryTerm> to predict altitude, time, stability, and descent **before** you cut. Then fly, compare the altimeter to the sim, and fix the model (often drag).
-
-<Callout tone="caution" title="Sim ≠ score">
-  Software narrows choices. Practice flights decide what is true on your rocket.
-</Callout>
-
-## Fault map
-
-| Symptom | Check first |
-| --- | --- |
-| Wrong height / chute timing | Motor delay · ejection · packing |
-| Nonsense altitude | Vents · altimeter case · battery |
-| Burned chute / no deploy | Nomex placement · pack tightness |
-| Cracked egg | Padding · descent rate · landing |
-| Crooked flight / broken fin | Fins · CG/CP · nose fit |
-
-Learn the photos. Use the map. That is how a team debugs instead of guessing.

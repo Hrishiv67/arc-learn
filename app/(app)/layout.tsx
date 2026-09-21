@@ -13,14 +13,14 @@ import { TabBar } from "@/components/nav/TabBar";
 
 const NAV_LINKS = [
   { href: "/modules", label: "Course" },
-  { href: "/modules/this-years-challenge", label: "Module 1" },
+  { href: "/resources", label: "Resources" },
 ];
 
 const TAB_ITEMS = [
   { href: "/modules", label: "Course", icon: "home" as const },
   {
-    href: "/modules/this-years-challenge",
-    label: "Module 1",
+    href: "/resources",
+    label: "Resources",
     icon: "list" as const,
   },
   { href: "/account", label: "Account", icon: "user" as const },

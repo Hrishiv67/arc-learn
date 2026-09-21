@@ -1,0 +1,29 @@
+import { GlossaryTerm } from "@/components/lesson/GlossaryTerm";
+import { Callout } from "@/components/ui/Callout";
+import { SourceFigure } from "@/components/lesson/SourceFigure";
+import { LessonSources } from "@/components/lesson/LessonSources";
+
+## Two points to know
+
+The **<GlossaryTerm id="center-of-gravity">center of gravity (CG)</GlossaryTerm>** is the balance point. The **<GlossaryTerm id="center-of-pressure">center of pressure (CP)</GlossaryTerm>** is where the sideways air force effectively acts.
+
+For a stable model rocket, **CG must be closer to the nose than CP**. If a gust tips it, the air pushes the tail back into line. Think of the feathers at the back of an arrow.
+
+<SourceFigure name="stability" />
+
+## Check the rocket you will actually fly
+
+Include the motor, eggs, parachute, electronics, and paint. A heavier motor moves CG toward the tail; added nose mass moves it forward. Changing fin size changes CP.
+
+The **<GlossaryTerm id="stability-margin">stability margin</GlossaryTerm>** is the CG–CP gap, often divided by body diameter and shown in _calibers_. One caliber means one body diameter. Ask your mentor to review the margin and launch speed; a positive margin alone does not guarantee a safe flight.
+
+## Fix the cause
+
+Straight, firmly attached fins matter. Larger fins can improve stability but add drag. Nose ballast can help but adds weight. Simulate the change and recheck the finished rocket; more ballast is not automatically better.
+
+<Callout title="Quick check" tone="info">
+  Point to CG and CP on your simulated rocket. Which one is nearer the nose?
+  Then check that the simulation uses your real loaded mass.
+</Callout>
+
+<LessonSources ids={["nasa-stability", "openrocket"]} />
