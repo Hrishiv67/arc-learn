@@ -30,6 +30,8 @@ test("every lesson renders, fits the screen, and loads its images", async ({
       ),
       mod.slug,
     ).toBe(true);
+    // This MDX pipeline intentionally uses CommonMark, without GFM tables.
+    await expect(page.locator(".prose-lesson")).not.toContainText("| ---");
     const images = page.locator(".prose-lesson img");
     for (const image of await images.all()) {
       await image.scrollIntoViewIfNeeded();
