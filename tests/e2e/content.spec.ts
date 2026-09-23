@@ -16,7 +16,7 @@ test("every lesson renders, fits the screen, and loads its images", async ({
   );
   const errors: string[] = [];
   page.on("pageerror", (error) => errors.push(error.message));
-  for (const mod of MODULES) {
+  for (const mod of MODULES.filter((m) => m.status === "live")) {
     await page.goto(`/modules/${mod.slug}/lesson`);
     await expect(
       page.getByRole("heading", { level: 1, name: mod.title }),
@@ -67,32 +67,34 @@ test("score explorer teaches penalties and disqualification", async ({
   ).toEqual([]);
 });
 
-test("passing safety opens the build lesson and persists after reload", async ({
+test("unreleased lessons and quizzes stay locked even with saved progress", async ({
   page,
 }) => {
-  await page.goto("/modules/building-it/lesson");
-  await expect(page.getByText("Locked", { exact: true })).toBeVisible();
-  await page.goto("/modules/safety-first/lesson");
-  await page.getByRole("link", { name: "Next: Take the quiz" }).click();
-  for (const answer of [2, 1, 0, 2]) {
-    await page.getByRole("radio").nth(answer).check();
-    await page
-      .getByRole("button", { name: "Check my answer", exact: true })
-      .click();
-    await page.getByRole("button", { name: "Next question" }).click();
+  await page.addInitScript(() =>
+    localStorage.setItem(
+      "arc-learn:progress:v1",
+      JSON.stringify({
+        "safety-first": { read: true, quiz: { score: 4, total: 4 } },
+      }),
+    ),
+  );
+  for (const mod of MODULES.filter((m) => m.status !== "live")) {
+    for (const suffix of ["lesson", "quiz"]) {
+      await page.goto("/modules/" + mod.slug + "/" + suffix);
+      await expect(
+        page.getByText("Locked for now", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Check my answer", exact: true }),
+      ).toHaveCount(0);
+    }
   }
-  await expect(page.getByText("4 of 4 correct · 100% accuracy")).toBeVisible();
-  await page.goto("/modules/building-it/lesson");
-  await page.reload();
-  await expect(
-    page.getByRole("heading", { name: "Dry-fit before glue" }),
-  ).toBeVisible();
 });
 
 test("resources and sourced diagrams remain readable on the current viewport", async ({
   page,
 }, testInfo) => {
-  await page.goto("/modules/anatomy-of-a-rocket/lesson");
+  await page.goto("/modules/this-years-challenge/lesson");
   await page
     .getByRole("link", { name: "Open full-size parts diagram" })
     .scrollIntoViewIfNeeded();

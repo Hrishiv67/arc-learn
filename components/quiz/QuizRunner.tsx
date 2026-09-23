@@ -3,7 +3,13 @@
 import { quizReadingHref } from "@/lib/content/quizReading";
 import { MODULES } from "@/content/modules/registry";
 import { RocketBuild } from "@/components/rocket/RocketBuild";
-import { useState } from "react";
+import { useState, useRef } from "react";
+import { QuizReadingContext, ReadingLink } from "./ReadingLink";
+import { QuizReadingPanel } from "./QuizReadingPanel";
+import {
+  QUESTION_NOTE,
+  type NoteId,
+} from "@/content/modules/01-this-years-challenge/notes";
 import type { Quiz } from "@/lib/schemas/quiz";
 import { Callout } from "@/components/ui/Callout";
 import { Button, TextButton } from "@/components/ui/Button";
@@ -35,6 +41,20 @@ export function QuizRunner({
   const lesson = MODULES.find((m) => m.id === quiz.moduleId);
   const [i, setI] = useState(0);
   const [marks, setMarks] = useState<boolean[]>([]);
+  const [readingOpen, setReadingOpen] = useState(false);
+  const [topic, setTopic] = useState<NoteId>("goal");
+  const notesButton = useRef<HTMLButtonElement>(null);
+  const heading = useRef<HTMLHeadingElement>(null);
+  const hasNotes = quiz.moduleId === "this-years-challenge";
+  function openReading(questionId?: string) {
+    setTopic(QUESTION_NOTE[questionId ?? quiz.questions[i]?.id] ?? "goal");
+    setReadingOpen(true);
+    requestAnimationFrame(() => document.getElementById("note-topic")?.focus());
+  }
+  function closeReading() {
+    setReadingOpen(false);
+    notesButton.current?.focus();
+  }
 
   const total = quiz.questions.length;
   const finished = i >= total;
@@ -49,159 +69,199 @@ export function QuizRunner({
       onComplete(next.filter(Boolean).length, total);
     }
     setI(i + 1);
+    setTopic(QUESTION_NOTE[quiz.questions[i + 1]?.id] ?? "goal");
+    requestAnimationFrame(() => heading.current?.focus());
   }
 
   function retry() {
     setI(0);
     setMarks([]);
+    setReadingOpen(false);
+    requestAnimationFrame(() => heading.current?.focus());
   }
 
   return (
-    <div className="max-w-[760px] flex flex-col gap-6">
-      <div>
-        <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">
-          Quiz
-        </span>
-        <h1 className="font-heading font-bold text-arc-navy text-[28px] md:text-[40px] mt-2">
-          {moduleTitle}
-        </h1>
-      </div>
-
-      {!finished && (
-        <p className="font-body text-[13px] text-sky-800">
-          Question {i + 1} of {total} · answer from the reading, not from memory
-          alone
-        </p>
-      )}
-
+    <QuizReadingContext.Provider value={hasNotes ? openReading : null}>
       <div
-        className="flex gap-1.5 items-center"
-        role="progressbar"
-        aria-label="Quiz questions completed"
-        aria-valuemin={0}
-        aria-valuemax={total}
-        aria-valuenow={marks.length}
+        className={clsx(
+          "grid gap-8 lg:gap-10 items-start",
+          readingOpen && "lg:grid-cols-[minmax(0,1fr)_360px]",
+        )}
       >
-        {quiz.questions.map((_, k) => (
-          <span
-            key={k}
-            className={clsx(
-              "h-[6px] flex-1 transition-colors duration-250 ease-arc",
-              k < marks.length
-                ? marks[k]
-                  ? "bg-go"
-                  : "bg-caution"
-                : k === i
-                  ? "bg-arc-navy"
-                  : "bg-mist-600",
-            )}
-          />
-        ))}
-      </div>
+        <div className="max-w-[760px] w-full min-w-0 flex flex-col gap-6">
+          <div>
+            <span className="font-heading font-semibold text-[10px] uppercase tracking-[0.03em] text-sky-800">
+              Quiz
+            </span>
+            <h1
+              ref={heading}
+              tabIndex={-1}
+              className="font-heading font-bold text-arc-navy text-[28px] md:text-[40px] mt-2"
+            >
+              {moduleTitle}
+            </h1>
+          </div>
 
-      {finished ? (
-        <>
-          <Callout
-            tone={passed ? "go" : "caution"}
-            title={`${score} of ${total} correct · ${pct}% accuracy`}
-          >
-            {passed
-              ? `Module complete — ${pct}% clears the ${Math.round(quiz.passRate * 100)}% bar. Retake it any time.`
-              : `${Math.round(quiz.passRate * 100)}% is the bar for this module. Review the explanations below and try again — no limit, no penalty.`}
-          </Callout>
-
-          <RocketBuild />
-          {lesson && (
-            <TextButton tone="navy" href={`/modules/${lesson.slug}/lesson`}>
-              Revisit the reading
-            </TextButton>
+          {!finished && (
+            <p className="font-body text-[13px] text-sky-800">
+              Question {i + 1} of {total} · Use the notes whenever you need
+              them.
+            </p>
           )}
-          <div className="flex flex-col border-t border-mist-600">
-            {quiz.questions.map((q, k) => (
-              <div
-                key={q.id}
-                className="flex gap-3 items-start border-b border-mist-600 py-3.5"
-              >
-                <Icon
-                  name={marks[k] ? "check" : "x"}
-                  size={16}
-                  className={clsx(
-                    "mt-0.5 shrink-0",
-                    marks[k] ? "text-go" : "text-caution",
-                  )}
-                />
-                <div className="min-w-0">
-                  <p className="font-body text-[16px] text-arc-ink">
-                    {q.prompt}
-                  </p>
-                  <p className="font-body text-[13px] text-sky-800 mt-1">
-                    {q.why}
-                  </p>
-                  {lesson && (
-                    <a
-                      href={quizReadingHref(quiz.moduleId, lesson.slug, q.id)}
-                      className="inline-block mt-2 text-sm font-bold underline underline-offset-4"
-                    >
-                      Review this in the reading
-                    </a>
-                  )}
-                </div>
-              </div>
+
+          {hasNotes && (
+            <button
+              ref={notesButton}
+              type="button"
+              aria-expanded={readingOpen}
+              aria-controls={readingOpen ? "quiz-reading" : undefined}
+              onClick={() => (readingOpen ? closeReading() : openReading())}
+              className="self-start border border-navy-300 bg-mist-200 px-4 py-3 text-sm font-bold text-arc-navy hover:bg-mist-500"
+            >
+              {readingOpen ? "Hide lesson notes" : "Open lesson notes"}{" "}
+              <span aria-hidden="true">↗</span>
+            </button>
+          )}
+
+          <div
+            className="flex gap-1.5 items-center"
+            role="progressbar"
+            aria-label="Quiz questions completed"
+            aria-valuemin={0}
+            aria-valuemax={total}
+            aria-valuenow={marks.length}
+          >
+            {quiz.questions.map((_, k) => (
+              <span
+                key={k}
+                className={clsx(
+                  "h-[6px] flex-1 transition-colors duration-250 ease-arc",
+                  k < marks.length
+                    ? marks[k]
+                      ? "bg-go"
+                      : "bg-caution"
+                    : k === i
+                      ? "bg-arc-navy"
+                      : "bg-mist-600",
+                )}
+              />
             ))}
           </div>
 
-          <div className="flex gap-4 items-center flex-wrap">
-            <Button variant="primary" onClick={onExit}>
-              Back to the course
-            </Button>
-            <TextButton tone="navy" onClick={retry}>
-              Try again
-            </TextButton>
-            <TextButton tone="navy" href="/modules/results">
-              See your results
-            </TextButton>
-          </div>
+          {finished ? (
+            <>
+              <Callout
+                tone={passed ? "go" : "caution"}
+                title={`${score} of ${total} correct · ${pct}% accuracy`}
+              >
+                {passed
+                  ? `Module complete — ${pct}% clears the ${Math.round(quiz.passRate * 100)}% bar. Retake it any time.`
+                  : `${Math.round(quiz.passRate * 100)}% is the bar for this module. Review the explanations below and try again — no limit, no penalty.`}
+              </Callout>
 
-          {isFrontier && passed && (
-            <Callout tone="go" title="You're caught up">
-              Every module that&rsquo;s live right now is complete. See your
-              full scorecard — including what&rsquo;s worth a reread — on the
-              results page.
-            </Callout>
-          )}
+              <RocketBuild />
+              {lesson && (
+                <TextButton tone="navy" href={`/modules/${lesson.slug}/lesson`}>
+                  Revisit the reading
+                </TextButton>
+              )}
+              <div className="flex flex-col border-t border-mist-600">
+                {quiz.questions.map((q, k) => (
+                  <div
+                    key={q.id}
+                    className="flex gap-3 items-start border-b border-mist-600 py-3.5"
+                  >
+                    <Icon
+                      name={marks[k] ? "check" : "x"}
+                      size={16}
+                      className={clsx(
+                        "mt-0.5 shrink-0",
+                        marks[k] ? "text-go" : "text-caution",
+                      )}
+                    />
+                    <div className="min-w-0">
+                      <p className="font-body text-[16px] text-arc-ink">
+                        {q.prompt}
+                      </p>
+                      <p className="font-body text-[13px] text-sky-800 mt-1">
+                        {q.why}
+                      </p>
+                      {lesson && (
+                        <ReadingLink
+                          href={quizReadingHref(
+                            quiz.moduleId,
+                            lesson.slug,
+                            q.id,
+                          )}
+                          questionId={q.id}
+                        />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
 
-          {nextModuleTitle && (
-            <div className="border-t border-mist-600 pt-5">
-              <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
-                Next up
-              </span>
-              <h3 className="font-heading font-bold text-arc-navy text-[21px] md:text-[24px] mt-2">
-                {nextModuleTitle}
-              </h3>
-              <p className="font-body text-[16px] text-arc-ink mt-1.5">
-                Being written now. It opens later this season.
-              </p>
-            </div>
+              <div className="flex gap-4 items-center flex-wrap">
+                <Button variant="primary" onClick={onExit}>
+                  Back to the course
+                </Button>
+                <TextButton tone="navy" onClick={retry}>
+                  Try again
+                </TextButton>
+                <TextButton tone="navy" href="/modules/results">
+                  See your results
+                </TextButton>
+              </div>
+
+              {isFrontier && passed && (
+                <Callout tone="go" title="You're caught up">
+                  Every module that&rsquo;s live right now is complete. See your
+                  full scorecard — including what&rsquo;s worth a reread — on
+                  the results page.
+                </Callout>
+              )}
+
+              {nextModuleTitle && (
+                <div className="border-t border-mist-600 pt-5">
+                  <span className="font-heading font-semibold text-[11px] uppercase tracking-[0.03em] text-sky-800">
+                    Next up
+                  </span>
+                  <h3 className="font-heading font-bold text-arc-navy text-[21px] md:text-[24px] mt-2">
+                    {nextModuleTitle}
+                  </h3>
+                  <p className="font-body text-[16px] text-arc-ink mt-1.5">
+                    Locked for now. More lessons will open later.
+                  </p>
+                </div>
+              )}
+            </>
+          ) : (
+            <QuestionSwitch
+              key={quiz.questions[i].id}
+              readingHref={
+                lesson
+                  ? quizReadingHref(
+                      quiz.moduleId,
+                      lesson.slug,
+                      quiz.questions[i].id,
+                    )
+                  : undefined
+              }
+              question={quiz.questions[i]}
+              flagDraft={flagDraft}
+              onAnswered={handleAnswered}
+            />
           )}
-        </>
-      ) : (
-        <QuestionSwitch
-          key={quiz.questions[i].id}
-          readingHref={
-            lesson
-              ? quizReadingHref(
-                  quiz.moduleId,
-                  lesson.slug,
-                  quiz.questions[i].id,
-                )
-              : undefined
-          }
-          question={quiz.questions[i]}
-          flagDraft={flagDraft}
-          onAnswered={handleAnswered}
-        />
-      )}
-    </div>
+        </div>
+        {hasNotes && readingOpen && (
+          <QuizReadingPanel
+            active={topic}
+            onSelect={setTopic}
+            onClose={closeReading}
+          />
+        )}
+      </div>
+    </QuizReadingContext.Provider>
   );
 }
 

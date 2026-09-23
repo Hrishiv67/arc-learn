@@ -63,8 +63,8 @@ test("quiz supports arrow keys, answer feedback, and reduced motion", async ({
     .click();
   await expect(page.getByText("Not this time", { exact: true })).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Review this in the reading" }),
-  ).toHaveAttribute("href", /lesson#the-flight-goal-for-this-season$/);
+    page.getByRole("button", { name: "Review this in the reading" }),
+  ).toBeVisible();
   await expect(radios.first()).toBeDisabled();
   await page
     .getByRole("button", { name: "Next question", exact: true })
