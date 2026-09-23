@@ -38,7 +38,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-ETS1-1"],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -54,7 +54,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: [],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -70,7 +70,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-ETS1-2", "MS-PS2-1", "MS-PS2-2"],
-    status: "live",
+    status: "soon",
     needsReview: false,
     gradeBand: "6th–12th grade",
     objectives: [
@@ -93,7 +93,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-PS2-1", "MS-PS2-2"],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -109,7 +109,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-PS2-1", "MS-PS2-2"],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -125,7 +125,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-ETS1-2", "MS-PS2-1", "HS-PS2-1"],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -147,7 +147,7 @@ const raw: ModuleMeta[] = [
       "HS-ETS1-3",
       "HS-ETS1-4",
     ],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -163,7 +163,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: ["safety-first"],
     ngssCodes: ["HS-ETS1-2", "HS-ETS1-3"],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -179,7 +179,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: [],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -195,7 +195,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: ["safety-first"],
     ngssCodes: [],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -211,7 +211,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: ["MS-ETS1-3"],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
   {
@@ -227,7 +227,7 @@ const raw: ModuleMeta[] = [
     isTimeless: true,
     prerequisiteIds: [],
     ngssCodes: [],
-    status: "live",
+    status: "soon",
     needsReview: false,
   },
 ];

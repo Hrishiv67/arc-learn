@@ -1,4 +1,6 @@
 "use client";
+import { QuizImage } from "./QuizImage";
+import { ReadingLink } from "./ReadingLink";
 
 import { useState } from "react";
 import type { ChoiceQuestion as ChoiceQuestionType } from "@/lib/schemas/quiz";
@@ -33,6 +35,7 @@ export function ChoiceQuestion({
       <h2 className="font-heading font-bold text-arc-navy text-[22px] md:text-[26px] leading-[1.25]">
         {question.prompt}
       </h2>
+      {question.image && <QuizImage name={question.image} />}
       <RadioGroup
         name={question.id}
         legend={question.prompt}
@@ -66,12 +69,7 @@ export function ChoiceQuestion({
           >
             {question.why}
             {readingHref && (
-              <a
-                href={readingHref}
-                className="block mt-3 text-sm font-bold underline underline-offset-4"
-              >
-                Review this in the reading
-              </a>
+              <ReadingLink href={readingHref} questionId={question.id} />
             )}
           </Callout>
         </div>

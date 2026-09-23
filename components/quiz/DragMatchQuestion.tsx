@@ -1,4 +1,5 @@
 "use client";
+import { ReadingLink } from "./ReadingLink";
 
 import { useState } from "react";
 import {
@@ -216,12 +217,7 @@ export function DragMatchQuestion({
           >
             {question.why}
             {readingHref && (
-              <a
-                href={readingHref}
-                className="block mt-3 text-sm font-bold underline underline-offset-4"
-              >
-                Review this in the reading
-              </a>
+              <ReadingLink href={readingHref} questionId={question.id} />
             )}
           </Callout>
         </div>

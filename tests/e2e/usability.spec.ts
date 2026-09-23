@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { MODULE_1_QUIZ as quiz } from "../../content/modules/01-this-years-challenge/quiz";
 
-test("quiz can be completed using selects at a normal phone height", async ({
+test("quiz can be completed by tapping at a normal phone height", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });

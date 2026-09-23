@@ -13,7 +13,10 @@ export function isModuleUnlocked(
   module: ModuleMeta,
   progress: ProgressState,
 ): boolean {
-  return module.prerequisiteIds.every((id) => isModuleComplete(progress[id]));
+  return (
+    module.status === "live" &&
+    module.prerequisiteIds.every((id) => isModuleComplete(progress[id]))
+  );
 }
 
 export function lockedReason(

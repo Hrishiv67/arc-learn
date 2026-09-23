@@ -41,3 +41,12 @@ Stored under `public/images/parts/` for the Anatomy of a Rocket lesson.
 ARC Learn is an unofficial study companion. It is not affiliated with or endorsed
 by the American Rocketry Challenge, the Aerospace Industries Association, or the
 National Association of Rocketry.
+
+## Module One quiz and reading images
+
+NASA/MSFC, “Rocket Blasts Off During 2017 Student Launch Challenge” (May 12, 2017).
+Source: https://www.nasa.gov/image-article/rocket-blasts-off-during-2017-student-launch-challenge/
+Original image: https://www.nasa.gov/wp-content/uploads/2023/03/33303400634_e932109be5_o.jpg
+Local: public/images/learning/nasa-student-launch.jpg. Original photograph; responsive CSS framing, with full-size image available. Caption explicitly identifies the different competition.
+
+NASA Glenn educational illustrations (parts, flight, stability) are credited and linked beside each image. Original source links and local files are documented in docs/CONTENT-VERIFICATION.md. Government educational media used with attribution, without implying endorsement.

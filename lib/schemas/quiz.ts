@@ -4,6 +4,7 @@ const baseQuestion = {
   id: z.string(),
   verified: z.boolean(),
   why: z.string(),
+  image: z.enum(["launch", "flight", "stability", "parts"]).optional(),
 };
 
 export const choiceQuestionSchema = z.object({

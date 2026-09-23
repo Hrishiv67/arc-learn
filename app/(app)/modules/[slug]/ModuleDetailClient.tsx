@@ -21,13 +21,12 @@ export function ModuleDetailClient({ slug }: { slug: string }) {
   if (mod.status !== "live") {
     return (
       <Container className="py-12">
-        <Badge tone="mist">Coming soon</Badge>
+        <Badge tone="mist">Locked for now</Badge>
         <h1 className="font-heading font-bold text-arc-navy text-[30px] md:text-[36px] mt-4">
           {mod.title}
         </h1>
         <p className="font-body text-[17px] text-arc-ink mt-4 max-w-[58ch]">
-          {mod.summary} This module is being written and will open later this
-          season.
+          Module One is open now. The rest of the course will open later.
         </p>
         <Button href="/modules" variant="outline" className="mt-6">
           Back to the course

@@ -1,11 +1,7 @@
-import { quizSchema, type Quiz } from "@/lib/schemas/quiz";
+import { quizSchema } from "@/lib/schemas/quiz";
 
-/**
- * 11 questions: 9 multiple-choice (application-style, not pure recall) plus
- * 2 interactive question types — a drag-label diagram and a drag-match —
- * built on @dnd-kit/core. Pass bar is 70%; explanations show either way.
- */
-const raw: Quiz = {
+/** Short, open-book applications of Module One. */
+export const MODULE_1_QUIZ = quizSchema.parse({
   moduleId: "this-years-challenge",
   passRate: 0.7,
   questions: [
@@ -14,203 +10,166 @@ const raw: Quiz = {
       type: "choice",
       verified: true,
       prompt:
-        "This season's altitude figure is a target, not a minimum. If one flight reaches 150 feet above target and another reaches 150 feet below, how do the two penalties compare?",
+        "Two flights miss the target: one is 150 feet too high, the other 150 feet too low. Which costs more?",
       options: [
-        "The overshoot costs more",
-        "The undershoot costs more",
-        "They cost exactly the same",
-        "Neither is penalized",
+        "Too high",
+        "Too low",
+        "Both cost the same",
+        "Neither costs points",
       ],
       answerIndex: 2,
-      why: "The target is a height to hit, not a floor to clear. A miss above and an equal miss below cost the same.",
+      why: "Each foot away from the target adds one point, above or below.",
     },
     {
       id: "q2",
       type: "choice",
       verified: true,
-      prompt:
-        "How is a rocket's altitude actually determined during a qualification flight?",
+      prompt: "What measures the rocket’s highest point?",
       options: [
-        "A judge estimates it by eye from the ground",
-        "An onboard altimeter records it during the flight",
-        "Teams self-report their expected altitude",
-        "It is calculated afterward from the motor's total impulse",
+        "A judge watching from the ground",
+        "An approved altimeter inside the rocket",
+        "The team’s prediction",
+        "The motor label",
       ],
       answerIndex: 1,
-      why: "The approved onboard altimeter measures peak height. Some units also log a flight trace; the official altitude does not come from a ground estimate.",
+      why: "The altimeter measures peak height. A prediction is not a flight measurement.",
+      image: "flight",
     },
     {
       id: "q3",
       type: "choice",
       verified: true,
       prompt:
-        "A simulation shows the center of pressure sitting ahead of the center of gravity. What does that predict about the flight?",
+        "A loaded rocket has CP nearer the nose than CG. What should the team do?",
       options: [
-        "The rocket self-corrects after a gust",
-        "The rocket flies exactly as designed, unaffected",
-        "The rocket diverges further off course and the flight ends early and unpredictably",
-        "The parachute deploys early",
+        "Launch: it will straighten itself",
+        "Add a bigger parachute",
+        "Fix the stability before launch",
+        "Ignore it if the motor fits",
       ],
       answerIndex: 2,
-      why: "CG ahead of CP lets a rocket straighten itself out after a gust. Reversed, small disturbances get worse instead of correcting.",
+      why: "For a stable model rocket, CG must be nearer the nose than CP. Check the loaded rocket.",
+      image: "stability",
     },
     {
       id: "q4",
       type: "choice",
       verified: true,
-      prompt:
-        "Stability margin is the distance between which two points on the airframe?",
+      prompt: "What is the stability margin?",
       options: [
-        "The nose cone and the fins",
-        "The center of gravity and the center of pressure",
-        "The motor mount and the payload bay",
-        "Apogee and the pad",
+        "The rocket’s total length",
+        "The gap between CG and CP",
+        "The width of the fins",
+        "The distance from the launch pad",
       ],
       answerIndex: 1,
-      why: "Stability margin measures the gap between CG and CP. CG must be nearer the nose than CP; a bigger margin is not automatically better.",
+      why: "CG is the balance point. CP is where the sideways air force acts. Their gap is the stability margin.",
     },
     {
       id: "q5",
       type: "choice",
       verified: true,
       prompt:
-        "A flight reaches the exact altitude target but 3 seconds outside the duration window. How does it score compared to a flight that reaches the target altitude and stays inside the duration window?",
+        "Your rocket hits the height target but stays up 3 seconds too long. What happens?",
       options: [
-        "Better, since the altitude was perfect",
-        "Worse — duration penalty points are added even though altitude was exact",
-        "The same, because only altitude is scored",
-        "No score can be calculated",
+        "A perfect score",
+        "Time penalty points are added",
+        "Only height matters",
+        "The target time changes",
       ],
       answerIndex: 1,
-      why: "Both halves of the flight goal are scored and penalties add together, so a perfect altitude does not cancel out a duration miss.",
+      why: "Height and time both count. Perfect height does not cancel a time penalty.",
     },
     {
       id: "q6",
       type: "choice",
       verified: true,
       prompt:
-        "Your team fits a larger parachute to protect the eggs on landing. If your original flight was already inside the duration window, what is the most likely effect on your score?",
+        "A bigger parachute slows the landing. What else might it change?",
       options: [
-        "No effect at all",
-        "The longer descent could push duration past the top of the window and add penalty points",
-        "The altitude target automatically adjusts to match",
+        "Nothing",
+        "It may keep the rocket in the air too long",
+        "It changes the height target",
         "It guarantees a better score",
       ],
       answerIndex: 1,
-      why: "A bigger parachute slows descent, which extends flight time — helpful for protecting the payload, but it can carry duration outside the window.",
+      why: "A slower descent protects the eggs but can add time and wind drift. Test both landing safety and flight time.",
+      image: "flight",
     },
     {
       id: "q7",
       type: "choice",
       verified: true,
       prompt:
-        "A flight reaches the exact target altitude and exactly on the target duration, but one egg has a hairline crack. What does this flight score?",
+        "Perfect height. Perfect time. One cracked egg. What is the result?",
       options: [
-        "A perfect score, since altitude and duration were exact",
-        "The flight is disqualified, regardless of its height and duration",
-        "A partial score based on the size of the crack",
-        "It depends on which of the two eggs cracked",
+        "A perfect score",
+        "Disqualified",
+        "A small penalty",
+        "Only the cracked egg is ignored",
       ],
       answerIndex: 1,
-      why: "The rules require the payload to survive uncracked. A crack disqualifies the flight even when altitude and duration are exact (2027 rules, section 4.4).",
+      why: "Both eggs must return uncracked. Even a hairline crack disqualifies the flight.",
     },
     {
       id: "q8",
       type: "choice",
       verified: true,
-      prompt:
-        "Which of these is the correct way to determine a rocket's liftoff mass?",
+      prompt: "What goes on the scale for liftoff mass?",
       options: [
-        "Weigh the bare airframe before the motor and payload go in",
-        "Weigh it fully assembled, with motor, parachute, and eggs installed",
-        "Add up the manufacturer's listed part weights",
-        "Estimate it from the body tube diameter",
+        "The empty body tube",
+        "The complete rocket, ready to fly",
+        "Only the motor and eggs",
+        "Only the heaviest parts",
       ],
       answerIndex: 1,
-      why: "Liftoff mass means the rocket as it sits on the pad, ready to fly — motor, parachute, and eggs included, weighed as one assembly, not in pieces.",
+      why: "Weigh everything together: rocket, motor, eggs, parachute, electronics, glue, and paint.",
     },
     {
       id: "q9",
       type: "choice",
       verified: true,
-      prompt:
-        "Who has to be present before a motor is loaded into a rocket on this course?",
+      prompt: "Before handling a motor, who should supervise?",
       options: [
-        "Nobody in particular",
-        "Another student on the team",
-        "An adult who has read the NAR Model Rocket Safety Code",
-        "A parent, notified afterward by text",
+        "Nobody",
+        "Another student",
+        "An adult familiar with the NAR safety code",
+        "A parent notified afterward",
       ],
       answerIndex: 2,
-      why: "Adult supervision by someone who has read the safety code is the floor for every launch on this course — not optional, and not satisfied by another student.",
+      why: "Work with an adult who has read the safety code before handling motors or launching.",
     },
     {
       id: "q10",
-      type: "drag-label",
+      type: "choice",
       verified: true,
       prompt:
-        "Drag each part name onto the matching spot on the cutaway. This is the vocabulary set the rules and the handbook use.",
-      why: "This is the vocabulary set that lets you read the rules, a simulation, and the team handbook without guessing — worth having cold before you touch a build module.",
-      diagram: "rocket-cutaway",
-      labels: [
-        { id: "nose-cone", text: "Nose cone" },
-        { id: "payload-bay", text: "Payload bay" },
-        { id: "altimeter", text: "Altimeter" },
-        { id: "recovery-system", text: "Recovery system" },
-        { id: "body-tube", text: "Body tube" },
-        { id: "motor-mount", text: "Motor mount" },
-        { id: "fins", text: "Fins" },
+        "Find the small surfaces near the bottom of this rocket. What do they do?",
+      options: [
+        "Measure height",
+        "Help keep the rocket pointing forward",
+        "Protect the eggs",
+        "Slow the landing like a parachute",
       ],
-      targets: [
-        { id: "t-nose-cone", correctLabelId: "nose-cone" },
-        { id: "t-payload-bay", correctLabelId: "payload-bay" },
-        { id: "t-altimeter", correctLabelId: "altimeter" },
-        { id: "t-recovery-system", correctLabelId: "recovery-system" },
-        { id: "t-body-tube", correctLabelId: "body-tube" },
-        { id: "t-motor-mount", correctLabelId: "motor-mount" },
-        { id: "t-fins", correctLabelId: "fins" },
-      ],
+      answerIndex: 1,
+      why: "Those are fins. With CG ahead of CP, they help the rocket straighten after a small gust.",
+      image: "launch",
     },
     {
       id: "q11",
-      type: "drag-match",
+      type: "choice",
       verified: true,
-      prompt: "Drag each term to its definition.",
-      why: "These six terms carry the rest of the course — apogee and duration score your flight, payload and liftoff mass constrain your build, and CG/CP decide whether it flies straight at all.",
-      pairs: [
-        {
-          id: "apogee",
-          term: "Apogee",
-          definition: "The highest point the rocket reaches",
-        },
-        {
-          id: "duration",
-          term: "Duration",
-          definition: "How long the flight lasts, pad to landing",
-        },
-        {
-          id: "payload",
-          term: "Payload",
-          definition: "What the rocket carries — the eggs",
-        },
-        {
-          id: "liftoff-mass",
-          term: "Liftoff mass",
-          definition: "What the whole rocket weighs on the pad, ready to fly",
-        },
-        {
-          id: "center-of-gravity",
-          term: "Center of gravity (CG)",
-          definition: "The point where the rocket balances",
-        },
-        {
-          id: "center-of-pressure",
-          term: "Center of pressure (CP)",
-          definition: "The point where aerodynamic force effectively acts",
-        },
+      prompt:
+        "The motor stops burning, but the rocket keeps climbing. Has it reached apogee?",
+      options: [
+        "Yes: apogee is when the motor stops",
+        "No: apogee is the highest point",
+        "Yes: apogee is liftoff",
+        "Only if the parachute is open",
       ],
+      answerIndex: 1,
+      why: "The rocket coasts upward after burnout. Apogee comes when it reaches its highest point.",
+      image: "flight",
     },
   ],
-};
-
-export const MODULE_1_QUIZ: Quiz = quizSchema.parse(raw);
+});

@@ -4,8 +4,8 @@ import { getModule } from "@/lib/content/loadModule";
 import type { ProgressState } from "@/lib/schemas/progress";
 
 describe("safety-gate prerequisite logic", () => {
-  const buildingIt = getModule("building-it")!;
-  const launchDay = getModule("launch-day")!;
+  const buildingIt = { ...getModule("building-it")!, status: "live" as const };
+  const launchDay = { ...getModule("launch-day")!, status: "live" as const };
   const thisYearsChallenge = getModule("this-years-challenge")!;
 
   it("locks Building It until Safety First is complete", () => {
@@ -30,6 +30,12 @@ describe("safety-gate prerequisite logic", () => {
       "safety-first": { read: true, quiz: { score: 5, total: 10 } },
     };
     expect(isModuleUnlocked(buildingIt, progress)).toBe(false);
+  });
+
+  it("unreleased modules stay locked regardless of prerequisites", () => {
+    expect(
+      isModuleUnlocked({ ...thisYearsChallenge, status: "soon" }, {}),
+    ).toBe(false);
   });
 
   it("Module 1 has no prerequisites and is always unlocked", () => {
